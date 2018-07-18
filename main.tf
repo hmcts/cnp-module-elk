@@ -20,8 +20,6 @@ resource "azurerm_template_deployment" "elk-iaas" {
   parameters = {
     esClusterName     = "${var.product}-elk-${var.env}"
     location          = "${azurerm_resource_group.elk-resourcegroup.location}"
-    subnetid          = "${var.subnetid}"
-    env               = "${var.env}"
     xpackPlugins      = "No"
     kibana            = "Yes"
     adminUsername     = "admin"

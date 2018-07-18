@@ -4,6 +4,7 @@ variable "product" {
 
 variable "location" {
   type = "string"
+  default = "UK South"
 }
 
 variable "env" {

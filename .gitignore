@@ -1,0 +1,5 @@
+*.iml
+.kitchen
+.terraform
+*.lock
+.idea

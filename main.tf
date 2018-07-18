@@ -27,5 +27,8 @@ resource "azurerm_template_deployment" "elk-iaas" {
     adminUsername     = "admin"
     adminPassword     = "password"
     vNetNewOrExisting = "existing"
+    vNetExistingResourceGroup = "core-infra-ccdelasticsearch"
+    vNetName          = "core-infra-vnet-ccdelasticsearch"
+    vNetClusterSubnetName = "core-infra-subnet-3-ccdelasticsearch"
   }
 }

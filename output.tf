@@ -1,11 +1,11 @@
-output "host_name" {
-  value = "${azurerm_template_deployment.redis-paas.outputs["hostName"]}"
+output "loadbalancer" {
+  value = "${azurerm_template_deployment.elk-iaas.outputs["loadbalancer"]}"
 }
 
-output "access_key" {
-  value = "${azurerm_template_deployment.redis-paas.outputs["accessKey"]}"
+output "kibana" {
+  value = "${azurerm_template_deployment.elk-iaas.outputs["kibana"]}"
 }
 
-output "redis_port" {
-  value = "${azurerm_template_deployment.redis-paas.outputs["sslPort"]}"
+output "jumpboxssh" {
+  value = "${azurerm_template_deployment.elk-iaas.outputs["jumpboxssh"]}"
 }

@@ -1,6 +1,6 @@
 # moj-module-redis
 
-This repository contains the module that enables you to create a Redis PaaS instance.
+This repository contains the module that enables you to create a ElasticSerach cluster IaaS.
 
 ## Variables
 
@@ -18,9 +18,9 @@ The following parameters are required by the module
 
 The following values are provided by the module for use in other modules
 
-- `host_name` the host name which can be used to connect to Redis
-- `access_key` the primary access key required to connect
-- `redis_port` the port on which Redis is running
+- `loadbalancer` the host name which can be used to connect to Redis
+- `kibana` the primary access key required to connect
+- `jumpboxssh` the port on which Redis is running
 
 ## Usage
 

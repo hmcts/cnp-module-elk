@@ -12,15 +12,20 @@ data "template_file" "elktemplate" {
 }
 
 resource "azurerm_template_deployment" "elk-iaas" {
-  template_body       = "${data.template_file.elktemplate.rendered}"
   name                = "${var.product}-${var.env}"
+  template_body       = "${data.template_file.elktemplate.rendered}"
   resource_group_name = "${azurerm_resource_group.elk-resourcegroup.name}"
   deployment_mode     = "Incremental"
 
   parameters = {
-    cachename = "${var.product}-${var.env}"
-    location  = "${azurerm_resource_group.elk-resourcegroup.location}"
-    subnetid  = "${var.subnetid}"
-    env       = "${var.env}"
+    esClusterName     = "${var.product}-elk-${var.env}"
+    location          = "${azurerm_resource_group.elk-resourcegroup.location}"
+    subnetid          = "${var.subnetid}"
+    env               = "${var.env}"
+    xpackPlugins      = "No"
+    kibana            = "Yes"
+    adminUsername     = "admin"
+    adminPassword     = "password"
+    vNetNewOrExisting = "existing"
   }
 }

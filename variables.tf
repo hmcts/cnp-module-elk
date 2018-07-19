@@ -14,3 +14,15 @@ variable "env" {
 variable "common_tags" {
   type = "map"
 }
+
+variable "vNetName" {
+  type = "string"
+}
+
+variable "vNetExistingResourceGroup" {
+  type = "string"
+}
+
+variable "vNetClusterSubnetName" {
+  type = "string"
+}

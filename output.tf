@@ -1,11 +1,11 @@
 output "loadbalancer" {
-  value = "${azurerm_template_deployment.elk-iaas.outputs["loadbalancer"]}"
+  value = "${azurerm_template_deployment.elastic-iaas.outputs["loadbalancer"]}"
 }
 
 output "kibana" {
-  value = "${azurerm_template_deployment.elk-iaas.outputs["kibana"]}"
+  value = "${azurerm_template_deployment.elastic-iaas.outputs["kibana"]}"
 }
 
 output "jumpboxssh" {
-  value = "${azurerm_template_deployment.elk-iaas.outputs["jumpboxssh"]}"
+  value = "${azurerm_template_deployment.elastic-iaas.outputs["jumpboxssh"]}"
 }

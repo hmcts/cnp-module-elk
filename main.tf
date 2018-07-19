@@ -18,6 +18,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
   deployment_mode     = "Incremental"
 
   parameters = {
+    # See https://github.com/elastic/azure-marketplace#parameters
     esClusterName     = "${var.product}-elastic-search-${var.env}"
     location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
 

@@ -20,9 +20,11 @@ resource "azurerm_template_deployment" "elastic-iaas" {
   parameters = {
     esClusterName     = "${var.product}-elastic-search-${var.env}"
     location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
+
     esVersion         = "6.3.0"
     xpackPlugins      = "No"
     kibana            = "Yes"
+
     adminUsername     = "elkadmin"
     adminPassword     = "password123!"
     securityAdminPassword = "password123!"
@@ -30,11 +32,13 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     securityBootstrapPassword = ""
     securityLogstashPassword = "password123!"
     securityReadPassword = "password123!"
+
     vNetNewOrExisting = "existing"
     vNetName          = "${var.vNetName}"
     vNetExistingResourceGroup = "${var.vNetExistingResourceGroup}"
     vNetClusterSubnetName = "${var.vNetClusterSubnetName}"
     vNetLoadBalancerIp = "${var.vNetLoadBalancerIp}"
+
     vmSizeKibana = "Standard_A2"
     vmSizeDataNodes = "Standard_A2"
     vmSizeClientNodes = "Standard_A2"

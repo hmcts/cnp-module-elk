@@ -35,5 +35,9 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vNetExistingResourceGroup = "${var.vNetExistingResourceGroup}"
     vNetClusterSubnetName = "${var.vNetClusterSubnetName}"
     vNetLoadBalancerIp = "${var.vNetLoadBalancerIp}"
+    vmSizeKibana = "Standard_A2"
+    vmSizeDataNodes = "Standard_A2"
+    vmSizeClientNodes = "Standard_A2"
+    vmSizeMasterNodes = "Standard_A2"
   }
 }

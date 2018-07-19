@@ -7,13 +7,13 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
     )}"
 }
 
-data "template_file" "elktemplate" {
-  template = "${file("${path.module}/templates/mainTemplate.json")}"
+data "http" "template" {
+  url = "https://raw.githubusercontent.com/elastic/azure-marketplace/master/src/mainTemplate.json"
 }
 
 resource "azurerm_template_deployment" "elastic-iaas" {
   name                = "${var.product}-${var.env}"
-  template_body       = "${data.template_file.elktemplate.rendered}"
+  template_body       = "${data.http.template.body}"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
   deployment_mode     = "Incremental"
 

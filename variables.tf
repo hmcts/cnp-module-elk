@@ -26,3 +26,7 @@ variable "vNetExistingResourceGroup" {
 variable "vNetClusterSubnetName" {
   type = "string"
 }
+
+variable "vNetLoadBalancerIp" {
+  type = "string"
+}

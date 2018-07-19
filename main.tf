@@ -34,5 +34,6 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vNetName          = "${var.vNetName}"
     vNetExistingResourceGroup = "${var.vNetExistingResourceGroup}"
     vNetClusterSubnetName = "${var.vNetClusterSubnetName}"
+    vNetLoadBalancerIp = "${var.vNetLoadBalancerIp}"
   }
 }

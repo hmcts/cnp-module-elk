@@ -8,7 +8,7 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
 }
 
 data "http" "template" {
-  url = "https://raw.githubusercontent.com/elastic/azure-marketplace/master/src/mainTemplate.json"
+  url = "https://raw.githubusercontent.com/elastic/azure-marketplace/6.3.0/src/mainTemplate.json"
 }
 
 resource "azurerm_template_deployment" "elastic-iaas" {

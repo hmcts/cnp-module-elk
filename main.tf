@@ -7,8 +7,13 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
     )}"
 }
 
+locals {
+  artifactsBaseUrl = "https://raw.githubusercontent.com/elastic/azure-marketplace/6.3.0/src"
+  templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
+}
+
 data "http" "template" {
-  url = "https://raw.githubusercontent.com/elastic/azure-marketplace/6.3.0/src/mainTemplate.json"
+url = "${local.templateUrl}"
 }
 
 resource "azurerm_template_deployment" "elastic-iaas" {
@@ -19,6 +24,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
   parameters = {
     # See https://github.com/elastic/azure-marketplace#parameters
+    artifactsBaseUrl  = "${local.artifactsBaseUrl}"
     esClusterName     = "${var.product}-elastic-search-${var.env}"
     location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
 

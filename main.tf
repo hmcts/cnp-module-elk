@@ -40,11 +40,17 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     securityLogstashPassword = "password123!"
     securityReadPassword = "password123!"
 
-    vNetNewOrExisting = "existing"
-    vNetName          = "${var.vNetName}"
-    vNetExistingResourceGroup = "${var.vNetExistingResourceGroup}"
-    vNetClusterSubnetName = "${var.vNetClusterSubnetName}"
-    vNetLoadBalancerIp = "${var.vNetLoadBalancerIp}"
+//    vNetNewOrExisting = "existing"
+//    vNetName          = "${var.vNetName}"
+//    vNetExistingResourceGroup = "${var.vNetExistingResourceGroup}"
+//    vNetClusterSubnetName = "${var.vNetClusterSubnetName}"
+//    vNetLoadBalancerIp = "${var.vNetLoadBalancerIp}"
+
+    vNetNewOrExisting = "new"
+    vNetName          = "elastic-sandbox-vnet"
+//    vNetNewAddressPrefix = "10.0.0.0/24"
+//    vNetLoadBalancerIp = "${var.vNetLoadBalancerIp}"
+//    vNetNewClusterSubnetAddressPrefix =
 
     vmSizeKibana = "Standard_A2"
     vmSizeDataNodes = "Standard_A2"

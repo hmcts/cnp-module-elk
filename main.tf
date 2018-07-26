@@ -48,9 +48,9 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
     vNetNewOrExisting = "new"
     vNetName          = "elastic-sandbox-vnet"
-//    vNetNewAddressPrefix = "10.0.0.0/24"
-//    vNetLoadBalancerIp = "${var.vNetLoadBalancerIp}"
-//    vNetNewClusterSubnetAddressPrefix =
+    vNetNewAddressPrefix = "40.0.0.0/24"
+    vNetLoadBalancerIp = "40.0.0.4"
+    vNetNewClusterSubnetAddressPrefix = "40.0.0.0/25"
 
     vmSizeKibana = "Standard_A2"
     vmSizeDataNodes = "Standard_A2"

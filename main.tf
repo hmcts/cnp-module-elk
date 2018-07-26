@@ -51,6 +51,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmSizeClientNodes = "Standard_A2"
     vmSizeMasterNodes = "Standard_A2"
 
-    vmDataNodeCount = 2
+    vmDataNodeCount = "2"
+    vmDataDiskCount = "1"
   }
 }

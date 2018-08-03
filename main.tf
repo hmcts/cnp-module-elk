@@ -55,23 +55,23 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmSizeMasterNodes = "Standard_A2"
   }
 }
-//
-//data "azurerm_subnet" "elastic-subnet" {
-//  name                 = "${local.elasticSubnetName}"
-//  virtual_network_name = "${local.elasticVnetName}"
-//  resource_group_name  = "${azurerm_resource_group.elastic-resourcegroup.name}"
-//}
-//
-//resource "azurerm_network_interface" "logstash" {
-//  name                  = "${var.product}-logstash-nic-${var.env}"
-//  location              = "${azurerm_resource_group.elastic-resourcegroup.location}"
-//
-//  ip_configuration {
-//    name                          = "${var.product}-logstash-nic-ip-${var.env}"
-//    subnet_id                     = "${data.azurerm_subnet.elastic-subnet.id}"
-//    private_ip_address_allocation = "dynamic"
-//  }
-//}
+
+data "azurerm_subnet" "elastic-subnet" {
+  name                 = "${local.elasticSubnetName}"
+  virtual_network_name = "${local.elasticVnetName}"
+  resource_group_name  = "${azurerm_resource_group.elastic-resourcegroup.name}"
+}
+
+resource "azurerm_network_interface" "logstash" {
+  name                  = "${var.product}-logstash-nic-${var.env}"
+  location              = "${azurerm_resource_group.elastic-resourcegroup.location}"
+
+  ip_configuration {
+    name                          = "${var.product}-logstash-nic-ip-${var.env}"
+    subnet_id                     = "${data.azurerm_subnet.elastic-subnet.id}"
+    private_ip_address_allocation = "dynamic"
+  }
+}
 //
 //resource "azurerm_virtual_machine" "logstash" {
 //  name                  = "${var.product}-logstash-vm-${var.env}"

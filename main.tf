@@ -65,6 +65,7 @@ data "azurerm_subnet" "elastic-subnet" {
 resource "azurerm_network_interface" "logstash" {
   name                  = "${var.product}-logstash-nic-${var.env}"
   location              = "${azurerm_resource_group.elastic-resourcegroup.location}"
+  resource_group_name   = "${azurerm_resource_group.elastic-resourcegroup.name}"
 
   ip_configuration {
     name                          = "${var.product}-logstash-nic-ip-${var.env}"

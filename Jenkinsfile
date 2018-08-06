@@ -25,6 +25,12 @@ node {
     checkout scm
   }
 
+  stage('Packer Version') {
+    sh '''
+            packer version
+          '''
+  }
+
   withSubscription(subscription) {
     env.TF_VAR_product = productName
 

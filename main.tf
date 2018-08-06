@@ -75,7 +75,7 @@ resource "azurerm_network_interface" "logstash" {
 }
 //
 //resource "azurerm_virtual_machine" "logstash" {
-//  name                  = "${var.product}-logstash-vm-${var.env}"
+//  name                  = "logstash-vm-${var.env}"
 //  location              = "${azurerm_resource_group.elastic-resourcegroup.location}"
 //  resource_group_name   = "${azurerm_resource_group.elastic-resourcegroup.name}"
 //  network_interface_ids = ["${azurerm_network_interface.logstash.id}"]

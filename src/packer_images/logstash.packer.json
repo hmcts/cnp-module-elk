@@ -1,5 +1,4 @@
 {
-  "description": "Elasticsarch Image",
   "variables": {
     "client_id": "{{env `ARM_CLIENT_ID`}}",
     "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
@@ -7,11 +6,10 @@
     "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
     "resource_group_name": "{{env `ARM_RESOURCE_GROUP`}}",
     "storage_account_name": "{{env `ARM_STORAGE_ACCOUNT`}}",
-
     "ssh_user": "centos",
     "ssh_pass": "password",
-
-    "vmimage_base_version": "{{env `ARM_vmimage_base_version`}}"
+    "environment": "{{env `ENVIRONMENT`}}",
+    "forgerock_ds_tokenstore_version": "{{env `ARM_forgerock_ds_tokenstore_version`}}"
   },
   "builders": [{
     "type": "azure-arm",
@@ -20,43 +18,52 @@
     "subscription_id": "{{user `subscription_id`}}",
     "tenant_id": "{{user `tenant_id`}}",
 
-      "managed_image_resource_group_name": "{{user `azure_resource_group_name`}}",
-      "managed_image_name": "elasticsearch6-{{isotime \"2006-01-02T030405\"}}",
+    "managed_image_resource_group_name": "{{user `resource_group_name`}}",
+    "managed_image_name": "forgerock-ds-tokenstore-{{user `forgerock_ds_tokenstore_version`}}",
 
-      "os_type": "Linux",
-      "image_publisher": "Canonical",
-      "image_offer": "UbuntuServer",
-      "image_sku": "16.04-LTS",
+    "ssh_username": "{{user `ssh_user`}}",
+    "ssh_password": "{{user `ssh_pass`}}",
 
-      "location": "{{user `azure_location`}}",
-      "vm_size": "Standard_DS2_v2"
-    }
-  ],
+    "os_type": "Linux",
+    "image_publisher": "OpenLogic",
+    "image_offer": "CentOS",
+    "image_sku": "7.3",
+    "image_version": "latest",
+    "location": "UK South",
+    "vm_size": "Standard_DS2_v2",
+
+    "ssh_pty": "true"
+  }],
   "provisioners": [
     {
-      "type": "shell",
-      "script": "update-machine.sh",
-      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+      "type": "file",
+      "source": "./jdk-8u161-linux-x64.rpm",
+      "destination": "/usr/tmp/jdk-8u161-linux-x64.rpm"
     },
     {
       "type": "file",
-      "source": "../templates/elasticsearch.yml",
-      "destination": "elasticsearch.yml"
+      "source": "./DS-5.5.0-1.noarch.rpm",
+      "destination": "/usr/tmp/DS-5.5.0-1.noarch.rpm"
     },
     {
-      "type": "shell",
-      "script": "install-java8.sh",
-      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+      "type": "file",
+      "source": "ansible.zip",
+      "destination": "/usr/tmp/ansible.zip"
     },
     {
+      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+      "inline": [
+        "echo 'Installing Dependencies'",
+        "yum install ansible epel-release -y",
+        "echo 'Unpacking Ansible'",
+        "cd /usr/tmp/ && unzip /usr/tmp/ansible.zip -d /tmp",
+        "echo 'Running Ansible'",
+        "cd /tmp/ansible && ansible-playbook -i inventories/dev/inventory_localhost opendscts.yml --tags phase_one -e 'env=localhost force_ds_ctsstore=Yes'",
+        "sync; sync;",
+        "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+      ],
+      "inline_shebang": "/bin/sh -x",
       "type": "shell",
-      "script": "install-elasticsearch6.sh",
-      "environment_vars": [ "ES_VERSION={{user `elasticsearch_version`}}" ],
-      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-    },
-    {
-      "type": "shell",
-      "script": "install-custom.sh"
-    }
-  ]
+      "skip_clean": true
+    }]
 }

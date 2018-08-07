@@ -63,6 +63,7 @@ def packerInstall(body) {
   }
   // otherwise download and install specified version
   download_file("https://releases.hashicorp.com/packer/${config.version}/packer_${config.version}_${config.platform}.zip", 'packer.zip')
+  sh 'ls -l packer.zip'
   unzip(zipFile: 'packer.zip', dir: config.install_path)
   sh "chmod +rx ${config.install_path}/packer"
   remove_file('packer.zip')
@@ -74,7 +75,5 @@ def remove_file(String file) {
 }
 
 def download_file(String url, String dest) {
-  def file = new File(dest).newOutputStream()
-  file << new URL(url).openStream()
-  file.close()
+    sh "wget -q -O ${dest} ${url}"
 }

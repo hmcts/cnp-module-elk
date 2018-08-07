@@ -27,7 +27,7 @@ node {
 
   stage('Packer') {
     packerInstall {
-      install_path = '/usr/bin' // optional location to install packer
+      install_path = '.' // optional location to install packer
       platform = 'linux_amd64' // platform where packer will be installed
       version = '1.1.3' // version of packer to install
     }

@@ -62,9 +62,17 @@ def packerInstall(body) {
     }
   }
   // otherwise download and install specified version
-  new utils().download_file("https://releases.hashicorp.com/packer/${config.version}/packer_${config.version}_${config.platform}.zip", 'packer.zip')
+  download_file("https://releases.hashicorp.com/packer/${config.version}/packer_${config.version}_${config.platform}.zip", 'packer.zip')
   unzip(zipFile: 'packer.zip', dir: config.install_path)
   sh "chmod +rx ${config.install_path}/packer"
-  new utils().remove_file('packer.zip')
+  remove_file('packer.zip')
   print "Packer successfully installed at ${config.install_path}/packer."
+}
+
+def remove_file(String file) {
+    new File(file).delete()
+}
+
+def download_file(String url, String dest) {
+    sh "wget -q -O ${dest} ${url}"
 }

@@ -70,11 +70,12 @@ def packerInstall(body) {
   unzip(zipFile: 'packer.zip', dir: config.install_path)
   sh "chmod +rx ${config.install_path}/packer"
   remove_file('packer.zip')
+  sh "ls -l packer"
   print "Packer successfully installed at ${config.install_path}/packer."
 }
 
 def remove_file(String file) {
-    new File(file).delete()
+    sh "rm ${file}"
 }
 
 def download_file(String url, String dest) {

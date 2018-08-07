@@ -66,7 +66,9 @@ def packerInstall(body) {
   sh 'ls -l packer.zip'
   sh 'pwd'
   sh 'ls -l /opt/jenkins/workspace/HMCTS_cnp-module-elk_master-DUAS6XIVJXFJ5QGTXXH46AS5NTBKF6ND4OOTMBS4IAGUTOSU7N3A/packer.zip'
+  sh 'ls -l /usr/bin'
   unzip(zipFile: 'packer.zip', dir: config.install_path)
+  sh 'ls -l /usr/bin/packer.zip'
   sh "chmod +rx ${config.install_path}/packer"
   remove_file('packer.zip')
   print "Packer successfully installed at ${config.install_path}/packer."

@@ -74,5 +74,7 @@ def remove_file(String file) {
 }
 
 def download_file(String url, String dest) {
-    sh "wget -q -O ${dest} ${url}"
+  def file = new File(dest).newOutputStream()
+  file << new URL(url).openStream()
+  file.close()
 }

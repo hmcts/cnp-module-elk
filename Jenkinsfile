@@ -64,6 +64,8 @@ def packerInstall(body) {
   // otherwise download and install specified version
   download_file("https://releases.hashicorp.com/packer/${config.version}/packer_${config.version}_${config.platform}.zip", 'packer.zip')
   sh 'ls -l packer.zip'
+  sh 'pwd'
+  sh 'ls -l /opt/jenkins/workspace/HMCTS_cnp-module-elk_master-DUAS6XIVJXFJ5QGTXXH46AS5NTBKF6ND4OOTMBS4IAGUTOSU7N3A/packer.zip'
   unzip(zipFile: 'packer.zip', dir: config.install_path)
   sh "chmod +rx ${config.install_path}/packer"
   remove_file('packer.zip')

@@ -42,7 +42,7 @@
     },
     {
       "type": "shell",
-      "script": "src/packer_images/install-java8.sh",
+      "script": "src/packer_images/install_java8.sh",
       "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     },
     {

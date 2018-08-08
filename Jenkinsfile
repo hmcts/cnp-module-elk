@@ -111,9 +111,6 @@ def packerBuild(body) {
         }
       }
       if (config.var != null) {
-        if (!(config.var instanceof String[])) {
-          throw new Exception('The var parameter must be an array of strings.')
-        }
         config.var.each() {
           cmd += " -var ${it}"
         }

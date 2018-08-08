@@ -35,9 +35,11 @@ node {
 
   stage('Packer Build Image') {
     withSubscription(subscription) {
+
       packerBuild {
           bin = './packer' // optional location of packer install
           template = 'src/packer_images/logstash.packer.json'
+          var = ["resource_group_name=${params.PRODUCT_NAME}-elastic-search-${params.ENVIRONMENT}"] // optional variable setting
       }
 
     }

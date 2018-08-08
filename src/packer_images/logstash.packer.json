@@ -21,11 +21,17 @@
     "ssh_username": "{{user `ssh_user`}}",
     "ssh_password": "{{user `ssh_pass`}}",
 
+//    "os_type": "Linux",
+//    "image_publisher": "OpenLogic",
+//    "image_offer": "CentOS",
+//    "image_sku": "7.3",
+//    "image_version": "latest",
+
     "os_type": "Linux",
-    "image_publisher": "OpenLogic",
-    "image_offer": "CentOS",
-    "image_sku": "7.3",
-    "image_version": "latest",
+    "image_publisher": "Canonical",
+    "image_offer": "UbuntuServer",
+    "image_sku": "16.04-LTS",
+
     "location": "UK South",
     "vm_size": "Standard_DS2_v2",
 
@@ -34,8 +40,19 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "./jdk-8u161-linux-x64.rpm",
-      "destination": "/usr/tmp/jdk-8u161-linux-x64.rpm"
+      "source": "../templates/logstash.conf",
+      "destination": "logstash.conf"
+    },
+    {
+      "type": "shell",
+      "script": "install-java8.sh",
+      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     }
+//    {
+//      "type": "shell",
+//      "script": "install-logstash.sh",
+//      "environment_vars": [ "ES_VERSION={{user `elasticsearch_version`}}" ],
+//      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+//    },
   ]
 }

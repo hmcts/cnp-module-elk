@@ -21,6 +21,8 @@
     "ssh_username": "{{user `ssh_user`}}",
     "ssh_password": "{{user `ssh_pass`}}",
 
+
+
     "os_type": "Linux",
     "image_publisher": "Canonical",
     "image_offer": "UbuntuServer",
@@ -34,7 +36,7 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "../templates/logstash.conf",
+      "source": "logstash.conf",
       "destination": "logstash.conf"
     },
     {

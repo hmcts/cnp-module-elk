@@ -17,7 +17,7 @@
     "tenant_id": "{{user `tenant_id`}}",
 
     "managed_image_resource_group_name": "{{user `resource_group_name`}}",
-    "managed_image_name": "ccd-logstash-ami",
+    "managed_image_name": "logstash-image-{{isotime \"2006-01-02T030405\"}}",
 
     "ssh_username": "{{user `ssh_user`}}",
     "ssh_password": "{{user `ssh_pass`}}",

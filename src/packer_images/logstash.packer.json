@@ -47,7 +47,7 @@
     },
     {
       "type": "shell",
-      "script": "install-logstash.sh",
+      "script": "install_logstash.sh",
       "environment_vars": [ "LOGSTASH_VERSION={{user `logstash_version`}}" ],
       "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     }

@@ -8,8 +8,7 @@
     "storage_account_name": "{{env `ARM_STORAGE_ACCOUNT`}}",
     "ssh_user": "centos",
     "ssh_pass": "password",
-    "environment": "{{env `ENVIRONMENT`}}",
-    "forgerock_ds_tokenstore_version": "{{env `ARM_forgerock_ds_tokenstore_version`}}"
+    "environment": "{{env `ENVIRONMENT`}}"
   },
   "builders": [{
     "type": "azure-arm",
@@ -19,7 +18,7 @@
     "tenant_id": "{{user `tenant_id`}}",
 
     "managed_image_resource_group_name": "{{user `resource_group_name`}}",
-    "managed_image_name": "forgerock-ds-tokenstore-{{user `forgerock_ds_tokenstore_version`}}",
+    "managed_image_name": "ccd-logstash-ami",
 
     "ssh_username": "{{user `ssh_user`}}",
     "ssh_password": "{{user `ssh_pass`}}",
@@ -39,31 +38,6 @@
       "type": "file",
       "source": "./jdk-8u161-linux-x64.rpm",
       "destination": "/usr/tmp/jdk-8u161-linux-x64.rpm"
-    },
-    {
-      "type": "file",
-      "source": "./DS-5.5.0-1.noarch.rpm",
-      "destination": "/usr/tmp/DS-5.5.0-1.noarch.rpm"
-    },
-    {
-      "type": "file",
-      "source": "ansible.zip",
-      "destination": "/usr/tmp/ansible.zip"
-    },
-    {
-      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
-      "inline": [
-        "echo 'Installing Dependencies'",
-        "yum install ansible epel-release -y",
-        "echo 'Unpacking Ansible'",
-        "cd /usr/tmp/ && unzip /usr/tmp/ansible.zip -d /tmp",
-        "echo 'Running Ansible'",
-        "cd /tmp/ansible && ansible-playbook -i inventories/dev/inventory_localhost opendscts.yml --tags phase_one -e 'env=localhost force_ds_ctsstore=Yes'",
-        "sync; sync;",
-        "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
-      ],
-      "inline_shebang": "/bin/sh -x",
-      "type": "shell",
-      "skip_clean": true
-    }]
+    }
+  ]
 }

@@ -25,7 +25,7 @@ node {
     checkout scm
   }
 
-  stage('Packer') {
+  stage('Packer Install') {
     packerInstall {
       install_path = '.' // optional location to install packer
       platform = 'linux_amd64' // platform where packer will be installed
@@ -33,10 +33,13 @@ node {
     }
   }
 
-  withSubscription(subscription) {
-    env.TF_VAR_product = productName
+  stage('Packer Build Image') {
+    withSubscription(subscription) {
+      packerBuild {
+        template = 'packer_images/logstash.packer.json'
+      }
 
-    spinInfra(productName, environment, planOnly, subscription)
+    }
   }
 }
 
@@ -63,14 +66,9 @@ def packerInstall(body) {
   }
   // otherwise download and install specified version
   download_file("https://releases.hashicorp.com/packer/${config.version}/packer_${config.version}_${config.platform}.zip", 'packer.zip')
-  sh 'ls -l packer.zip'
-  sh 'pwd'
-  sh 'ls -l /opt/jenkins/workspace/HMCTS_cnp-module-elk_master-DUAS6XIVJXFJ5QGTXXH46AS5NTBKF6ND4OOTMBS4IAGUTOSU7N3A/packer.zip'
-  sh 'ls -l /usr/bin'
   unzip(zipFile: 'packer.zip', dir: config.install_path)
   sh "chmod +rx ${config.install_path}/packer"
   remove_file('packer.zip')
-  sh "ls -l packer"
   print "Packer successfully installed at ${config.install_path}/packer."
 }
 
@@ -80,4 +78,56 @@ def remove_file(String file) {
 
 def download_file(String url, String dest) {
     sh "wget -q -O ${dest} ${url}"
+}
+
+def packerBuild(body) {
+  // evaluate the body block and collect configuration into the object
+  def config = [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = config
+  body()
+
+  // input checking
+  if (config.template == null) {
+    throw new Exception('The required template parameter was not set.')
+  }
+  config.bin = config.bin == null ? 'packer' : config.bin
+
+  if (fileExists(config.template)) {
+    // create artifact with packer
+    try {
+      cmd = "${config.bin} build -color=false"
+
+      // check for optional inputs
+      if (config.var_file != null) {
+        if (fileExists(config.var_file)) {
+          cmd += " -var_file=${config.var_file}"
+        }
+        else {
+          throw new Exception("The var file ${config.var_file} does not exist!")
+        }
+      }
+      if (config.var != null) {
+        if (!(config.var instanceof String[])) {
+          throw new Exception('The var parameter must be an array of strings.')
+        }
+        config.var.each() {
+          cmd += " -var ${it}"
+        }
+      }
+      if (config.only != null) {
+        cmd += " -only=${config.only}"
+      }
+
+      sh "${cmd} ${config.template}"
+    }
+    catch(Exception error) {
+      print 'Failure using packer build.'
+      throw error
+    }
+    print 'Packer build artifact created successfully.'
+  }
+  else {
+    throw new Exception("The template file ${config.template} does not exist!")
+  }
 }

@@ -35,11 +35,6 @@
   }],
   "provisioners": [
     {
-      "type": "file",
-      "source": "logstash.conf",
-      "destination": "logstash.conf"
-    },
-    {
       "type": "shell",
       "script": "install-java8.sh",
       "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"

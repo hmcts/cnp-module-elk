@@ -37,7 +37,7 @@ node {
     withSubscription(subscription) {
       packerBuild {
           bin = '.' // optional location of packer install
-          template = 'src/packer_images/logstash.packer.json'
+          template = 'packer_images/logstash.packer.json'
       }
 
     }

@@ -36,7 +36,7 @@ node {
   stage('Packer Build Image') {
     withSubscription(subscription) {
       packerBuild {
-        template = 'packer_images/logstash.packer.json'
+        template = 'src/packer_images/logstash.packer.json'
       }
 
     }

@@ -20,34 +20,31 @@ planOnly = params.PLAN_ONLY
 node {
   env.PATH = "$env.PATH:/usr/local/bin"
   def az = { cmd -> return sh(script: "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-$subscription az $cmd", returnStdout: true).trim() }
-  stages {
-    stage('Checkout') {
-      deleteDir()
-      checkout scm
+  stage('Checkout') {
+    deleteDir()
+    checkout scm
+  }
+
+  stage('Packer Install') {
+    when {
+      expression { params.BUILD_LOGSTASH_IMAGE == true }
     }
-
-    stage('Packer Install') {
-      when {
-        expression { params.BUILD_LOGSTASH_IMAGE == true }
-      }
-      packerInstall {
-        install_path = '.' // optional location to install packer
-        platform = 'linux_amd64' // platform where packer will be installed
-        version = '1.1.3' // version of packer to install
-      }
+    packerInstall {
+      install_path = '.' // optional location to install packer
+      platform = 'linux_amd64' // platform where packer will be installed
+      version = '1.1.3' // version of packer to install
     }
+  }
 
-    stage('Packer Build Image') {
-      when {
-        expression { params.BUILD_LOGSTASH_IMAGE == true }
-      }
-      withSubscription(subscription) {
-        packerBuild {
-          bin = './packer' // optional location of packer install
-          template = 'src/packer_images/logstash.packer.json'
-          var = ["resource_group_name=ccd-definition-store-elastic-search-sandbox"] // optional variable setting
-        }
-
+  stage('Packer Build Image') {
+    when {
+      expression { params.BUILD_LOGSTASH_IMAGE == true }
+    }
+    withSubscription(subscription) {
+      packerBuild {
+        bin = './packer' // optional location of packer install
+        template = 'src/packer_images/logstash.packer.json'
+        var = ["resource_group_name=ccd-definition-store-elastic-search-sandbox"] // optional variable setting
       }
     }
   }

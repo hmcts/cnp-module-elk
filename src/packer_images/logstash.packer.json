@@ -5,7 +5,7 @@
     "tenant_id": "{{env `ARM_TENANT_ID`}}",
     "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
     "resource_group_name": "",
-    "logstash_version" : "6.3.0",
+    "logstash_version" : "6.3.0-1",
     "ssh_user": "centos",
     "ssh_pass": "password"
   },

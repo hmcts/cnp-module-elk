@@ -14,6 +14,6 @@ else
     apt-get install logstash=$LOGSTASH_VERSION
 fi
 
-systemctl status logstash
+# systemctl status logstash
 
 mv logstash.conf /usr/share/logstash/logstash.conf

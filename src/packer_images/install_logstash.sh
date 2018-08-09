@@ -16,4 +16,4 @@ fi
 
 systemctl status logstash
 
-mv logstash.conf /usr/share/logstash/logstash.yml
+mv logstash.conf /usr/share/logstash/logstash.conf

@@ -73,38 +73,38 @@ resource "azurerm_network_interface" "logstash" {
     private_ip_address_allocation = "dynamic"
   }
 }
-//
-//resource "azurerm_virtual_machine" "logstash" {
-//  name                  = "logstash-vm-${var.env}"
-//  location              = "${azurerm_resource_group.elastic-resourcegroup.location}"
-//  resource_group_name   = "${azurerm_resource_group.elastic-resourcegroup.name}"
-//  network_interface_ids = ["${azurerm_network_interface.logstash.id}"]
-//  vm_size               = "Standard_A2"
-//
-//  storage_image_reference {
-//    id = "${data.azurerm_image.logstash.id}"
-//  }
-//
-//  storage_os_disk {
-//    name              = "es-logstash-osdisk"
-//    caching           = "ReadWrite"
-//    create_option     = "FromImage"
-//    managed_disk_type = "Standard_LRS"
-//  }
-//
-//  "os_profile" {
-//    computer_name = "es-logstash-os-profile"
-//    admin_username = "ubuntu"
-//    admin_password = "password123!"
-////    custom_data = "${data.template_file.singlenode_userdata_script.rendered}"
-//  }
-//
-//  os_profile_linux_config {
-//    disable_password_authentication = false
-//
-////    ssh_keys {
-////      path     = "/home/ubuntu/.ssh/authorized_keys"
-////      key_data = "${file(var.key_path)}"
-////    }
-//  }
-//}
+
+resource "azurerm_virtual_machine" "logstash" {
+  name                  = "logstash-vm-${var.env}"
+  location              = "${azurerm_resource_group.elastic-resourcegroup.location}"
+  resource_group_name   = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_interface_ids = ["${azurerm_network_interface.logstash.id}"]
+  vm_size               = "Standard_A2"
+
+  storage_image_reference {
+    id = "${data.azurerm_image.logstash.id}"
+  }
+
+  storage_os_disk {
+    name              = "es-logstash-osdisk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+
+  "os_profile" {
+    computer_name = "es-logstash-os-profile"
+    admin_username = "ubuntu"
+    admin_password = "password123!"
+//    custom_data = "${data.template_file.singlenode_userdata_script.rendered}"
+  }
+
+  os_profile_linux_config {
+    disable_password_authentication = false
+
+//    ssh_keys {
+//      path     = "/home/ubuntu/.ssh/authorized_keys"
+//      key_data = "${file(var.key_path)}"
+//    }
+  }
+}

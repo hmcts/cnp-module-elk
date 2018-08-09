@@ -102,9 +102,9 @@ resource "azurerm_virtual_machine" "logstash" {
   os_profile_linux_config {
     disable_password_authentication = false
 
-//    ssh_keys {
-//      path     = "/home/ubuntu/.ssh/authorized_keys"
-//      key_data = "${file(var.key_path)}"
-//    }
+    ssh_keys {
+      path     = "/home/ubuntu/.ssh/authorized_keys"
+      key_data = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC4ldrQVFYTIFE5tRKSutFe39LFAsVFB6sZUCGpM4xrZwc9CqlbfagTrpMJz2ey3XwXSjNbD/cjS5xVUOOEUK5pJpvKlZyBDNVYUUMzKv6Y1kNPrdYUa2oA+E4e8W4mg3ZKqtnWLPeGcZJ86/ZPoFHhdyYHEuP7ucIC18236kG2DNxw3Ex+kn4h/OeSeh0S0C2XWnJqUMTfwrm8bdOX3ODnD4h7rN87ak+WvktUm8EWWVnknN7MoEIRg6A6/CevxQG/69XkEDbfmsyH9tUsOoCrtwYU2il1rkTkAf6JaGo5fr/wVU55gij4Ka5DE8TPqFkL1/2OimBRTFcnE1enS0nH9txxJWnwYQWjfN9wL4hQ1WJZLNpv/WuCLp9afQNV98DwbWjbE+DfBoXyaZijdbFUD1Zv2ZOM3T3vyt+nQi57CwiG5Scq3Z9TyLt9pmDibJdQ0EByDXvIxPcaGQy9G+3kP3WmeAN81H8Z1FmRBDvLA3DkEpAYvw983wGRvTzuvwpjicPKnYe5oQFBCuHQi7/d0TrENFpdulb1+FPLJ6u+jG3WWquK8b88tm06jh/dLTaVVhu98h+P4cz3qhd7gctp3A+QLa0xEi2bNmCrFcfK7zCO5soijCyxXGwdqc7aDZUgo1gbueJJbOMNx4PYrn97A6IqUt4qDri7kLCe5nuxSw=="
+    }
   }
 }

@@ -5,8 +5,8 @@
     "tenant_id": "{{env `ARM_TENANT_ID`}}",
     "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
     "resource_group_name": "",
-    "ssh_user": "centos",
-    "ssh_pass": "password"
+    "ssh_user": "ubuntu",
+    "ssh_pass": "password123!"
   },
   "builders": [{
     "type": "azure-arm",

@@ -93,7 +93,7 @@ resource "azurerm_virtual_machine" "logstash" {
   }
 
   "os_profile" {
-    computer_name = "es-logstash-os-profile"
+    computer_name = "logstash-vm-${var.env}"
     admin_username = "ubuntu"
     admin_password = "password123!"
 //    custom_data = "${data.template_file.singlenode_userdata_script.rendered}"

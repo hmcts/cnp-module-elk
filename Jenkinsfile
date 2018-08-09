@@ -27,7 +27,6 @@ node {
 
   if (params.BUILD_LOGSTASH_IMAGE == true) {
     stage('Packer Install') {
-
       packerInstall {
         install_path = '.' // optional location to install packer
         platform = 'linux_amd64' // platform where packer will be installed
@@ -36,9 +35,6 @@ node {
     }
 
     stage('Packer Build Image') {
-      when {
-        expression { params.BUILD_LOGSTASH_IMAGE == true }
-      }
       withSubscription(subscription) {
         packerBuild {
           bin = './packer' // optional location of packer install

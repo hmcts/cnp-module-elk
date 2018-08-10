@@ -20,3 +20,4 @@ mv logstash.conf /usr/share/logstash/logstash.conf
 
 wget -q https://jdbc.postgresql.org/download/postgresql-42.2.2.jar
 mv postgresql-42.2.2.jar /usr/share/logstash/postgresql-42.2.2.jar
+sudo chmod 777 /usr/share/logstash/data

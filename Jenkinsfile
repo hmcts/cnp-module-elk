@@ -39,7 +39,7 @@ node {
         packerBuild {
           bin = './packer' // optional location of packer install
           template = 'src/packer_images/logstash.packer.json'
-          var = ["resource_group_name=ccd-definition-store-elastic-search-sandbox"] // optional variable setting
+          var = ["resource_group_name=ccd-elastic-search-sandbox"] // optional variable setting
         }
       }
     }

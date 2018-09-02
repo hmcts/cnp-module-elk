@@ -1,5 +1,5 @@
 output "loadbalancer" {
-  value = "${azurerm_template_deployment.elastic-iaas.outputs["loadbalancer"]}"
+  value = "${local.vNetLoadBalancerIp}"
 }
 
 output "kibana" {

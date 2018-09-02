@@ -12,6 +12,7 @@ locals {
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "elastic-search-vnet"
   elasticSubnetName = "elastic-search-subnet"
+  vNetLoadBalancerIp = "10.112.0.4"
 }
 
 data "http" "template" {
@@ -35,7 +36,6 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     kibana            = "Yes"
 
     vmHostNamePrefix = "${var.product}"
-    vmDataNodeCount = "${1}"
 
     adminUsername     = "elkadmin"
     adminPassword     = "password123!"
@@ -48,7 +48,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vNetNewOrExisting = "new"
     vNetName          = "${local.elasticVnetName}"
     vNetNewAddressPrefix = "10.112.0.0/16"
-    vNetLoadBalancerIp = "10.112.0.4"
+    vNetLoadBalancerIp = "${local.vNetLoadBalancerIp}"
     vNetClusterSubnetName = "${local.elasticSubnetName}"
     vNetNewClusterSubnetAddressPrefix = "10.112.0.0/25"
 

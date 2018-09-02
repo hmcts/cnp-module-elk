@@ -35,7 +35,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     xpackPlugins      = "No"
     kibana            = "Yes"
 
-    vmHostNamePrefix = "${var.product}_"
+    vmHostNamePrefix = "${var.product}-"
 
     adminUsername     = "elkadmin"
     adminPassword     = "password123!"

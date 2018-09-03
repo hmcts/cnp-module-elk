@@ -96,7 +96,6 @@ resource "azurerm_virtual_machine" "logstash" {
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
-
   "os_profile" {
     computer_name = "logstash-vm-${var.env}"
     admin_username = "ubuntu"
@@ -104,6 +103,7 @@ resource "azurerm_virtual_machine" "logstash" {
 //    custom_data = "${data.template_file.singlenode_userdata_script.rendered}"
   }
 
+  //FIXME certificates needs to be manually copied to kibana to be able to connect to logstash
   os_profile_linux_config {
     disable_password_authentication = false
 

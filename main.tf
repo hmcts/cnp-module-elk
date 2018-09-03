@@ -60,7 +60,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 }
 
 //FIXME the whole build fails if the cluster doesn not exists yet because there's no elasticVnetName which is required by elastic-subnet
-
+// FIXME requires manual vnet peering to be setup between elastic vnet and ccd vnet
 data "azurerm_subnet" "elastic-subnet" {
   name                 = "${local.elasticSubnetName}"
   virtual_network_name = "${local.elasticVnetName}"

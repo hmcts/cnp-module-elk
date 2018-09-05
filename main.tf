@@ -61,18 +61,6 @@ resource "azurerm_template_deployment" "elastic-iaas" {
   }
 }
 
-//module "elastic" {
-//  source = "git@github.com:hmcts/cnp-module-elk.git?ref=master"
-//  product = "${var.product}"
-//  location = "${var.location}"
-//  env = "${var.env}"
-//  common_tags = "${var.common_tags}"
-//  vNetName = "${data.terraform_remote_state.core_apps_infrastructure.vnetname}"
-//  vNetExistingResourceGroup = "${data.terraform_remote_state.core_apps_infrastructure.resourcegroup_name}"
-//  vNetClusterSubnetName = "${data.terraform_remote_state.core_apps_infrastructure.subnet_names[2]}"
-//  vNetLoadBalancerIp = "${var.elastic_search_host}"
-//}
-
 data "azurerm_subnet" "elastic-subnet" {
   name                 = "${local.elasticSubnetName}"
   virtual_network_name = "${local.elasticVnetName}"

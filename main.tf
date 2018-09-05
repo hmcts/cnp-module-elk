@@ -57,7 +57,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmSizeClientNodes = "Standard_A2"
     vmSizeMasterNodes = "Standard_A2"
 
-    esAdditionalYaml = "action.auto_create_index: 0\n"
+    esAdditionalYaml = "action.auto_create_index: false\nindex.mapper.dynamic: false\n"
   }
 }
 

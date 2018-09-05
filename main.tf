@@ -57,6 +57,18 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmSizeClientNodes = "Standard_A2"
     vmSizeMasterNodes = "Standard_A2"
 
-    esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\nindex.mapper.dynamic: false\n"
+    esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
   }
 }
+
+//module "elastic" {
+//  source = "git@github.com:hmcts/cnp-module-elk.git?ref=master"
+//  product = "${var.product}"
+//  location = "${var.location}"
+//  env = "${var.env}"
+//  common_tags = "${var.common_tags}"
+//  vNetName = "${data.terraform_remote_state.core_apps_infrastructure.vnetname}"
+//  vNetExistingResourceGroup = "${data.terraform_remote_state.core_apps_infrastructure.resourcegroup_name}"
+//  vNetClusterSubnetName = "${data.terraform_remote_state.core_apps_infrastructure.subnet_names[2]}"
+//  vNetLoadBalancerIp = "${var.elastic_search_host}"
+//}

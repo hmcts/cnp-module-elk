@@ -1,6 +1,6 @@
-# moj-module-redis
+# cnp-module-elk
 
-This repository contains the module that enables you to create a ElasticSerach cluster IaaS.
+This repository contains the module that enables you to create an ElasticSearch cluster IaaS.
 
 ## Variables
 

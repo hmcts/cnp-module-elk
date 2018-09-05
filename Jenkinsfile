@@ -4,7 +4,7 @@
 
 properties([
     parameters([
-        string(name: 'PRODUCT_NAME', defaultValue: 'ccd-elk', description: ''),
+        string(name: 'PRODUCT_NAME', defaultValue: 'ccd', description: ''),
         string(name: 'ENVIRONMENT', defaultValue: 'db-sandbox', description: 'Suffix for resources created'),
         choice(name: 'SUBSCRIPTION', choices: 'sandbox\nprod\nnonprod', description: 'Azure subscriptions available to build in'),
         booleanParam(name: 'PLAN_ONLY', defaultValue: true, description: 'set to true for skipping terraform apply'),

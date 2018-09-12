@@ -13,3 +13,11 @@ output "kibana" {
 output "jumpboxssh" {
   value = "${azurerm_template_deployment.elastic-iaas.outputs["jumpboxssh"]}"
 }
+
+output "elastic_resource_group_name" {
+  value = "${azurerm_resource_group.elastic-resourcegroup.name}}"
+}
+
+output "logstash_resource_group_name" {
+  value = "${azurerm_resource_group.logstash-resourcegroup.name}}"
+}

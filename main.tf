@@ -29,54 +29,52 @@ data "http" "template" {
   url = "${local.templateUrl}"
 }
 
+data "template_file" "elktemplate" {
+  template = "${file("${path.module}/templates/mainTemplate.json")}"
+}
+
 resource "azurerm_template_deployment" "elastic-iaas" {
   name                = "${azurerm_resource_group.elastic-resourcegroup.name}-template"
-  template_body       = "${data.http.template.body}"
+  template_body       = "${data.template_file.elktemplate.rendered}"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
   deployment_mode     = "Incremental"
 
-  parameters_body = <<DEPLOY
-  {
-    "parameters": {
-    "vmDataNodeCount": {
-      "type": "int",
-      "value": 2
-    }
+  parameters = {
+    # See https://github.com/elastic/azure-marketplace#parameters
+    artifactsBaseUrl  = "${local.artifactsBaseUrl}"
+    esClusterName     = "${var.product}-elastic-search-${var.env}"
+    location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
 
-    "artifactsBaseUrl  = "${local.artifactsBaseUrl}"
-    "esClusterName     = "${var.product}-elastic-search-${var.env}"
-    "location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
+    esVersion         = "6.3.0"
+    xpackPlugins      = "No"
+    kibana            = "Yes"
 
-    "esVersion         = "6.3.0"
-    "xpackPlugins      = "No"
-    "kibana            = "Yes"
+    vmHostNamePrefix = "${var.product}-"
 
-    "vmHostNamePrefix = "${var.product}-"
+    adminUsername     = "elkadmin"
+    adminPassword     = "password123!"
+    securityAdminPassword = "password123!"
+    securityKibanaPassword = "password123!"
+    securityBootstrapPassword = ""
+    securityLogstashPassword = "password123!"
+    securityReadPassword = "password123!"
 
-    "adminUsername     = "elkadmin"
-    "adminPassword     = "password123!"
-    "securityAdminPassword = "password123!"
-    "securityKibanaPassword = "password123!"
-    "securityBootstrapPassword = ""
-    "securityLogstashPassword = "password123!"
-    "securityReadPassword = "password123!"
+    vNetNewOrExisting = "new"
+    vNetName          = "${local.elasticVnetName}"
+    vNetNewAddressPrefix = "10.112.0.0/16"
+    vNetLoadBalancerIp = "${local.vNetLoadBalancerIp}"
+    vNetClusterSubnetName = "${local.elasticSubnetName}"
+    vNetNewClusterSubnetAddressPrefix = "10.112.0.0/25"
 
-    "vNetNewOrExisting = "new"
-    "vNetName          = "${local.elasticVnetName}"
-    "vNetNewAddressPrefix = "10.112.0.0/16"
-    "vNetLoadBalancerIp = "${local.vNetLoadBalancerIp}"
-    "vNetClusterSubnetName = "${local.elasticSubnetName}"
-    "vNetNewClusterSubnetAddressPrefix = "10.112.0.0/25"
+    vmSizeKibana = "Standard_A2"
+    vmSizeDataNodes = "Standard_A2"
+    vmSizeClientNodes = "Standard_A2"
+    vmSizeMasterNodes = "Standard_A2"
 
-    "vmSizeKibana = "Standard_A2"
-    "vmSizeDataNodes = "Standard_A2"
-    "vmSizeClientNodes = "Standard_A2"
-    "vmSizeMasterNodes = "Standard_A2"
+    dataNodesAreMasterEligible = "${var.dataNodesAreMasterEligible}"
 
-    "dataNodesAreMasterEligible = "${var.dataNodesAreMasterEligible}"
+    vmDataNodeCount = "2"
 
-    "esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
+    esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
   }
-  }
-  DEPLOY
 }

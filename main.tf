@@ -30,7 +30,7 @@ data "http" "template" {
 }
 
 data "template_file" "elktemplate" {
-  template = "${file("${path.module}/templates/mainTemplate.json")}"
+  template = "${file("${path.module}/mainTemplate.json")}"
 }
 
 resource "azurerm_template_deployment" "elastic-iaas" {

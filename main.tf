@@ -67,6 +67,9 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmSizeClientNodes = "Standard_A2"
     vmSizeMasterNodes = "Standard_A2"
 
+    dataNodesAreMasterEligible = "${var.dataNodesAreMasterEligible}"
+    # vmDataNodeCount
+
     esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
   }
 }

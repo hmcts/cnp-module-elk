@@ -14,3 +14,8 @@ variable "env" {
 variable "common_tags" {
   type = "map"
 }
+
+variable "dataNodesAreMasterEligible" {
+  type = "string"
+  default = "Yes"
+}

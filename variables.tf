@@ -19,3 +19,9 @@ variable "dataNodesAreMasterEligible" {
   type = "string"
   default = "Yes"
 }
+
+variable "vmDataNodeCount" {
+  description = "How many nodes to create"
+  type = "string"
+  default = "3"
+}

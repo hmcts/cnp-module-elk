@@ -72,7 +72,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
   }
 
-  parameters_body = "${file("./es-parameter-file.json")}"
+  parameters_body = "${file("es-parameter-file.json")}"
 
 
 }

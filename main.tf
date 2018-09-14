@@ -18,7 +18,7 @@ resource "azurerm_resource_group" "logstash-resourcegroup" {
 }
 
 locals {
-  artifactsBaseUrl = "https://raw.githubusercontent.com/elastic/azure-marketplace/6.3.0/src"
+  artifactsBaseUrl = "https://github.com/hmcts/azure-marketplace/blob/master/src"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet"
   elasticSubnetName = "${var.product}-elastic-search-subnet"
@@ -29,13 +29,9 @@ data "http" "template" {
   url = "${local.templateUrl}"
 }
 
-data "template_file" "elktemplate" {
-  template = "${file("${path.module}/mainTemplate.json")}"
-}
-
 resource "azurerm_template_deployment" "elastic-iaas" {
   name                = "${azurerm_resource_group.elastic-resourcegroup.name}-template"
-  template_body       = "${data.template_file.elktemplate.rendered}"
+  template_body       = "${data.http.template.body}"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
   deployment_mode     = "Incremental"
 
@@ -72,8 +68,6 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmSizeMasterNodes = "Standard_A2"
 
     dataNodesAreMasterEligible = "${var.dataNodesAreMasterEligible}"
-
-    vmDataNodeCount = "2"
 
     esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
   }

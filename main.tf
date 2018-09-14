@@ -7,6 +7,7 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
     )}"
 }
 
+//create the logstash resource group also so that it's there ready for logstash image creation
 resource "azurerm_resource_group" "logstash-resourcegroup" {
   name     = "${var.product}-logstash-${var.env}"
   location = "${var.location}"

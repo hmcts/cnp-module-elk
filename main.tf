@@ -72,13 +72,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
   }
 
-  parameters {
-    name = "vmDataNodeCount"
-    type = "int"
-    int_value = 3
-  }
-
-  # parameters_body = "${file("es-parameter-file.json")}"
+  parameters_body = "${file("es-parameter-file.json")}"
 
 
 }

@@ -18,7 +18,7 @@ resource "azurerm_resource_group" "logstash-resourcegroup" {
 }
 
 locals {
-  artifactsBaseUrl = "https://github.com/hmcts/azure-marketplace/blob/master/src"
+  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet"
   elasticSubnetName = "${var.product}-elastic-search-subnet"

@@ -35,7 +35,7 @@ variable "vmDataDiskCount" {
 variable "vmClientNodeCount" {
   description = "number of client nodes"
   type = "string"
-  default = "1"
+  default = "0"
 }
 
 variable "storageAccountType" {

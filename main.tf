@@ -62,10 +62,10 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vNetClusterSubnetName = "${local.elasticSubnetName}"
     vNetNewClusterSubnetAddressPrefix = "10.112.0.0/25"
 
-    vmSizeKibana = "Standard_A2"
-    vmSizeDataNodes = "Standard_A2"
-    vmSizeClientNodes = "Standard_A2"
-    vmSizeMasterNodes = "Standard_A2"
+    vmSizeKibana = "${var.vmSizeAllNodes}"
+    vmSizeDataNodes = "${var.vmSizeAllNodes}"
+    vmSizeClientNodes = "${var.vmSizeAllNodes}"
+    vmSizeMasterNodes = "${var.vmSizeAllNodes}"
 
     dataNodesAreMasterEligible = "${var.dataNodesAreMasterEligible}"
 
@@ -74,6 +74,6 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmClientNodeCount = "${var.vmClientNodeCount}"
     storageAccountType = "${var.storageAccountType}"
 
-    esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
+    esAdditionalYaml = "${var.esAdditionalYaml}"
   }
 }

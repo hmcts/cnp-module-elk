@@ -44,3 +44,15 @@ variable "storageAccountType" {
   default = "Standard"
 }
 
+variable "vmSizeAllNodes" {
+  description = "vm size for all the cluster nodes"
+  type = "string"
+  default = "Standard_A2"
+}
+
+variable "esAdditionalYaml" {
+  description = "additional configuration"
+  type = "string"
+  default = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
+}
+

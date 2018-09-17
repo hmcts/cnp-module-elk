@@ -62,7 +62,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vNetClusterSubnetName = "${local.elasticSubnetName}"
     vNetNewClusterSubnetAddressPrefix = "10.112.0.0/25"
 
-    vmSizeKibana = "${var.vmSizeAllNodes}"
+    vmSizeKibana = "Standard_A2"
     vmSizeDataNodes = "${var.vmSizeAllNodes}"
     vmSizeClientNodes = "${var.vmSizeAllNodes}"
     vmSizeMasterNodes = "${var.vmSizeAllNodes}"

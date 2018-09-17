@@ -21,7 +21,19 @@ variable "dataNodesAreMasterEligible" {
 }
 
 variable "vmDataNodeCount" {
-  description = "How many nodes to create"
+  description = "number of data nodes"
   type = "string"
-  default = "3"
+  default = "1"
+}
+
+variable "vmDataDiskCount" {
+  description = "number of data node's disks"
+  type = "string"
+  default = "1"
+}
+
+variable "vmClientNodeCount" {
+  description = "number of client nodes"
+  type = "string"
+  default = "1"
 }

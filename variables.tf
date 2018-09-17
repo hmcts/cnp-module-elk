@@ -37,3 +37,10 @@ variable "vmClientNodeCount" {
   type = "string"
   default = "1"
 }
+
+variable "storageAccountType" {
+  description = "disk storage account type"
+  type = "string"
+  default = "Standard"
+}
+

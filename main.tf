@@ -72,6 +72,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmDataNodeCount = "${var.vmDataNodeCount}"
     vmDataDiskCount = "${var.vmDataDiskCount}"
     vmClientNodeCount = "${var.vmClientNodeCount}"
+    storageAccountType = "${var.storageAccountType}"
 
     esAdditionalYaml = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\n"
   }

@@ -99,7 +99,7 @@ resource "azurerm_virtual_network_peering" "elasticToCoreInfra" {
 
 resource "azurerm_virtual_network_peering" "coreInfraToElastic" {
   name                      = "coreInfraToElastic"
-  resource_group_name       = "${azurerm_resource_group.test.name}"
+  resource_group_name       = "core-infra-${var.env}"
   virtual_network_name      = "${data.azurerm_virtual_network.core_infra_vnet.name}"
   remote_virtual_network_id = "${data.azurerm_virtual_network.elastic_infra_vnet.id}"
   depends_on = ["azurerm_template_deployment.elastic-iaas"]

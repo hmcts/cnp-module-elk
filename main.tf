@@ -7,16 +7,6 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
     )}"
 }
 
-//create the logstash resource group also so that it's there ready for logstash image creation
-resource "azurerm_resource_group" "logstash-resourcegroup" {
-  name     = "${var.product}-logstash-${var.env}"
-  location = "${var.location}"
-
-  tags = "${merge(var.common_tags,
-    map("lastUpdated", "${timestamp()}")
-    )}"
-}
-
 locals {
   artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"

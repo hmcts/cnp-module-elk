@@ -17,7 +17,3 @@ output "jumpboxssh" {
 output "elastic_resource_group_name" {
   value = "${azurerm_resource_group.elastic-resourcegroup.name}}"
 }
-
-output "logstash_resource_group_name" {
-  value = "${azurerm_resource_group.logstash-resourcegroup.name}}"
-}

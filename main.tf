@@ -7,12 +7,21 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
     )}"
 }
 
+resource "random_string" "password" {
+  length  = 16
+  special = true
+  upper   = true
+  lower   = true
+  number  = true
+}
+
 locals {
   artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
   elasticSubnetName = "${var.product}-elastic-search-subnet-${var.env}"
   vNetLoadBalancerIp = "10.112.0.4"
+  administratorLoginPassword = "${random_string.password.result}"
 }
 
 data "http" "template" {
@@ -33,17 +42,17 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
     esVersion         = "6.3.0"
     xpackPlugins      = "No"
-    kibana            = "Yes"
+    kibana            = "No"
 
     vmHostNamePrefix = "${var.product}-"
 
     adminUsername     = "elkadmin"
-    adminPassword     = "password123!"
-    securityAdminPassword = "password123!"
-    securityKibanaPassword = "password123!"
+    adminPassword     = "${local.administratorLoginPassword}"
+    securityAdminPassword = "${local.administratorLoginPassword}"
+    securityKibanaPassword = "${local.administratorLoginPassword}"
     securityBootstrapPassword = ""
-    securityLogstashPassword = "password123!"
-    securityReadPassword = "password123!"
+    securityLogstashPassword = "${local.administratorLoginPassword}"
+    securityReadPassword = "${local.administratorLoginPassword}"
 
     vNetNewOrExisting = "new"
     vNetName          = "${local.elasticVnetName}"

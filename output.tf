@@ -17,3 +17,8 @@ output "jumpboxssh" {
 output "elastic_resource_group_name" {
   value = "${azurerm_resource_group.elastic-resourcegroup.name}}"
 }
+
+output "elasticsearch_admin_password" {
+  value = "${local.administratorLoginPassword}"
+}
+

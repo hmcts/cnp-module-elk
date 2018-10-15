@@ -42,7 +42,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
     esVersion         = "6.3.0"
     xpackPlugins      = "No"
-    kibana            = "Yes"
+    kibana            = "No"
 
     vmHostNamePrefix = "${var.product}-"
 

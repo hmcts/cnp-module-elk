@@ -19,8 +19,7 @@ locals {
   artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
-  elasticSubnetName = "${var.product}-elastic-search-subnet-${var.env}"
-  vNetLoadBalancerIp = "10.112.0.4"
+  vNetLoadBalancerIp = "10.100.152.4"
   administratorLoginPassword = "${random_string.password.result}"
 }
 
@@ -54,12 +53,11 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     securityLogstashPassword = "${local.administratorLoginPassword}"
     securityReadPassword = "${local.administratorLoginPassword}"
 
-    vNetNewOrExisting = "new"
-    vNetName          = "${local.elasticVnetName}"
-    vNetNewAddressPrefix = "10.112.0.0/16"
+    vNetNewOrExisting = "existing"
+    vNetName          = "${data.azurerm_virtual_network.core_infra_vnet.name}"
+    vNetExistingResourceGroup = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
     vNetLoadBalancerIp = "${local.vNetLoadBalancerIp}"
-    vNetClusterSubnetName = "${local.elasticSubnetName}"
-    vNetNewClusterSubnetAddressPrefix = "10.112.0.0/25"
+    vNetClusterSubnetName = "${data.azurerm_subnet.elastic-subnet.name}"
 
     vmSizeKibana = "Standard_A2"
     vmSizeDataNodes = "${var.vmSizeAllNodes}"
@@ -82,26 +80,8 @@ data "azurerm_virtual_network" "core_infra_vnet" {
   resource_group_name  = "core-infra-${var.env}"
 }
 
-data "azurerm_virtual_network" "elastic_infra_vnet" {
-  name                 = "${local.elasticVnetName}"
-  resource_group_name  = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
-}
-
-resource "azurerm_virtual_network_peering" "elasticToCoreInfra" {
-  name                      = "elasticToCoreInfra"
-  resource_group_name       = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  virtual_network_name      = "${local.elasticVnetName}"
-  remote_virtual_network_id = "${data.azurerm_virtual_network.core_infra_vnet.id}"
-  allow_virtual_network_access = "true"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
-}
-
-resource "azurerm_virtual_network_peering" "coreInfraToElastic" {
-  name                      = "coreInfraToElastic"
-  resource_group_name       = "core-infra-${var.env}"
-  virtual_network_name      = "${data.azurerm_virtual_network.core_infra_vnet.name}"
-  remote_virtual_network_id = "${data.azurerm_virtual_network.elastic_infra_vnet.id}"
-  allow_virtual_network_access = "true"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+data "azurerm_subnet" "elastic-subnet" {
+  name                 = "elasticsearch"
+  virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
+  resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
 }

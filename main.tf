@@ -19,7 +19,6 @@ locals {
   artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
-  elasticSubnetName = "elasticsearch"
   vNetLoadBalancerIp = "10.100.152.4"
   administratorLoginPassword = "${random_string.password.result}"
 }
@@ -58,7 +57,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vNetName          = "${data.azurerm_virtual_network.core_infra_vnet.name}"
     vNetExistingResourceGroup = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
     vNetLoadBalancerIp = "${local.vNetLoadBalancerIp}"
-    vNetClusterSubnetName = "${local.elasticSubnetName}"
+    vNetClusterSubnetName = "${data.azurerm_subnet.elastic-subnet.name}"
 
     vmSizeKibana = "Standard_A2"
     vmSizeDataNodes = "${var.vmSizeAllNodes}"
@@ -82,7 +81,7 @@ data "azurerm_virtual_network" "core_infra_vnet" {
 }
 
 data "azurerm_subnet" "elastic-subnet" {
-  name                 = "${local.elasticSubnetName}"
-  virtual_network_name = "${local.elasticVnetName}"
-  resource_group_name  = "${data.azurerm_resource_group.elastic-resourcegroup.name}"
+  name                 = "elasticsearch"
+  virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
+  resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
 }

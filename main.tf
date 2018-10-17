@@ -28,7 +28,7 @@ data "http" "template" {
 }
 
 resource "azurerm_template_deployment" "elastic-iaas" {
-  name                = "${azurerm_resource_group.elastic-resourcegroup.name}-template"
+  name                = "${azurerm_resource_group.elastic-resourcegroup.name}"
   template_body       = "${data.http.template.body}"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
   deployment_mode     = "Incremental"

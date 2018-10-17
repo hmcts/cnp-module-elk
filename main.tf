@@ -16,6 +16,7 @@ resource "random_string" "password" {
 }
 
 locals {
+  #FIXME BEWARE old template v6.3.1 is on a branch now. Master points to latest 6.4.1
   artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
@@ -39,12 +40,13 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     esClusterName     = "${var.product}-elastic-search-${var.env}"
     location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
 
-    esVersion         = "6.3.0"
+    esVersion         = "6.4.1"
     xpackPlugins      = "No"
-    kibana            = "No"
+    kibana            = "Yes"
 
     vmHostNamePrefix = "${var.product}-"
 
+    #TODO move from password to sshPublicKey
     adminUsername     = "elkadmin"
     adminPassword     = "${local.administratorLoginPassword}"
     securityAdminPassword = "${local.administratorLoginPassword}"
@@ -72,6 +74,10 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     storageAccountType = "${var.storageAccountType}"
 
     esAdditionalYaml = "${var.esAdditionalYaml}"
+
+    #v6.4.1 new parameters
+    logstash = "Yes"
+    vmSizeLogstash = "${var.vmSizeAllNodes}"
   }
 }
 

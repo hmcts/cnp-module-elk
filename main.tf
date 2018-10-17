@@ -85,3 +85,22 @@ data "azurerm_subnet" "elastic-subnet" {
   virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
   resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
 }
+
+resource "random_integer" "makeDNSupdateRunEachTime" {
+  min     = 1
+  max     = 99999
+}
+
+resource "null_resource" "consul" {
+  triggers {
+    trigger = "${azurerm_template_deployment.elastic-iaas.name}"
+    forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
+  }
+
+  # register loadbalancer dns
+  provisioner "local-exec" {
+    # createDns.sh domain rg uri ilbIp subscription
+    command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}' '${azurerm_template_deployment.elastic-iaas.name}'"
+  }
+}
+

@@ -19,7 +19,7 @@ locals {
   artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
-  vNetLoadBalancerIp = "10.100.152.4"
+  vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
   administratorLoginPassword = "${random_string.password.result}"
 }
 

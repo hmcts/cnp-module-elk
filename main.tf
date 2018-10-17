@@ -20,7 +20,7 @@ locals {
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
-  administratorLoginPassword = "${random_string.password.result}"
+  securePassword = "${random_string.password.result}"
 }
 
 data "http" "template" {
@@ -39,19 +39,22 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     esClusterName     = "${var.product}-elastic-search-${var.env}"
     location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
 
-    esVersion         = "6.3.0"
+    esVersion         = "6.4.1"
     xpackPlugins      = "No"
     kibana            = "No"
+    logstash          = "No"
 
     vmHostNamePrefix = "${var.product}-"
 
+    #TODO move from password to sshPublicKey
     adminUsername     = "elkadmin"
-    adminPassword     = "${local.administratorLoginPassword}"
-    securityAdminPassword = "${local.administratorLoginPassword}"
-    securityKibanaPassword = "${local.administratorLoginPassword}"
+    adminPassword     = "${local.securePassword}"
+    securityAdminPassword = "${local.securePassword}"
+    securityKibanaPassword = "${local.securePassword}"
     securityBootstrapPassword = ""
-    securityLogstashPassword = "${local.administratorLoginPassword}"
-    securityReadPassword = "${local.administratorLoginPassword}"
+    securityLogstashPassword = "${local.securePassword}"
+    securityReadPassword = "${local.securePassword}"
+    securityBeatsPassword = "${local.securePassword}"
 
     vNetNewOrExisting = "existing"
     vNetName          = "${data.azurerm_virtual_network.core_infra_vnet.name}"

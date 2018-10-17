@@ -19,6 +19,6 @@ output "elastic_resource_group_name" {
 }
 
 output "elasticsearch_admin_password" {
-  value = "${local.administratorLoginPassword}"
+  value = "${local.securePassword}"
 }
 

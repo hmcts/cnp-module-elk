@@ -100,7 +100,7 @@ resource "null_resource" "consul" {
   # register loadbalancer dns
   provisioner "local-exec" {
     # createDns.sh domain rg uri ilbIp subscription
-    command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}'"
-    '${azurerm_template_deployment.elastic-iaas.name}'
+    command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local
+    .vNetLoadBalancerIp}' '${var.subscription}' '${azurerm_template_deployment.elastic-iaas.name}'"
   }
 }

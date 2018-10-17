@@ -93,7 +93,7 @@ resource "random_integer" "makeDNSupdateRunEachTime" {
 
 resource "null_resource" "consul" {
   triggers {
-    trigger = "${azurerm_template_deployment.elastic-iaas.name}",
+    trigger = "${azurerm_template_deployment.elastic-iaas.name}"
     forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
   }
 

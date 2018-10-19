@@ -44,6 +44,8 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     kibana            = "No"
     logstash          = "No"
 
+    cnpEnv = "${var.env}"
+
     vmHostNamePrefix = "${var.product}-"
 
     #TODO move from password to sshPublicKey

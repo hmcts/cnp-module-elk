@@ -16,11 +16,10 @@ resource "random_string" "password" {
 }
 
 locals {
-  #FIXME BEWARE old template v6.3.1 is on a branch now. Master points to latest 6.4.1
   artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
-  vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, 254)}"
+  vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
   securePassword = "${random_string.password.result}"
 }
 
@@ -42,7 +41,10 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
     esVersion         = "6.4.1"
     xpackPlugins      = "No"
-    kibana            = "Yes"
+    kibana            = "No"
+    logstash          = "No"
+
+    cnpEnv = "${var.env}"
 
     vmHostNamePrefix = "${var.product}-"
 
@@ -54,6 +56,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     securityBootstrapPassword = ""
     securityLogstashPassword = "${local.securePassword}"
     securityReadPassword = "${local.securePassword}"
+    securityBeatsPassword = "${local.securePassword}"
 
     vNetNewOrExisting = "existing"
     vNetName          = "${data.azurerm_virtual_network.core_infra_vnet.name}"
@@ -107,6 +110,7 @@ resource "null_resource" "consul" {
   # register loadbalancer dns
   provisioner "local-exec" {
     # createDns.sh domain rg uri ilbIp subscription
-    command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}'"
+    command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}' '${azurerm_template_deployment.elastic-iaas.name}'"
   }
 }
+

@@ -57,6 +57,6 @@ variable "vmSizeAllNodes" {
 variable "esAdditionalYaml" {
   description = "additional configuration"
   type = "string"
-  default = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\nxpack.monitoring.collection.enabled: true"
+  default = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\nxpack.monitoring.collection.enabled: true\n"
 }
 

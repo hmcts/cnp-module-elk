@@ -42,7 +42,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     esVersion         = "6.4.2"
     xpackPlugins      = "No"
     kibana            = "Yes"
-    logstash          = "No"
+    logstash          = "Yes"
     logstashConf      = "${var.logstashConf}"
     cnpEnv = "${var.env}"
 

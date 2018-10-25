@@ -43,7 +43,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     xpackPlugins      = "No"
     kibana            = "Yes"
     logstash          = "Yes"
-    logstashConf      = "${var.logstashConf}"
+
     cnpEnv = "${var.env}"
 
     vmHostNamePrefix = "${var.product}-"
@@ -79,6 +79,8 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     storageAccountType = "${var.storageAccountType}"
 
     esAdditionalYaml = "${var.esAdditionalYaml}"
+
+    logstashConf      = "${var.logstashConf}"
   }
 }
 

@@ -43,7 +43,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     xpackPlugins      = "No"
     kibana            = "Yes"
     logstash          = "No"
-
+    logstashConf      = "${var.logstashConf}"
     cnpEnv = "${var.env}"
 
     vmHostNamePrefix = "${var.product}-"
@@ -57,6 +57,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     securityLogstashPassword = "${local.securePassword}"
     securityReadPassword = "${local.securePassword}"
     securityBeatsPassword = "${local.securePassword}"
+    securityLogstashPassword = "${local.securePassword}"
 
     vNetNewOrExisting = "existing"
     vNetName          = "${data.azurerm_virtual_network.core_infra_vnet.name}"
@@ -68,6 +69,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmSizeDataNodes = "${var.vmSizeAllNodes}"
     vmSizeClientNodes = "${var.vmSizeAllNodes}"
     vmSizeMasterNodes = "${var.vmSizeAllNodes}"
+    vmSizeLogstash = "${var.vmSizeAllNodes}"
 
     dataNodesAreMasterEligible = "${var.dataNodesAreMasterEligible}"
 

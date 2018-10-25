@@ -60,3 +60,8 @@ variable "esAdditionalYaml" {
   default = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*\nxpack.monitoring.collection.enabled: true\n"
 }
 
+variable "logstashConf" {
+  description = "A Base-64 encoded form of a Logstash config file to deploy"
+  type = "string"
+  default = ""
+}

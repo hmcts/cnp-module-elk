@@ -77,6 +77,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     storageAccountType = "${var.storageAccountType}"
 
     esAdditionalYaml = "${var.esAdditionalYaml}"
+    kibanaAdditionalYaml = "${var.kibanaAdditionalYaml}"
   }
 }
 

@@ -55,9 +55,14 @@ variable "vmSizeAllNodes" {
 }
 
 variable "esAdditionalYaml" {
-  description = "additional configuration"
+  description = "Additional configuration for Elasticsearch yaml configuration file. Each line must be separated by a \n"
   type = "string"
-  # Always terminate with a \n
   default = "action.auto_create_index: .security*,.monitoring*,.watches,.triggered_watches,.watcher-history*,.kibana*,.logstash_dead_letter,.ml*\nxpack.monitoring.collection.enabled: true\nscript.allowed_types: none\nscript.allowed_contexts: none\n"
+}
+
+variable "kibanaAdditionalYaml" {
+  description = "Additional configuration for Kibana yaml configuration file. Each line must be separated by a \n"
+  type = "string"
+  default = ""
 }
 

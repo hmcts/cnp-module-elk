@@ -50,7 +50,8 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
     #TODO move from password to sshPublicKey
     adminUsername     = "elkadmin"
-    adminPassword     = "${local.securePassword}"
+    authenticationType = "sshPublicKey"
+    sshPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDCh71wxQi1CNr+4p3smXJkkTvvBpY/MNz57su893dmsP3s7WHZA1EZcQAbaNPt7pw9hpl1Um9yUIxK91mReFQGYPFTVIplR6Zl62r9nPvnW/iLVaERuNNc/giv2xD5cbrv7FLOM1i9SA6s+JKUjepSXqBidOf850o1ezPnhL0qNGmPFUVu1Ze0ZkuMJXDUcNSWY43q3+/eq9RUXxXEi2ZTK6QN7iCq0i49KyfJchQFKFxPwCSQhBWAOOh09mLZ2ykY1VCY/sR3EA+vUwjo5gwOjA32zJEempe3sEV06t2kQPXZDr+QPJJpDZPx6J6rZN9efuudP3RllSjV7FTkkPVdr9vmUPV/ESfVf2s62q5ftMJEFkW2QzSa+Vqjdv9SQqs55gI4aVUZwxG4YZ6QeEgcViBx15p1VX7kmceNZsOv3MedOAKxn4lIojN7rL2VpIFFr66m37aPgltXwHMwej2YTgQHU51pvaJfGP3pKCJJddisjj2h2fhcXHhfRh0r8oAq3zExKa1uofj1oijs6Aqkq6RGnDIzMM1cbBppdnNB52+aV/u5O7W6Xsa6jsrfHLwg1ZxbbMCkTDhbvLRThsdhO+3mKNCmuhVD5qDpOJbYRpBFUPyZNMRmnkgNV1AiZHoQzXbfrekPughuqMu0ngXF3dXVzaJJnP1b9zqb9M2I1Q=="
     securityAdminPassword = "${local.securePassword}"
     securityKibanaPassword = "${local.securePassword}"
     securityBootstrapPassword = ""

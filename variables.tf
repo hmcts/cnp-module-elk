@@ -54,6 +54,11 @@ variable "vmSizeAllNodes" {
   default = "Standard_A2"
 }
 
+variable "ssh_public_key" {
+  description = "pub key used to ssh into the cluster nodes"
+  type = "string"
+}
+
 variable "esAdditionalYaml" {
   description = "Additional configuration for Elasticsearch yaml configuration file. Each line must be separated by a \n"
   type = "string"

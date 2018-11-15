@@ -50,7 +50,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
     adminUsername     = "elkadmin"
     authenticationType = "sshPublicKey"
-    sshPublicKey = "${var.ssh_public_key}"
+    sshPublicKey = "${var.ssh_elastic_search_public_key}"
     securityAdminPassword = "${local.securePassword}"
     securityKibanaPassword = "${local.securePassword}"
     securityBootstrapPassword = ""

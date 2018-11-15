@@ -54,7 +54,7 @@ variable "vmSizeAllNodes" {
   default = "Standard_A2"
 }
 
-variable "ssh_public_key" {
+variable "ssh_elastic_search_public_key" {
   description = "pub key used to ssh into the cluster nodes"
   type = "string"
 }

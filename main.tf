@@ -92,6 +92,12 @@ data "azurerm_subnet" "elastic-subnet" {
   resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
 }
 
+data "azurerm_subnet" "apps" {
+  name                 = "core-infra-subnet-3-${var.env}"
+  virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
+  resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
+}
+
 resource "random_integer" "makeDNSupdateRunEachTime" {
   min     = 1
   max     = 99999

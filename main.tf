@@ -92,6 +92,58 @@ data "azurerm_subnet" "elastic-subnet" {
   resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
 }
 
+data "azurerm_subnet" "apps" {
+  name                 = "core-infra-subnet-3-${var.env}"
+  virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
+  resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
+}
+
+data "azurerm_network_security_group" "cluster_nsg" {
+  name = "${var.product}-cluster-nsg"
+  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
+data "azurerm_application_security_group" "asg" {
+  name                = "${var.product}-data-asg"
+  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
+# Rules that we can't easily define in the Elastic templates
+
+resource "azurerm_network_security_rule" "bastion_rule" {
+  name                        = "Bastion_To_ES_Temp"
+  description                 = "Allow Bastion access for debugging"
+  priority                    = 170
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "9200"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
+resource "azurerm_network_security_rule" "apps_rule" {
+  name                        = "App_To_ES"
+  description                 = "Allow Apps to access the ElasticSearch cluster"
+  priority                    = 180
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "9200"
+  source_address_prefix       = "${data.azurerm_subnet.apps.address_prefix}"
+  destination_application_security_group_ids = ["${data.azurerm_application_security_group.asg.id}"]
+  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
 resource "random_integer" "makeDNSupdateRunEachTime" {
   min     = 1
   max     = 99999

@@ -110,12 +110,12 @@ data "azurerm_application_security_group" "asg" {
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 
-# Rules that we can't easily define in the Elastic templates
+# Rules that we can't easily define in the Elastic templates, use 200>=priority>300 for these rules
 
 resource "azurerm_network_security_rule" "bastion_rule" {
   name                        = "Bastion_To_ES_Temp"
   description                 = "Allow Bastion access for debugging"
-  priority                    = 170
+  priority                    = 200
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
@@ -131,7 +131,7 @@ resource "azurerm_network_security_rule" "bastion_rule" {
 resource "azurerm_network_security_rule" "apps_rule" {
   name                        = "App_To_ES"
   description                 = "Allow Apps to access the ElasticSearch cluster"
-  priority                    = 180
+  priority                    = 210
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"

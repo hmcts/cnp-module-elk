@@ -110,6 +110,16 @@ data "azurerm_application_security_group" "asg" {
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 
+data "azurerm_key_vault_secret" "bastion_dev_ip" {
+  name      = "bastion-dev-ip"
+  vault_uri = "https://infra-vault-${var.subscription}.vault.azure.net/"
+}
+
+data "azurerm_key_vault_secret" "bastion_devops_ip" {
+  name      = "bastion-devops-ip"
+  vault_uri = "https://infra-vault-${var.subscription}.vault.azure.net/"
+}
+
 # Rules that we can't easily define in the Elastic templates, use 200>=priority>300 for these rules
 
 resource "azurerm_network_security_rule" "bastion_devops_rule" {
@@ -121,7 +131,7 @@ resource "azurerm_network_security_rule" "bastion_devops_rule" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "9200"
-  source_address_prefix       = "*"
+  source_address_prefix       = "${data.azurerm_key_vault_secret.bastion_devops_ip.value}"
   destination_address_prefix  = "*"
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
@@ -138,7 +148,7 @@ resource "azurerm_network_security_rule" "bastion_dev_rule" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "9200"
-  source_address_prefix       = "*"
+  source_address_prefix       = "${data.azurerm_key_vault_secret.bastion_dev_ip.value}"
   destination_address_prefix  = "*"
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"

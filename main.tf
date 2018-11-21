@@ -104,7 +104,7 @@ data "azurerm_network_security_group" "cluster_nsg" {
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 
-data "azurerm_application_security_group" "asg" {
+data "azurerm_application_security_group" "data_asg" {
   name                = "${var.product}-data-asg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
@@ -165,7 +165,7 @@ resource "azurerm_network_security_rule" "apps_rule" {
   source_port_range           = "*"
   destination_port_range      = "9200"
   source_address_prefix       = "${data.azurerm_subnet.apps.address_prefix}"
-  destination_application_security_group_ids = ["${data.azurerm_application_security_group.asg.id}"]
+  destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
   depends_on = ["azurerm_template_deployment.elastic-iaas"]

@@ -21,6 +21,8 @@ locals {
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
   securePassword = "${random_string.password.result}"
+  # nonprod (demo, aat) makes use of prod Jenkins so us prod subscription in such cases
+  jenkins_subscription = "${var.subscription == "nonprod" ? "prod" : var.subscription }"
 }
 
 data "http" "template" {
@@ -86,6 +88,11 @@ data "azurerm_virtual_network" "core_infra_vnet" {
   resource_group_name  = "core-infra-${var.env}"
 }
 
+data "azurerm_virtual_network" "mgmt_infra_vnet" {
+  name                 = "mgmt-infra-${local.jenkins_subscription}"
+  resource_group_name  = "mgmt-infra-${local.jenkins_subscription}"
+}
+
 data "azurerm_subnet" "elastic-subnet" {
   name                 = "elasticsearch"
   virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
@@ -96,6 +103,12 @@ data "azurerm_subnet" "apps" {
   name                 = "core-infra-subnet-3-${var.env}"
   virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
   resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
+}
+
+data "azurerm_subnet" "jenkins" {
+  name                 = "jenkins-subnet"
+  virtual_network_name = "${data.azurerm_virtual_network.mgmt_infra_vnet.name}"
+  resource_group_name  = "${data.azurerm_virtual_network.mgmt_infra_vnet.resource_group_name}"
 }
 
 data "azurerm_network_security_group" "cluster_nsg" {
@@ -139,6 +152,22 @@ resource "azurerm_network_security_rule" "apps_rule" {
   destination_port_range      = "9200"
   source_address_prefix       = "${data.azurerm_subnet.apps.address_prefix}"
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.asg.id}"]
+  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
+resource "azurerm_network_security_rule" "jenkins_rule" {
+  name                        = "Jenkins_To_ES"
+  description                 = "Allow Jenkins to access the ElasticSearch cluster for testing"
+  priority                    = 220
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "9200"
+  source_address_prefix       = "${data.azurerm_subnet.jenkins.address_prefix}"
+  destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
   depends_on = ["azurerm_template_deployment.elastic-iaas"]

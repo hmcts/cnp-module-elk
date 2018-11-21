@@ -112,10 +112,27 @@ data "azurerm_application_security_group" "asg" {
 
 # Rules that we can't easily define in the Elastic templates, use 200>=priority>300 for these rules
 
-resource "azurerm_network_security_rule" "bastion_rule" {
-  name                        = "Bastion_To_ES_Temp"
-  description                 = "Allow Bastion access for debugging"
+resource "azurerm_network_security_rule" "bastion_devops_rule" {
+  name                        = "BastionDevOps_To_ES_Temp"
+  description                 = "Allow Bastion access for debugging (devops)"
   priority                    = 200
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "9200"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
+resource "azurerm_network_security_rule" "bastion_dev_rule" {
+  count                       = "${var.subscription == "prod" ? 0 : 1}"
+  name                        = "BastionDev_To_ES_Temp"
+  description                 = "Allow Bastion access for debugging (dev)"
+  priority                    = 201
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"

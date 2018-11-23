@@ -1,3 +1,8 @@
+provider "azurerm" {
+  alias           = "mgmt"
+  subscription_id = "${var.mgmt_subscription_id}"
+}
+
 resource "azurerm_resource_group" "elastic-resourcegroup" {
   name     = "${var.product}-elastic-search-${var.env}"
   location = "${var.location}"
@@ -21,8 +26,7 @@ locals {
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
   securePassword = "${random_string.password.result}"
-  # nonprod (demo, aat) makes use of prod Jenkins so us prod subscription in such cases
-  jenkins_subscription = "${var.subscription == "nonprod" ? "prod" : var.subscription }"
+  mgmt_network_name = "${var.subscription == "prod" || var.subscription == "nonprod" ? "mgmt-infra-prod" : "mgmt-infra-sandbox"}"
 }
 
 data "http" "template" {
@@ -88,11 +92,6 @@ data "azurerm_virtual_network" "core_infra_vnet" {
   resource_group_name  = "core-infra-${var.env}"
 }
 
-data "azurerm_virtual_network" "mgmt_infra_vnet" {
-  name                 = "mgmt-infra-${local.jenkins_subscription}"
-  resource_group_name  = "mgmt-infra-${local.jenkins_subscription}"
-}
-
 data "azurerm_subnet" "elastic-subnet" {
   name                 = "elasticsearch"
   virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
@@ -106,9 +105,10 @@ data "azurerm_subnet" "apps" {
 }
 
 data "azurerm_subnet" "jenkins" {
+  provider             = "azurerm.mgmt"
   name                 = "jenkins-subnet"
-  virtual_network_name = "${data.azurerm_virtual_network.mgmt_infra_vnet.name}"
-  resource_group_name  = "${data.azurerm_virtual_network.mgmt_infra_vnet.resource_group_name}"
+  virtual_network_name = "${local.mgmt_network_name}"
+  resource_group_name  = "${local.mgmt_network_name}"
 }
 
 data "azurerm_network_security_group" "cluster_nsg" {

@@ -71,3 +71,4 @@ variable "kibanaAdditionalYaml" {
   default = "console.enabled: false\n"
 }
 
+variable "mgmt_subscription_id" {}

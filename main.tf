@@ -193,6 +193,22 @@ resource "azurerm_network_security_rule" "jenkins_rule" {
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 
+resource "azurerm_network_security_rule" "bastion_ssh_rule" {
+  name                        = "Bastion_To_VMs"
+  description                 = "Allow Bastion SSH access overridding templates broad SSH access"
+  priority                    = 230
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "22"
+  source_address_prefix       = "${local.bastion_ip}"
+  destination_address_prefix  = "${data.azurerm_subnet.elastic-subnet.address_prefix}"
+  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
 resource "random_integer" "makeDNSupdateRunEachTime" {
   min     = 1
   max     = 99999

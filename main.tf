@@ -133,6 +133,12 @@ data "azurerm_application_security_group" "data_asg" {
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 
+data "azurerm_application_security_group" "kibana_asg" {
+  name                = "${var.product}-kibana-asg"
+  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
 data "azurerm_log_analytics_workspace" "log_analytics" {
   name                = "hmcts-${var.subscription}"
   resource_group_name = "oms-automation"
@@ -216,6 +222,38 @@ resource "azurerm_network_security_rule" "bastion_ssh_rule" {
 }
 
 # Additional kibana-nsg rules use 300>=priority>400
+
+resource "azurerm_network_security_rule" "kibana_tight_ssh_rule" {
+  name                        = "Bastion_only_SSH"
+  description                 = "Override open SSH and limit this to Bastion only"
+  priority                    = 300
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "22"
+  source_address_prefix       = "${local.bastion_ip}"
+  destination_application_security_group_ids = ["${data.azurerm_application_security_group.kibana_asg.id}"]
+  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name = "${data.azurerm_network_security_group.kibana_nsg.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
+resource "azurerm_network_security_rule" "kibana_tight_kibana_rule" {
+  name                        = "Bastion_only_Kibana"
+  description                 = "Override open Kibana accessand limit this to Bastion only"
+  priority                    = 310
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "5601"
+  source_address_prefix       = "${local.bastion_ip}"
+  destination_application_security_group_ids = ["${data.azurerm_application_security_group.kibana_asg.id}"]
+  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name = "${data.azurerm_network_security_group.kibana_nsg.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
 
 resource "azurerm_network_security_rule" "denyall_kibana_rule" {
   name                        = "DenyAllOtherTraffic"

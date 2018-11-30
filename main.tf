@@ -121,6 +121,12 @@ data "azurerm_network_security_group" "cluster_nsg" {
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 
+data "azurerm_network_security_group" "kibana_nsg" {
+  name = "${var.product}-kibana-nsg"
+  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
 data "azurerm_application_security_group" "data_asg" {
   name                = "${var.product}-data-asg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
@@ -206,6 +212,24 @@ resource "azurerm_network_security_rule" "bastion_ssh_rule" {
   destination_address_prefix  = "${data.azurerm_subnet.elastic-subnet.address_prefix}"
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
+
+# Additional kibana-nsg rules use 300>=priority>400
+
+resource "azurerm_network_security_rule" "denyall_kibana_rule" {
+  name                        = "DenyAllOtherTraffic"
+  description                 = "Deny all traffic that is not SSH or Kibana access"
+  priority                    = 400
+  direction                   = "Inbound"
+  access                      = "Deny"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name = "${data.azurerm_network_security_group.kibana_nsg.name}"
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 

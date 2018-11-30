@@ -27,6 +27,7 @@ locals {
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
   securePassword = "${random_string.password.result}"
   mgmt_network_name = "${var.subscription == "prod" || var.subscription == "nonprod" ? "mgmt-infra-prod" : "mgmt-infra-sandbox"}"
+  bastion_ip = "${var.subscription == "prod" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value }"
 }
 
 data "http" "template" {
@@ -143,33 +144,17 @@ data "azurerm_key_vault_secret" "bastion_devops_ip" {
 
 # Rules that we can't easily define in the Elastic templates, use 200>=priority>300 for these rules
 
-resource "azurerm_network_security_rule" "bastion_devops_rule" {
-  name                        = "BastionDevOps_To_ES_Temp"
-  description                 = "Allow Bastion access for debugging (devops)"
+resource "azurerm_network_security_rule" "bastion_es_rule" {
+  count                       = "${var.subscription == "prod" ? 0 : 1}"
+  name                        = "Bastion_To_ES"
+  description                 = "Allow Bastion access for debugging elastic queries on development platforms"
   priority                    = 200
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "9200"
-  source_address_prefix       = "${data.azurerm_key_vault_secret.bastion_devops_ip.value}"
-  destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
-  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
-}
-
-resource "azurerm_network_security_rule" "bastion_dev_rule" {
-  count                       = "${var.subscription == "prod" ? 0 : 1}"
-  name                        = "BastionDev_To_ES_Temp"
-  description                 = "Allow Bastion access for debugging (dev)"
-  priority                    = 201
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "9200"
-  source_address_prefix       = "${data.azurerm_key_vault_secret.bastion_dev_ip.value}"
+  source_address_prefix       = "${local.bastion_ip}"
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"

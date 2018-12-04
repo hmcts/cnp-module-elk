@@ -84,6 +84,9 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
     esAdditionalYaml = "${var.esAdditionalYaml}"
     kibanaAdditionalYaml = "${var.kibanaAdditionalYaml}"
+
+    logAnalyticsId = "${var.logAnalyticsId}"
+    logAnalyticsKey = "${var.logAnalyticsKey}"
   }
 }
 

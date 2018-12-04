@@ -72,3 +72,15 @@ variable "kibanaAdditionalYaml" {
 }
 
 variable "mgmt_subscription_id" {}
+
+variable "logAnalyticsId" {
+  description = "Log Analytics ID, enables VM logging to Log Analytics (blank disables)"
+  type = "string"
+  default = ""
+}
+
+variable "logAnalyticsKey" {
+  description = "Log Analytics secret key, enables VM logging to Log Analytics"
+  type = "string"
+  default = ""
+}

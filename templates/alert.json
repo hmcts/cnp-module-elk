@@ -56,21 +56,17 @@
             }
         },
         "TimeWindow": {
-            "type": "int",
-            "defaultValue": 10,
-            "minValue": 5,
-            "maxValue": 1440,
+            "type": "string",
+            "defaultValue": "10",
             "metadata": {
-                "Description": "Length of time in minutes over which to evaluate results. Must be greater than or equal to AlertFrequency"
+                "Description": "Length of time in minutes over which to evaluate results. Must be greater than or equal to AlertFrequency (5-1440)"
             }
         },
         "AlertFrequency": {
-            "type": "int",
-            "defaultValue": 5,
-            "minValue": 5,
-            "maxValue": 1440,
+            "type": "string",
+            "defaultValue": "5",
             "metadata": {
-                "Description": "How often the query runs in minutes."
+                "Description": "How often the query runs in minutes. (5-1440)"
             }
         },
         "AggregateValueOperator": {
@@ -85,12 +81,10 @@
             }
         },
         "AggregateValue": {
-            "type": "int",
-            "defaultValue": 70,
-            "minValue": 0,
-            "maxValue": 10000,
+            "type": "string",
+            "defaultValue": "70",
             "metadata": {
-                "Description": "The value to compare the results"
+                "Description": "The value to compare the results (0-10000)"
             }
         },
         "TriggerAlertCondition": {
@@ -116,12 +110,10 @@
             }
         },
         "TriggerAlertValue": {
-            "type": "int",
-            "defaultValue": 0,
-            "minValue": 0,
-            "maxValue": 10000,
+            "type": "string",
+            "defaultValue": "0",
             "metadata": {
-                "Description": "Number of the times the criteria must be met to trigger the alert."
+                "Description": "Number of the times the criteria must be met to trigger the alert. (0-10000)"
             }
         }
     },

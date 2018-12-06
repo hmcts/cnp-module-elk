@@ -15,7 +15,7 @@ resource "azurerm_template_deployment" "alert_cluster_health" {
     TimeWindow = "10"
     AlertFrequency = "5"
     AggregateValueOperator = "gt"
-    AggregateValue = 0
+    AggregateValue = "0"
     TriggerAlertCondition = "Total"
     TriggerAlertOperator = "gt"
     TriggerAlertValue = "0"

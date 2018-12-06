@@ -11,7 +11,7 @@ resource "azurerm_template_deployment" "alert_cluster_health" {
     UniqueNameOfSearch = "Cluster-unhealthy"
     Description = "Checks that status_s for the healthcheck is != green"
     SearchQuery = "es_health_CL | where status_s != \"green\""
-    Severity = "Critical"
+    Severity = "critical"
     TimeWindow = "10"
     AlertFrequency = "5"
     AggregateValueOperator = "gt"

@@ -43,6 +43,13 @@
                 "Description": "SearchQuery. Please remember to use '' in powershell or escape character \" from ARM"
             }
         },
+        "SearchCategory": {
+            "type": "string",
+            "defaultValue": "ElasticSearch",
+            "metadata": {
+                "Description": "Search Category"
+            }
+        },
         "Severity": {
             "type": "string",
             "allowedValues": [
@@ -119,7 +126,6 @@
     },
     "variables": {
         "LogAnalyticsApiVersion": "2017-03-03-preview",
-        "Category": "Alert",
         "ScheduleName": "[toLower(concat('schedule-', parameters('UniqueNameOfSearch'), '-', uniqueString(resourceGroup().id, deployment().name)))]",
         "AlertName": "[toLower(concat('alert-', parameters('UniqueNameOfSearch'), '-', uniqueString(resourceGroup().id, deployment().name) ))]"
     },
@@ -134,7 +140,7 @@
                 "etag": "*",
                 "query": "[parameters('SearchQuery')]",
                 "displayName": "[parameters('DisplayNameOfSearch')]",
-                "category": "[variables('Category')]"
+                "category": "[parameters('SearchCategory')]"
             }
         },
         {

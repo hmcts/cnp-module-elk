@@ -8,11 +8,11 @@
                 "Description": "Name of Log Analytics workspace"
             }
         },
-        "EmailRecipients": {
+        "ActionGroupName": {
             "type": "string",
-            "defaultValue":"some@email.com",
+            "defaultValue": "my-ation-group",
             "metadata": {
-                "Description": "List of recipients for the email alert separated by semicolon"
+                "Description": "Action group for alert actions"
             }
         },
         "DisplayNameOfSearch": {
@@ -125,7 +125,7 @@
         }
     },
     "variables": {
-        "LogAnalyticsApiVersion": "2017-03-03-preview",
+        "LogAnalyticsApiVersion": "2017-03-15-preview",
         "ScheduleName": "[toLower(concat('schedule-', parameters('UniqueNameOfSearch'), '-', uniqueString(resourceGroup().id, deployment().name)))]",
         "AlertName": "[toLower(concat('alert-', parameters('UniqueNameOfSearch'), '-', uniqueString(resourceGroup().id, deployment().name) ))]"
     },
@@ -182,11 +182,11 @@
                 "Throttling": {
                     "DurationInMinutes": 30
                 },
-                "EmailNotification": {
-                    "Recipients": [
-                        "[parameters('EmailRecipients')]"
+                "AzNsNotification": {
+                    "GroupIds": [
+                        "[resourceId('Microsoft.Insights/actionGroups', parameters('ActionGroupName'))]"
                     ],
-                    "Subject": "[parameters('DisplayNameOfSearch')]"
+                    "CustomEmailSubject": "[parameters('DisplayNameOfSearch')]"
                 }
             }
         }

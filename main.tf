@@ -126,6 +126,11 @@ data "azurerm_application_security_group" "data_asg" {
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 
+data "azurerm_log_analytics_workspace" "log_analytics" {
+  name                = "hmcts-${var.subscription}"
+  resource_group_name = "oms-automation"
+}
+
 data "azurerm_key_vault_secret" "bastion_dev_ip" {
   name      = "bastion-dev-ip"
   vault_uri = "https://infra-vault-${var.subscription}.vault.azure.net/"

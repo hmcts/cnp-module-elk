@@ -50,7 +50,7 @@
                 "warning",
                 "informational"
             ],
-            "defaultValue": "critical",
+            "defaultValue": "warning",
             "metadata": {
                 "Description": "Severity of alert"
             }

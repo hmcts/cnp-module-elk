@@ -172,12 +172,7 @@
                 "Severity": "[parameters('Severity')]",
                 "Threshold": {
                     "Operator": "[parameters('AggregateValueOperator')]",
-                    "Value": "[parameters('AggregateValue')]",
-                    "MetricsTrigger": {
-                        "TriggerCondition": "[parameters('TriggerAlertCondition')]",
-                        "Operator": "[parameters('TriggerAlertOperator')]",
-                        "Value": "[parameters('TriggerAlertValue')]"
-                    }
+                    "Value": "[parameters('AggregateValue')]"
                 },
                 "Throttling": {
                     "DurationInMinutes": 30

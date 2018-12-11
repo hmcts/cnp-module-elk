@@ -92,5 +92,6 @@ resource "azurerm_template_deployment" "alert_dead_letter_queue" {
     TriggerAlertCondition = "Total"
     TriggerAlertOperator = "gt"
     TriggerAlertValue = "0"
+    ThrottleDuration = "${var.env == "prod" ? 30 : 24 * 60}"
   }
 }

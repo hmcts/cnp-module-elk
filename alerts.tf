@@ -21,6 +21,7 @@ module "elastic_ccd_action_group" {
 }
 
 resource "azurerm_template_deployment" "alert_cluster_health_not_green" {
+  count               = "${var.subscription != "sandbox" ? 1 : 0}"
   name                = "alert_cluster_health_not_green_${var.env}"
   template_body       = "${file("${path.module}/templates/alert.json")}"
   resource_group_name = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
@@ -70,6 +71,7 @@ resource "azurerm_template_deployment" "alert_cluster_health_red" {
 }
 
 resource "azurerm_template_deployment" "alert_dead_letter_queue" {
+  count               = "${var.subscription != "sandbox" ? 1 : 0}"
   name                = "alert_dead_letter_queue"
   template_body       = "${file("${path.module}/templates/alert.json")}"
   resource_group_name = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"

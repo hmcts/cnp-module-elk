@@ -82,7 +82,7 @@ resource "azurerm_template_deployment" "alert_dead_letter_queue" {
     ActionGroupName = "${module.elastic_ccd_action_group.action_group_name}"
     DisplayNameOfSearch = "ElasticSearch deadletter queue is not empty"
     UniqueNameOfSearch = "Cluster-deadletters_present"
-    Description = "Checks that status_s for the healthcheck is != green"
+    Description = "Check that deadletter queue is empty"
     SearchQuery = "es_indices_CL | where index_s == \".logstash_dead_letter\" and docs_count_s != \"0\""
     Severity = "warning"
     TimeWindow = "10"

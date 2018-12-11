@@ -80,10 +80,10 @@ resource "azurerm_template_deployment" "alert_dead_letter_queue" {
   parameters = {
     workspaceName = "${data.azurerm_log_analytics_workspace.log_analytics.name}"
     ActionGroupName = "${module.elastic_ccd_action_group.action_group_name}"
-    DisplayNameOfSearch = "ElasticSearch deadletter queue is not empty"
-    UniqueNameOfSearch = "Cluster-deadletters_present"
-    Description = "Checks that status_s for the healthcheck is != green"
-    SearchQuery = "es_indices_CL | where index_s == \".logstash_dead_letter\" and docs_count_s != \"0\""
+    DisplayNameOfSearch = "ElasticSearch deadletter queue is not empty in ${var.env}"
+    UniqueNameOfSearch = "Cluster-deadletters_${var.env}"
+    Description = "Check that deadletter queue is empty in ${var.env}"
+    SearchQuery = "es_indices_CL | where index_s == \".logstash_dead_letter\" and docs_count_s != \"0\" and _ResourceId contains \"${azurerm_resource_group.elastic-resourcegroup.name}\""
     Severity = "warning"
     TimeWindow = "10"
     AlertFrequency = "5"
@@ -92,5 +92,6 @@ resource "azurerm_template_deployment" "alert_dead_letter_queue" {
     TriggerAlertCondition = "Total"
     TriggerAlertOperator = "gt"
     TriggerAlertValue = "0"
+    ThrottleDuration = "${var.env == "prod" ? 30 : 24 * 60}"
   }
 }

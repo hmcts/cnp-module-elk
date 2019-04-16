@@ -108,6 +108,12 @@ data "azurerm_subnet" "apps" {
   resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
 }
 
+data "azurerm_subnet" "aks" {
+  name                 = "aks"
+  virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
+  resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
+}
+
 data "azurerm_subnet" "jenkins" {
   provider             = "azurerm.mgmt"
   name                 = "jenkins-subnet"
@@ -182,12 +188,13 @@ resource "azurerm_network_security_rule" "apps_rule" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "9200"
-  source_address_prefix       = "${data.azurerm_subnet.apps.address_prefix}"
+  source_address_prefixes      = ["${data.azurerm_subnet.apps.address_prefix}","${data.azurerm_subnet.aks.address_prefix}"]
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
+
 
 resource "azurerm_network_security_rule" "jenkins_rule" {
   name                        = "Jenkins_To_ES"

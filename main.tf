@@ -150,14 +150,19 @@ data "azurerm_log_analytics_workspace" "log_analytics" {
   resource_group_name = "oms-automation"
 }
 
+data "azurerm_key_vault" "infra_vault" {
+  name = "infra-vault-${var.subscription}"
+  resource_group_name = "${var.subscription == "prod" ? "core-infra-prod" : "cnp-core-infra"}"
+}
+
 data "azurerm_key_vault_secret" "bastion_dev_ip" {
   name      = "bastion-dev-ip"
-  vault_uri = "https://infra-vault-${var.subscription}.vault.azure.net/"
+  key_vault_id = "${data.azurerm_key_vault.infra_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "bastion_devops_ip" {
   name      = "bastion-devops-ip"
-  vault_uri = "https://infra-vault-${var.subscription}.vault.azure.net/"
+  key_vault_id = "${data.azurerm_key_vault.infra_vault.id}"
 }
 
 # Rules that we can't easily define in the Elastic templates, use 200>=priority>300 for these rules

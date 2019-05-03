@@ -71,7 +71,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vNetLoadBalancerIp = "${local.vNetLoadBalancerIp}"
     vNetClusterSubnetName = "${data.azurerm_subnet.elastic-subnet.name}"
 
-    vmSizeKibana = "Standard_A2"
+    vmSizeKibana = "Standard_A2_v2"
     vmSizeDataNodes = "${var.vmSizeAllNodes}"
     vmSizeClientNodes = "${var.vmSizeAllNodes}"
     vmSizeMasterNodes = "${var.vmSizeAllNodes}"

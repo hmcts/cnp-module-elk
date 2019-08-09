@@ -27,7 +27,7 @@ locals {
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
   securePassword = "${random_string.password.result}"
   # Amend mgm_network_name to reflect your network
-  mgmt_network_name = "{var.subscription == "ethosldata" || ${var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" ? "mgmt-infra-prod" : "mgmt-infra-sandbox"}"
+  mgmt_network_name = "${var.subscription == "ethosldata" || var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" ? "mgmt-infra-prod" : "mgmt-infra-sandbox"}"
   bastion_ip = "${var.subscription == "prod" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value }"
 }
 

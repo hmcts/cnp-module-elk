@@ -59,6 +59,11 @@ variable "ssh_elastic_search_public_key" {
   type = "string"
 }
 
+variable "ssh_elastic_search_private_key" {
+  description = "priv key used to ssh into the cluster nodes"
+  type = "string"
+}
+
 variable "esAdditionalYaml" {
   description = "Additional configuration for Elasticsearch yaml configuration file. Each line must be separated by a \n"
   type = "string"

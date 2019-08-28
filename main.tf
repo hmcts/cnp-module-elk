@@ -291,7 +291,7 @@ resource "random_integer" "makeDNSupdateRunEachTime" {
 
 resource "null_resource" "consul" {
   triggers {
-    trigger = "${azurerm_template_deployment.elastic-iaas.name}"
+    trigger  = "${azurerm_template_deployment.elastic-iaas.name}"
     forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
   }
 
@@ -302,3 +302,41 @@ resource "null_resource" "consul" {
   }
 }
 
+data "azurerm_key_vault_secret" "prod_ssh_key" {
+  name           = "${var.subscription == "prod" ? "elk-private-key" : "AAT_PRIVATE_KEY_GOES_HERE"}"
+  key_vault_id   = "${data.azurerm_key_vault.infra_vault.id}"
+}
+
+data "azurerm_network_interface" "data_node_0_nic" {
+  name                = "${azurerm_template_deployment.elastic-iaas.vmHostNamePrefix}-data-0-nic"
+  resource_group_name = "${azurerm_template_deployment.elastic-iaas.resource_group_name}"
+  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+}
+
+data "template_file" "inventory" {
+  template = <<EOF
+
+  [all]
+  $${data_node_0_ip}
+  
+  [all:vars]
+  ansible_user = $${ansible_user}
+  ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+  EOF
+
+    vars {
+      data_node_0_ip         = "${data.azurerm_network_interface.data_node_nic.private_ip_address}"
+      ansible_user           = "${azurerm_template_deployment.elastic-iaas.adminUsername}"
+    }
+
+}
+
+resource "null_resource" "update_inventory" {
+  triggers {
+    always_run = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+    command = "echo \"${data.template_file.inventory.rendered}\" > /tmp/inventory"
+  }
+}

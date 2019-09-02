@@ -56,7 +56,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
     vmHostNamePrefix = "${var.product}-"
 
-    adminUsername     = "elkadmin"
+    adminUsername = "elkadmin"
     authenticationType = "sshPublicKey"
     sshPublicKey = "${var.ssh_elastic_search_public_key}"
     securityAdminPassword = "${local.securePassword}"
@@ -302,8 +302,8 @@ resource "null_resource" "consul" {
   }
 }
 
-data "azurerm_key_vault_secret" "prod_ssh_key" {
-  name           = "${var.subscription == "prod" ? "elk-private-key" : "AAT_PRIVATE_KEY_GOES_HERE"}"
+data "azurerm_key_vault_secret" "ssh_key" {
+  name           = "${var.subscription == "prod" ? "elk-private-key" : "elk-private-key"}"
   key_vault_id   = "${data.azurerm_key_vault.infra_vault.id}"
 }
 
@@ -337,6 +337,6 @@ resource "null_resource" "update_inventory" {
   }
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.inventory.rendered}\" > /tmp/inventory"
+    command = "echo \"${data.template_file.inventory.rendered}\" > /tmp/ansible/inventory"
   }
 }

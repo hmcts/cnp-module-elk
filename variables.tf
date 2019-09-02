@@ -1,5 +1,5 @@
 variable "product" {
-  type = "string"
+  type    = "string"
 }
 
 variable "location" {
@@ -8,7 +8,7 @@ variable "location" {
 }
 
 variable "env" {
-  type = "string"
+  type    = "string"
 }
 
 variable "subscription" {
@@ -16,52 +16,52 @@ variable "subscription" {
 }
 
 variable "common_tags" {
-  type = "map"
+  type    = "map"
 }
 
 variable "dataNodesAreMasterEligible" {
-  type = "string"
+  type    = "string"
   default = "Yes"
 }
 
 variable "vmDataNodeCount" {
   description = "number of data nodes"
-  type = "string"
-  default = "1"
+  type        = "string"
+  default     = "1"
 }
 
 variable "vmDataDiskCount" {
   description = "number of data node's disks"
-  type = "string"
-  default = "1"
+  type        = "string"
+  default     = "1"
 }
 
 variable "vmClientNodeCount" {
   description = "number of client nodes"
-  type = "string"
-  default = "0"
+  type        = "string"
+  default     = "0"
 }
 
 variable "storageAccountType" {
   description = "disk storage account type"
-  type = "string"
-  default = "Standard"
+  type        = "string"
+  default     = "Standard"
 }
 
 variable "vmSizeAllNodes" {
   description = "vm size for all the cluster nodes"
-  type = "string"
-  default = "Standard_A2_v2"
+  type        = "string"
+  default     = "Standard_A2_v2"
 }
 
 variable "ssh_elastic_search_public_key" {
   description = "pub key used to ssh into the cluster nodes"
-  type = "string"
+  type        = "string"
 }
 
 variable "ssh_elastic_search_private_key" {
   description = "priv key used to ssh into the cluster nodes"
-  type = "string"
+  type        = "string"
 }
 
 variable "esAdditionalYaml" {

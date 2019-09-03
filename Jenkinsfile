@@ -2,6 +2,16 @@
 @Library('Infrastructure') _
 
 try {
+    
+  static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+    [ 
+      secretType: 'Secret',
+      name: secretName,
+      version: '',
+      envVariable: envVar
+    ]
+  }
+  
   node {
 
     def secrets = [

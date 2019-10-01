@@ -47,7 +47,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     esClusterName     = "${var.product}-elastic-search-${var.env}"
     location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
 
-    esVersion         = "6.4.2"
+    esVersion         = "7.0.1"
     xpackPlugins      = "No"
     kibana            = "Yes"
     logstash          = "No"

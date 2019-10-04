@@ -22,7 +22,7 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl = "https://github.com/elastic/azure-marketplace/blob/master/src"
+  artifactsBaseUrl = "https://raw.githubusercontent.com/elastic/azure-marketplace/master/src/"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"

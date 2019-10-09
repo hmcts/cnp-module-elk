@@ -4,7 +4,7 @@ provider "azurerm" {
 }
 
 locals {
-  aks_env_name = "${var.env == "sandbox"? "sbox" : ${var.env}}"
+  aks_env_name = "${var.env == "sandbox" ? "sbox" : var.env}"
 }
 
 data "azurerm_virtual_network" "aks_core_vnet" {

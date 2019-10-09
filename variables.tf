@@ -85,6 +85,4 @@ variable "logAnalyticsKey" {
   default = ""
 }
 
-variable "aks_infra_subscription_id" {
-  default = "96c274ce-846d-4e48-89a7-d528432298a7"
-}
+variable "aks_infra_subscription_id" {}

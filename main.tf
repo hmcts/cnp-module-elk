@@ -211,14 +211,28 @@ resource "azurerm_network_security_rule" "apps_rule" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "9200"
-  source_address_prefixes      = ["${data.azurerm_subnet.apps.address_prefix}","${data.azurerm_subnet.aks.address_prefix}",
-    "${data.azurerm_subnet.aks-00.address_prefix}", "${data.azurerm_subnet.aks-01.address_prefix}"]
+  source_address_prefixes      = ["${data.azurerm_subnet.apps.address_prefix}","${data.azurerm_subnet.aks.address_prefix}"]
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 
+resource "azurerm_network_security_rule" "aks_rule" {
+  name                        = "AKS_To_ES"
+  description                 = "Allow AKS to access the ElasticSearch cluster"
+  priority                    = 215
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Any"
+  source_port_range           = "*"
+  destination_port_range      = "9200"
+  source_address_prefixes      = ["${data.azurerm_subnet.aks-00.address_prefix}", "${data.azurerm_subnet.aks-01.address_prefix}"]
+  destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
+  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+}
 
 resource "azurerm_network_security_rule" "jenkins_rule" {
   name                        = "Jenkins_To_ES"

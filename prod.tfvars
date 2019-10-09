@@ -1,0 +1,1 @@
+aks_infra_subscription_id = "replace-with-correct-value"

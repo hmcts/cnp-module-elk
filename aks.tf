@@ -29,7 +29,7 @@ resource "azurerm_network_security_rule" "aks_rule" {
   priority                    = 215
   direction                   = "Inbound"
   access                      = "Allow"
-  protocol                    = "Any"
+  protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "9200"
   source_address_prefixes      = ["${data.azurerm_subnet.aks-00.address_prefix}", "${data.azurerm_subnet.aks-01.address_prefix}"]

@@ -1,17 +1,11 @@
 provider "azurerm" {
   alias           = "aks-infra"
-  subscription_id = "${var.aks_infra_subscription_id}"
-  skip_provider_registration = true
-}
-
-locals {
-  aks_env_name = "${var.env == "sandbox" ? "sbox" : var.env}"
 }
 
 data "azurerm_virtual_network" "aks_core_vnet" {
   provider             = "azurerm.aks-infra"
-  name                 = "core-${local.aks_env_name}-vnet"
-  resource_group_name  = "aks-infra-${local.aks_env_name}-rg"
+  name                 = "core-${var.env}-vnet"
+  resource_group_name  = "aks-infra-${var.env}-rg"
 }
 
 data "azurerm_subnet" "aks-00" {

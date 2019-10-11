@@ -1,6 +1,7 @@
+provider "azurerm" {}
+
 provider "azurerm" {
   alias           = "mgmt"
-  subscription_id = "${var.mgmt_subscription_id}"
 }
 
 resource "azurerm_resource_group" "elastic-resourcegroup" {

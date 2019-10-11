@@ -1,6 +1,7 @@
+provider "azurerm" {}
+
 provider "azurerm" {
   alias           = "mgmt"
-  subscription_id = "${var.mgmt_subscription_id}"
 }
 
 resource "azurerm_resource_group" "elastic-resourcegroup" {
@@ -301,4 +302,3 @@ resource "null_resource" "consul" {
     command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}' '${azurerm_template_deployment.elastic-iaas.name}'"
   }
 }
-

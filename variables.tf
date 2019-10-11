@@ -71,8 +71,6 @@ variable "kibanaAdditionalYaml" {
   default = "console.enabled: false\n"
 }
 
-variable "mgmt_subscription_id" {}
-
 variable "logAnalyticsId" {
   description = "Log Analytics ID, enables VM logging to Log Analytics (blank disables)"
   type = "string"

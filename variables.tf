@@ -82,3 +82,9 @@ variable "logAnalyticsKey" {
   type = "string"
   default = ""
 }
+
+variable "dataNodeAcceleratedNetworking" {
+  description = "Whether to enable accelerated networking for data nodes, which enables single root I/O virtualization (SR-IOV) to a VM, greatly improving its networking performance. Valid values are Default, Yes, No"
+  type = "string"
+  default = "No"
+}

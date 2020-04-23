@@ -22,7 +22,7 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/ES-7x-upgrade/src/"
+  _artifactsLocation = "https://raw.githubusercontent.com/hmcts/azure-marketplace/ES-7x-upgrade/src/"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
@@ -44,11 +44,11 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
   parameters = {
     # See https://github.com/elastic/azure-marketplace#parameters
-    artifactsBaseUrl  = "${local.artifactsBaseUrl}"
+    _artifactsLocation  = "${local.artifactsBaseUrl}"
     esClusterName     = "${var.product}-elastic-search-${var.env}"
     location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
 
-    esVersion         = "7.6.0"
+    esVersion         = "7.3.2"
     xpackPlugins      = "No"
     kibana            = "Yes"
     logstash          = "No"

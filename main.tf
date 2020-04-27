@@ -22,7 +22,7 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/ES-7x-upgrade/src/"
+  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/hmcts-elastic-az-marketplace/hmcts-v7-upgrade/src/"
   templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"

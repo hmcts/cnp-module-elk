@@ -33,7 +33,7 @@ locals {
 }
 
 data "http" "template" {
-  url = "${local.templateUrl}"
+  url = "https://github.com/hmcts/elastic-hmcts-az-marketplace/raw/hmcts-v7-upgrade/src/mainTemplate.json"
 }
 
 resource "azurerm_template_deployment" "elastic-iaas" {

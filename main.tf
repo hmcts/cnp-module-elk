@@ -1,7 +1,8 @@
+provider "azurerm" {}
+
 provider "azurerm" {
   version = "1.35.0"
   alias           = "mgmt"
-  subscription_id = "${var.mgmt_subscription_id}"
 }
 
 resource "azurerm_resource_group" "elastic-resourcegroup" {
@@ -85,6 +86,8 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmClientNodeCount = "${var.vmClientNodeCount}"
     storageAccountType = "${var.storageAccountType}"
 
+    vmDataNodeAcceleratedNetworking = "${var.dataNodeAcceleratedNetworking}"
+
     esAdditionalYaml = "${var.esAdditionalYaml}"
     kibanaAdditionalYaml = "${var.kibanaAdditionalYaml}"
 
@@ -106,12 +109,6 @@ data "azurerm_subnet" "elastic-subnet" {
 
 data "azurerm_subnet" "apps" {
   name                 = "core-infra-subnet-3-${var.env}"
-  virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
-  resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
-}
-
-data "azurerm_subnet" "aks" {
-  name                 = "aks"
   virtual_network_name = "${data.azurerm_virtual_network.core_infra_vnet.name}"
   resource_group_name  = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
 }
@@ -195,7 +192,7 @@ resource "azurerm_network_security_rule" "apps_rule" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "9200"
-  source_address_prefixes      = ["${data.azurerm_subnet.apps.address_prefix}","${data.azurerm_subnet.aks.address_prefix}"]
+  source_address_prefixes      = ["${data.azurerm_subnet.apps.address_prefix}"]
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
@@ -302,4 +299,3 @@ resource "null_resource" "consul" {
     command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}' '${azurerm_template_deployment.elastic-iaas.name}'"
   }
 }
-

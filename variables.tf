@@ -71,8 +71,6 @@ variable "kibanaAdditionalYaml" {
   default = "console.enabled: false\n"
 }
 
-variable "mgmt_subscription_id" {}
-
 variable "logAnalyticsId" {
   description = "Log Analytics ID, enables VM logging to Log Analytics (blank disables)"
   type = "string"
@@ -83,4 +81,10 @@ variable "logAnalyticsKey" {
   description = "Log Analytics secret key, enables VM logging to Log Analytics"
   type = "string"
   default = ""
+}
+
+variable "dataNodeAcceleratedNetworking" {
+  description = "Whether to enable accelerated networking for data nodes, which enables single root I/O virtualization (SR-IOV) to a VM, greatly improving its networking performance. Valid values are Default, Yes, No"
+  type = "string"
+  default = "No"
 }

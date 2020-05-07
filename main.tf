@@ -83,7 +83,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
     vmDataNodeCount = "${var.vmDataNodeCount}"
     vmDataDiskCount = "${var.vmDataDiskCount}"
-    vmClientNodeCount = "${var.vmClientNodeCount}"
+    #vmClientNodeCount = "${var.vmClientNodeCount}"
     storageAccountType = "${var.storageAccountType}"
 
     vmDataNodeAcceleratedNetworking = "${var.dataNodeAcceleratedNetworking}"

@@ -26,21 +26,21 @@ variable "dataNodesAreMasterEligible" {
 
 variable "vmDataNodeCount" {
   description = "number of data nodes"
-  #type = "string"
+  type = "string"
   default = "1"
 }
 
 variable "vmDataDiskCount" {
   description = "number of data node's disks"
-  #type = "string"
+  type = "string"
   default = "1"
 }
 
-variable "vmClientNodeCount" {
-  description = "number of client nodes"
-  #type = "string"
-  default = "0"
-}
+#variable "vmClientNodeCount" {
+#  description = "number of client nodes"
+#  type = "string"
+#  default = "0"
+#}
 
 variable "storageAccountType" {
   description = "disk storage account type"

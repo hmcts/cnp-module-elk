@@ -4,8 +4,8 @@ provider "azurerm" {
 
 data "azurerm_virtual_network" "aks_core_vnet" {
   provider             = "azurerm.aks-infra"
-  name                 = "core-${var.env}-vnet"
-  resource_group_name  = "aks-infra-sbox-rg"
+  name                 = "core-${local.env}-vnet"
+  resource_group_name  = "aks-${local.env}-rg"
 }
 
 data "azurerm_subnet" "aks-00" {
@@ -21,6 +21,10 @@ data "azurerm_subnet" "aks-01" {
   virtual_network_name = "${data.azurerm_virtual_network.aks_core_vnet.name}"
   resource_group_name  = "${data.azurerm_virtual_network.aks_core_vnet.resource_group_name}"
 }
+
+locals {'
+   env = "${var.env == "sandbox" ? sbox : var.env}"
+} 
 
 resource "azurerm_network_security_rule" "aks_rule" {
   name                        = "AKS_To_ES"

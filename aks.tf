@@ -22,8 +22,8 @@ data "azurerm_subnet" "aks-01" {
   resource_group_name  = "${data.azurerm_virtual_network.aks_core_vnet.resource_group_name}"
 }
 
-locals {'
-   env = "sbox"
+locals {
+   env = "${var.env == "sandbox" ? sbox : var.env}"
 } 
 
 resource "azurerm_network_security_rule" "aks_rule" {

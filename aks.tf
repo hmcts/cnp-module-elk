@@ -23,7 +23,7 @@ data "azurerm_subnet" "aks-01" {
 }
 
 locals {
-   env = "${var.env == "sandbox" ? sbox : var.env}"
+   env = "${var.env == "sandbox" ? "sbox" : var.env}"
 } 
 
 resource "azurerm_network_security_rule" "aks_rule" {

@@ -1,7 +1,7 @@
 provider "azurerm" {}
 
 provider "azurerm" {
-  version = "1.35.0"
+  version = "1.x"
   alias           = "mgmt"
 }
 
@@ -34,7 +34,7 @@ locals {
 }
 
 data "http" "template" {
-  url = "https://github.com/hmcts/elastic-hmcts-az-marketplace/raw/hmcts-v7-upgrade/src/mainTemplate.json"
+  url = "${local.templateUrl}"
 }
 
 resource "azurerm_template_deployment" "elastic-iaas" {

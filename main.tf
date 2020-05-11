@@ -1,7 +1,7 @@
 provider "azurerm" {}
 
 provider "azurerm" {
-  version = "1.x"
+  version = "~> 1.x"
   alias           = "mgmt"
 }
 

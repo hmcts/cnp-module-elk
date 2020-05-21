@@ -26,14 +26,12 @@ variable "dataNodesAreMasterEligible" {
 
 variable "vmDataNodeCount" {
  description = "number of data nodes"
- type = "int"
- default = "1"
+ default = 1
 }
 
 variable "vmDataDiskCount" {
  description = "number of data node's disks"
- type = "int"
- default = "1"
+ default = 1
 }
 
 variable "vmClientNodeCount" {

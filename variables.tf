@@ -30,11 +30,11 @@ variable "vmDataNodeCount" {
  type = "string"
 }
 
-variable "vmDataDiskCount" {
- description = "number of data node's disks"
- default = "1"
- type = "string"
-}
+# variable "vmDataDiskCount" {
+#  description = "number of data node's disks"
+#  default = "1"
+#  type = "string"
+# }
 
 variable "vmClientNodeCount" {
  description = "number of client nodes"

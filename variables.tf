@@ -26,7 +26,7 @@ variable "dataNodesAreMasterEligible" {
 
 variable "vmDataNodeCount" {
  description = "number of data nodes"
- default = "1"
+#  default = "1"
  type = "string"
 }
 

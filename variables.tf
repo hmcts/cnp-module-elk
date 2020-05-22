@@ -24,11 +24,11 @@ variable "dataNodesAreMasterEligible" {
   default = "Yes"
 }
 
-# variable "vmDataNodeCount" {
-#  description = "number of data nodes"
-#  default = "1"
-#  type = "string"
-# }
+variable "vmDataNodeCount" {
+ description = "number of data nodes"
+ default = "1"
+ type = "string"
+}
 
 variable "vmDataDiskCount" {
  description = "number of data node's disks"

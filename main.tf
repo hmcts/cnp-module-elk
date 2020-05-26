@@ -39,7 +39,7 @@ data "http" "template" {
 
 resource "azurerm_template_deployment" "elastic-iaas" {
   name                = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  template_body       = "${data.http.template.body}"
+  template_body       = "https://raw.githubusercontent.com/hmcts/azure-marketplace/origin/v7upgrade/src/mainTemplate.json"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
   deployment_mode     = "Incremental"
 

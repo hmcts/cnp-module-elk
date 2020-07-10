@@ -285,7 +285,7 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
   name                 = "oneAgentLinux"
   location             = "${var.location}"
   resource_group_name  = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  virtual_machine_name = "${var.product}-"
+  virtual_machine_name = "${var.product}-data-${var.vmDataNodeCount}"
   publisher            = "dynatrace.ruxit"
   type                 = "oneAgentLinux"
   type_handler_version = "1.2"

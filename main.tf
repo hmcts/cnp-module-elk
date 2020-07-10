@@ -300,20 +300,20 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
 SETTINGS
 }
 
-resource "random_integer" "makeDNSupdateRunEachTime" {
-  min     = 1
-  max     = 99999
-}
+# resource "random_integer" "makeDNSupdateRunEachTime" {
+#   min     = 1
+#   max     = 99999
+# }
 
-resource "null_resource" "consul" {
-  triggers {
-    trigger = "${azurerm_template_deployment.elastic-iaas.name}"
-    forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
-  }
+# resource "null_resource" "consul" {
+#   triggers {
+#     trigger = "${azurerm_template_deployment.elastic-iaas.name}"
+#     forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
+#   }
 
-  # register loadbalancer dns
-  provisioner "local-exec" {
-    # createDns.sh domain rg uri ilbIp subscription
-    command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}' '${azurerm_template_deployment.elastic-iaas.name}'"
-  }
-}
+#   # register loadbalancer dns
+#   provisioner "local-exec" {
+#     # createDns.sh domain rg uri ilbIp subscription
+#     command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}' '${azurerm_template_deployment.elastic-iaas.name}'"
+#   }
+# }

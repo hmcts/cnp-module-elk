@@ -302,6 +302,25 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
 SETTINGS
 }
 
+resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
+  name                 = "oneAgentLinux"
+  location             = "${var.location}"
+  resource_group_name  = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  virtual_machine_name = "${var.product}-kibana"
+  publisher            = "dynatrace.ruxit"
+  type                 = "oneAgentLinux"
+  type_handler_version = "1.2"
+
+    settings = <<SETTINGS
+    {
+        "tenantId": "${var.dynatrace_instance}",
+        "token": "${var.dynatrace_token}",
+        "network-zone": "azure.cft",
+        "hostgroup": "${var.dynatrace_hostgroup}"
+    }
+SETTINGS
+}
+
 # resource "random_integer" "makeDNSupdateRunEachTime" {
 #   min     = 1
 #   max     = 99999

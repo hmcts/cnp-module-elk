@@ -281,6 +281,25 @@ resource "azurerm_network_security_rule" "denyall_kibana_rule" {
   depends_on = ["azurerm_template_deployment.elastic-iaas"]
 }
 
+resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
+  name                 = "oneAgentLinux"
+  location             = "${var.location}"
+  resource_group_name  = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  virtual_machine_name = "${var.product}-"
+  publisher            = "dynatrace.ruxit"
+  type                 = "oneAgentLinux"
+  type_handler_version = "1.2"
+
+    settings = <<SETTINGS
+    {
+        "tenantId": "${var.dynatrace_instance}",
+        "token": "${var.dynatrace_token}",
+        "network-zone": "azure.cft",
+        "hostgroup": "${var.dynatrace_hostgroup}"
+    }
+SETTINGS
+}
+
 resource "random_integer" "makeDNSupdateRunEachTime" {
   min     = 1
   max     = 99999

@@ -88,3 +88,18 @@ variable "dataNodeAcceleratedNetworking" {
   type = "string"
   default = "No"
 }
+
+variable "dynatrace_instance" {
+  type = "string"
+  default = ""
+}
+
+variable "dynatrace_hostgroup" {
+  type = "string"
+  default = ""
+}
+
+variable "dynatrace_token" {
+  type = "string"
+  default = ""
+}

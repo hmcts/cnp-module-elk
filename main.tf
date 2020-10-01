@@ -295,7 +295,7 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
     {
         "tenantId": "${var.dynatrace_instance}",
         "token": "${var.dynatrace_token}",
-        "installerArgs": "--set-network-zone=azure.cft"
+        "installerArgs": "--set-network-zone=azure.cft",
         "hostgroup": "${var.dynatrace_hostgroup}"
     }
 SETTINGS

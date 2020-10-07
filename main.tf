@@ -118,7 +118,7 @@ data "azurerm_subnet" "jenkins" {
   provider             = "azurerm.mgmt"
   name                 = "iaas"
   virtual_network_name = "${local.mgmt_network_name}"
-  resource_group_name  = "${local.mgmt_network_name}"
+  resource_group_name  = "${local.mgmt_rg_name}"
 }
 
 data "azurerm_network_security_group" "cluster_nsg" {

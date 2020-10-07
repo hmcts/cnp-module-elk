@@ -1,6 +1,7 @@
 provider "azurerm" {}
 
 provider "azurerm" {
+  version = "1.44.0"
   alias           = "mgmt"
 }
 
@@ -22,8 +23,8 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
-  templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
+  artifactsBaseUrl = "https://github.com/hmcts/elastic-hmcts-az-marketplace/raw/hmcts-v7-upgrade/src/"
+  templateUrl = "${local.artifactsBaseUrl}mainTemplate.json"
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
   securePassword = "${random_string.password.result}"
@@ -46,14 +47,14 @@ resource "azurerm_template_deployment" "elastic-iaas" {
 
   parameters = {
     # See https://github.com/elastic/azure-marketplace#parameters
-    artifactsBaseUrl  = "${local.artifactsBaseUrl}"
-    esClusterName     = "${var.product}-elastic-search-${var.env}"
-    location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
+    _artifactsLocation  = "${local.artifactsBaseUrl}"
+    esClusterName       = "${var.product}-elastic-search-${var.env}"
+    location            = "${azurerm_resource_group.elastic-resourcegroup.location}"
 
-    esVersion         = "6.4.2"
-    xpackPlugins      = "No"
-    kibana            = "Yes"
-    logstash          = "No"
+    esVersion           = "7.3.2"
+    xpackPlugins        = "No"
+    kibana              = "Yes"
+    logstash            = "No"
 
     cnpEnv = "${var.env}"
 

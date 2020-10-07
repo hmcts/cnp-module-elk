@@ -27,9 +27,11 @@ locals {
   elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
   securePassword = "${random_string.password.result}"
-  # Amend mgm_network_name to reflect your network
-  mgmt_network_name = "${var.subscription == "ethosldata" || var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "demo" ? "mgmt-infra-prod" : "mgmt-infra-sandbox" }"
-  bastion_ip = "${var.subscription == "prod" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value }"
+
+  mgmt_network_name = "${var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "core-cftptl-intsvc-vnet" : "core-cftsbox-intsvc-vnet"}"
+  mgmt_rg_name =  "${var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "aks-infra-cftptl-intsvc-rg" : "aks-infra-cftsbox-intsvc-rg"}"
+  bastion_ip = "${var.subscription == "prod" || var.subscription == "ethosldata" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value }"
+
 }
 
 data "http" "template" {
@@ -114,7 +116,7 @@ data "azurerm_subnet" "apps" {
 
 data "azurerm_subnet" "jenkins" {
   provider             = "azurerm.mgmt"
-  name                 = "jenkins-subnet"
+  name                 = "iaas"
   virtual_network_name = "${local.mgmt_network_name}"
   resource_group_name  = "${local.mgmt_network_name}"
 }

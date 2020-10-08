@@ -31,7 +31,6 @@ locals {
   mgmt_network_name = "${var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "core-cftptl-intsvc-vnet" : "core-cftsbox-intsvc-vnet"}"
   mgmt_rg_name      = "${var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "aks-infra-cftptl-intsvc-rg" : "aks-infra-cftsbox-intsvc-rg"}"
   bastion_ip        = "${var.subscription == "prod" || var.subscription == "ethosldata" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value}"
-
 }
 
 data "http" "template" {
@@ -188,7 +187,6 @@ resource "azurerm_network_security_rule" "apps_rule" {
   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
 }
 
-
 resource "azurerm_network_security_rule" "jenkins_rule" {
   name                                       = "Jenkins_To_ES"
   description                                = "Allow Jenkins to access the ElasticSearch cluster for testing"
@@ -318,12 +316,9 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
 SETTINGS
 }
 
-
-resource "null_resource" "dynatrace_kb_networkzone" {
-
+resource "null_resource" "azcli_exec" {
   provisioner "local-exec" {
     command = "sudo /opt/dynatrace/oneagent/agent/tools/oneagentctl --set-network-zone azure.cft --restart-service"
   }
-
   depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent_kibana]
 }

@@ -45,55 +45,43 @@ resource "azurerm_template_deployment" "elastic-iaas" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    # See https://github.com/elastic/azure-marketplace#parameters
-    artifactsBaseUrl  = "${local.artifactsBaseUrl}"
-    esClusterName     = "${var.product}-elastic-search-${var.env}"
-    location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
-
-    esVersion         = "6.4.2"
-    xpackPlugins      = "No"
-    kibana            = "Yes"
-    logstash          = "No"
-
-    cnpEnv = "${var.env}"
-
-    vmHostNamePrefix = "${var.product}-"
-
-    adminUsername     = "elkadmin"
-    authenticationType = "sshPublicKey"
-    sshPublicKey = "${var.ssh_elastic_search_public_key}"
-    securityAdminPassword = "${local.securePassword}"
-    securityKibanaPassword = "${local.securePassword}"
-    securityBootstrapPassword = ""
-    securityLogstashPassword = "${local.securePassword}"
-    securityReadPassword = "${local.securePassword}"
-    securityBeatsPassword = "${local.securePassword}"
-
-    vNetNewOrExisting = "existing"
-    vNetName          = "${data.azurerm_virtual_network.core_infra_vnet.name}"
-    vNetExistingResourceGroup = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
-    vNetLoadBalancerIp = "${local.vNetLoadBalancerIp}"
-    vNetClusterSubnetName = "${data.azurerm_subnet.elastic-subnet.name}"
-
-    vmSizeKibana = "Standard_A2_v2"
-    vmSizeDataNodes = "${var.vmSizeAllNodes}"
-    vmSizeClientNodes = "${var.vmSizeAllNodes}"
-    vmSizeMasterNodes = "${var.vmSizeAllNodes}"
-
-    dataNodesAreMasterEligible = "${var.dataNodesAreMasterEligible}"
-
-    vmDataNodeCount = "${var.vmDataNodeCount}"
-    vmDataDiskCount = "${var.vmDataDiskCount}"
-    vmClientNodeCount = "${var.vmClientNodeCount}"
-    storageAccountType = "${var.storageAccountType}"
-
+    artifactsBaseUrl                = "${local.artifactsBaseUrl}"
+    esClusterName                   = "${var.product}-elastic-search-${var.env}"
+    location                        = "${azurerm_resource_group.elastic-resourcegroup.location}"
+    esVersion                       = "6.4.2"
+    xpackPlugins                    = "No"
+    kibana                          = "Yes"
+    logstash                        = "No"
+    cnpEnv                          = "${var.env}"
+    vmHostNamePrefix                = "${var.product}-"
+    adminUsername                   = "elkadmin"
+    authenticationType              = "sshPublicKey"
+    sshPublicKey                    = "${var.ssh_elastic_search_public_key}"
+    securityAdminPassword           = "${local.securePassword}"
+    securityKibanaPassword          = "${local.securePassword}"
+    securityBootstrapPassword       = ""
+    securityLogstashPassword        = "${local.securePassword}"
+    securityReadPassword            = "${local.securePassword}"
+    securityBeatsPassword           = "${local.securePassword}"
+    vNetNewOrExisting               = "existing"
+    vNetName                        = "${data.azurerm_virtual_network.core_infra_vnet.name}"
+    vNetExistingResourceGroup       = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
+    vNetLoadBalancerIp              = "${local.vNetLoadBalancerIp}"
+    vNetClusterSubnetName           = "${data.azurerm_subnet.elastic-subnet.name}"
+    vmSizeKibana                    = "Standard_A2_v2"
+    vmSizeDataNodes                 = "${var.vmSizeAllNodes}"
+    vmSizeClientNodes               = "${var.vmSizeAllNodes}"
+    vmSizeMasterNodes               = "${var.vmSizeAllNodes}"
+    dataNodesAreMasterEligible      = "${var.dataNodesAreMasterEligible}"
+    vmDataNodeCount                 = "${var.vmDataNodeCount}"
+    vmDataDiskCount                 = "${var.vmDataDiskCount}"
+    vmClientNodeCount               = "${var.vmClientNodeCount}"
+    storageAccountType              = "${var.storageAccountType}"
     vmDataNodeAcceleratedNetworking = "${var.dataNodeAcceleratedNetworking}"
-
-    esAdditionalYaml = "${var.esAdditionalYaml}"
-    kibanaAdditionalYaml = "${var.kibanaAdditionalYaml}"
-
-    logAnalyticsId = "${var.logAnalyticsId}"
-    logAnalyticsKey = "${var.logAnalyticsKey}"
+    esAdditionalYaml                = "${var.esAdditionalYaml}"
+    kibanaAdditionalYaml            = "${var.kibanaAdditionalYaml}"
+    logAnalyticsId                  = "${var.logAnalyticsId}"
+    logAnalyticsKey                 = "${var.logAnalyticsKey}"
   }
 }
 
@@ -297,10 +285,19 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
     {
         "tenantId": "${var.dynatrace_instance}",
         "token": "${var.dynatrace_token}",
-        "installerArgs": "--set-network-zone=azure.cft",
         "hostgroup": "${var.dynatrace_hostgroup}"
     }
 SETTINGS
+}
+
+resource "null_resource" "dynatrace_oneagent_networkzone" {
+  count = "${var.vmDataNodeCount}"
+
+  provisioner "local-exec" {
+    command = "sudo /opt/dynatrace/oneagent/agent/tools/oneagentctl --set-network-zone azure.cft --restart-service"
+  }
+
+  depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent]
 }
 
 resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
@@ -316,26 +313,17 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
     {
         "tenantId": "${var.dynatrace_instance}",
         "token": "${var.dynatrace_token}",
-        "installerArgs": "--set-network-zone=azure.cft",
         "hostgroup": "${var.dynatrace_hostgroup}"
     }
 SETTINGS
 }
 
-# resource "random_integer" "makeDNSupdateRunEachTime" {
-#   min     = 1
-#   max     = 99999
-# }
 
-# resource "null_resource" "consul" {
-#   triggers {
-#     trigger = "${azurerm_template_deployment.elastic-iaas.name}"
-#     forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
-#   }
+resource "null_resource" "dynatrace_oneagent_kibana_networkzone" {
 
-#   # register loadbalancer dns
-#   provisioner "local-exec" {
-#     # createDns.sh domain rg uri ilbIp subscription
-#     command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}' '${azurerm_template_deployment.elastic-iaas.name}'"
-#   }
-# }
+  provisioner "local-exec" {
+    command = "sudo /opt/dynatrace/oneagent/agent/tools/oneagentctl --set-network-zone azure.cft --restart-service"
+  }
+
+  depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent_kibana]
+}

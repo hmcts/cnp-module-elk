@@ -1,7 +1,7 @@
 provider "azurerm" {}
 
 provider "azurerm" {
-  alias           = "mgmt"
+  alias = "mgmt"
 }
 
 resource "azurerm_resource_group" "elastic-resourcegroup" {
@@ -10,7 +10,7 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
 
   tags = "${merge(var.common_tags,
     map("lastUpdated", "${timestamp()}")
-    )}"
+  )}"
 }
 
 resource "random_string" "password" {
@@ -22,16 +22,15 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
-  templateUrl = "${local.artifactsBaseUrl}/mainTemplate.json"
-  elasticVnetName = "${var.product}-elastic-search-vnet-${var.env}"
+  artifactsBaseUrl   = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
+  templateUrl        = "${local.artifactsBaseUrl}/mainTemplate.json"
+  elasticVnetName    = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
-  securePassword = "${random_string.password.result}"
+  securePassword     = "${random_string.password.result}"
 
   mgmt_network_name = "${var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "core-cftptl-intsvc-vnet" : "core-cftsbox-intsvc-vnet"}"
-  mgmt_rg_name =  "${var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "aks-infra-cftptl-intsvc-rg" : "aks-infra-cftsbox-intsvc-rg"}"
-  bastion_ip = "${var.subscription == "prod" || var.subscription == "ethosldata" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value }"
-
+  mgmt_rg_name      = "${var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "aks-infra-cftptl-intsvc-rg" : "aks-infra-cftsbox-intsvc-rg"}"
+  bastion_ip        = "${var.subscription == "prod" || var.subscription == "ethosldata" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value}"
 }
 
 data "http" "template" {
@@ -45,61 +44,49 @@ resource "azurerm_template_deployment" "elastic-iaas" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    # See https://github.com/elastic/azure-marketplace#parameters
-    artifactsBaseUrl  = "${local.artifactsBaseUrl}"
-    esClusterName     = "${var.product}-elastic-search-${var.env}"
-    location          = "${azurerm_resource_group.elastic-resourcegroup.location}"
-
-    esVersion         = "6.4.2"
-    xpackPlugins      = "No"
-    kibana            = "Yes"
-    logstash          = "No"
-
-    cnpEnv = "${var.env}"
-
-    vmHostNamePrefix = "${var.product}-"
-
-    adminUsername     = "elkadmin"
-    authenticationType = "sshPublicKey"
-    sshPublicKey = "${var.ssh_elastic_search_public_key}"
-    securityAdminPassword = "${local.securePassword}"
-    securityKibanaPassword = "${local.securePassword}"
-    securityBootstrapPassword = ""
-    securityLogstashPassword = "${local.securePassword}"
-    securityReadPassword = "${local.securePassword}"
-    securityBeatsPassword = "${local.securePassword}"
-
-    vNetNewOrExisting = "existing"
-    vNetName          = "${data.azurerm_virtual_network.core_infra_vnet.name}"
-    vNetExistingResourceGroup = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
-    vNetLoadBalancerIp = "${local.vNetLoadBalancerIp}"
-    vNetClusterSubnetName = "${data.azurerm_subnet.elastic-subnet.name}"
-
-    vmSizeKibana = "Standard_A2_v2"
-    vmSizeDataNodes = "${var.vmSizeAllNodes}"
-    vmSizeClientNodes = "${var.vmSizeAllNodes}"
-    vmSizeMasterNodes = "${var.vmSizeAllNodes}"
-
-    dataNodesAreMasterEligible = "${var.dataNodesAreMasterEligible}"
-
-    vmDataNodeCount = "${var.vmDataNodeCount}"
-    vmDataDiskCount = "${var.vmDataDiskCount}"
-    vmClientNodeCount = "${var.vmClientNodeCount}"
-    storageAccountType = "${var.storageAccountType}"
-
+    artifactsBaseUrl                = "${local.artifactsBaseUrl}"
+    esClusterName                   = "${var.product}-elastic-search-${var.env}"
+    location                        = "${azurerm_resource_group.elastic-resourcegroup.location}"
+    esVersion                       = "6.4.2"
+    xpackPlugins                    = "No"
+    kibana                          = "Yes"
+    logstash                        = "No"
+    cnpEnv                          = "${var.env}"
+    vmHostNamePrefix                = "${var.product}-"
+    adminUsername                   = "elkadmin"
+    authenticationType              = "sshPublicKey"
+    sshPublicKey                    = "${var.ssh_elastic_search_public_key}"
+    securityAdminPassword           = "${local.securePassword}"
+    securityKibanaPassword          = "${local.securePassword}"
+    securityBootstrapPassword       = ""
+    securityLogstashPassword        = "${local.securePassword}"
+    securityReadPassword            = "${local.securePassword}"
+    securityBeatsPassword           = "${local.securePassword}"
+    vNetNewOrExisting               = "existing"
+    vNetName                        = "${data.azurerm_virtual_network.core_infra_vnet.name}"
+    vNetExistingResourceGroup       = "${data.azurerm_virtual_network.core_infra_vnet.resource_group_name}"
+    vNetLoadBalancerIp              = "${local.vNetLoadBalancerIp}"
+    vNetClusterSubnetName           = "${data.azurerm_subnet.elastic-subnet.name}"
+    vmSizeKibana                    = "Standard_A2_v2"
+    vmSizeDataNodes                 = "${var.vmSizeAllNodes}"
+    vmSizeClientNodes               = "${var.vmSizeAllNodes}"
+    vmSizeMasterNodes               = "${var.vmSizeAllNodes}"
+    dataNodesAreMasterEligible      = "${var.dataNodesAreMasterEligible}"
+    vmDataNodeCount                 = "${var.vmDataNodeCount}"
+    vmDataDiskCount                 = "${var.vmDataDiskCount}"
+    vmClientNodeCount               = "${var.vmClientNodeCount}"
+    storageAccountType              = "${var.storageAccountType}"
     vmDataNodeAcceleratedNetworking = "${var.dataNodeAcceleratedNetworking}"
-
-    esAdditionalYaml = "${var.esAdditionalYaml}"
-    kibanaAdditionalYaml = "${var.kibanaAdditionalYaml}"
-
-    logAnalyticsId = "${var.logAnalyticsId}"
-    logAnalyticsKey = "${var.logAnalyticsKey}"
+    esAdditionalYaml                = "${var.esAdditionalYaml}"
+    kibanaAdditionalYaml            = "${var.kibanaAdditionalYaml}"
+    logAnalyticsId                  = "${var.logAnalyticsId}"
+    logAnalyticsKey                 = "${var.logAnalyticsKey}"
   }
 }
 
 data "azurerm_virtual_network" "core_infra_vnet" {
-  name                 = "core-infra-vnet-${var.env}"
-  resource_group_name  = "core-infra-${var.env}"
+  name                = "core-infra-vnet-${var.env}"
+  resource_group_name = "core-infra-${var.env}"
 }
 
 data "azurerm_subnet" "elastic-subnet" {
@@ -122,27 +109,27 @@ data "azurerm_subnet" "jenkins" {
 }
 
 data "azurerm_network_security_group" "cluster_nsg" {
-  name = "${var.product}-cluster-nsg"
+  name                = "${var.product}-cluster-nsg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 data "azurerm_network_security_group" "kibana_nsg" {
-  name = "${var.product}-kibana-nsg"
+  name                = "${var.product}-kibana-nsg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 data "azurerm_application_security_group" "data_asg" {
   name                = "${var.product}-data-asg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 data "azurerm_application_security_group" "kibana_asg" {
   name                = "${var.product}-kibana-asg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 data "azurerm_log_analytics_workspace" "log_analytics" {
@@ -151,70 +138,69 @@ data "azurerm_log_analytics_workspace" "log_analytics" {
 }
 
 data "azurerm_key_vault" "infra_vault" {
-  name = "infra-vault-${var.subscription}"
+  name                = "infra-vault-${var.subscription}"
   resource_group_name = "${var.subscription == "prod" ? "core-infra-prod" : "cnp-core-infra"}"
 }
 
 data "azurerm_key_vault_secret" "bastion_dev_ip" {
-  name      = "bastion-dev-ip"
+  name         = "bastion-dev-ip"
   key_vault_id = "${data.azurerm_key_vault.infra_vault.id}"
 }
 
 data "azurerm_key_vault_secret" "bastion_devops_ip" {
-  name      = "bastion-devops-ip"
+  name         = "bastion-devops-ip"
   key_vault_id = "${data.azurerm_key_vault.infra_vault.id}"
 }
 
 # Rules that we can't easily define in the Elastic templates, use 200>=priority>300 for these rules
 
 resource "azurerm_network_security_rule" "bastion_es_rule" {
-  count                       = "${var.subscription == "prod" ? 0 : 1}"
-  name                        = "Bastion_To_ES"
-  description                 = "Allow Bastion access for debugging elastic queries on development platforms"
-  priority                    = 200
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "9200"
-  source_address_prefix       = "${local.bastion_ip}"
+  count                                      = "${var.subscription == "prod" ? 0 : 1}"
+  name                                       = "Bastion_To_ES"
+  description                                = "Allow Bastion access for debugging elastic queries on development platforms"
+  priority                                   = 200
+  direction                                  = "Inbound"
+  access                                     = "Allow"
+  protocol                                   = "Tcp"
+  source_port_range                          = "*"
+  destination_port_range                     = "9200"
+  source_address_prefix                      = "${local.bastion_ip}"
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
-  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name                = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 resource "azurerm_network_security_rule" "apps_rule" {
-  name                        = "App_To_ES"
-  description                 = "Allow Apps to access the ElasticSearch cluster"
-  priority                    = 210
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "9200"
-  source_address_prefixes      = ["${data.azurerm_subnet.apps.address_prefix}"]
+  name                                       = "App_To_ES"
+  description                                = "Allow Apps to access the ElasticSearch cluster"
+  priority                                   = 210
+  direction                                  = "Inbound"
+  access                                     = "Allow"
+  protocol                                   = "Tcp"
+  source_port_range                          = "*"
+  destination_port_range                     = "9200"
+  source_address_prefixes                    = ["${data.azurerm_subnet.apps.address_prefix}"]
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
-  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name                = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
 }
 
-
 resource "azurerm_network_security_rule" "jenkins_rule" {
-  name                        = "Jenkins_To_ES"
-  description                 = "Allow Jenkins to access the ElasticSearch cluster for testing"
-  priority                    = 220
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "9200"
-  source_address_prefix       = "${data.azurerm_subnet.jenkins.address_prefix}"
+  name                                       = "Jenkins_To_ES"
+  description                                = "Allow Jenkins to access the ElasticSearch cluster for testing"
+  priority                                   = 220
+  direction                                  = "Inbound"
+  access                                     = "Allow"
+  protocol                                   = "Tcp"
+  source_port_range                          = "*"
+  destination_port_range                     = "9200"
+  source_address_prefix                      = "${data.azurerm_subnet.jenkins.address_prefix}"
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
-  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name                = "${data.azurerm_network_security_group.cluster_nsg.name}"
+  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 resource "azurerm_network_security_rule" "bastion_ssh_rule" {
@@ -230,41 +216,41 @@ resource "azurerm_network_security_rule" "bastion_ssh_rule" {
   destination_address_prefix  = "${data.azurerm_subnet.elastic-subnet.address_prefix}"
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 # Additional kibana-nsg rules use 300>=priority>400
 
 resource "azurerm_network_security_rule" "kibana_tight_ssh_rule" {
-  name                        = "Bastion_only_SSH"
-  description                 = "Override open SSH and limit this to Bastion only"
-  priority                    = 300
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "22"
-  source_address_prefix       = "${local.bastion_ip}"
+  name                                       = "Bastion_only_SSH"
+  description                                = "Override open SSH and limit this to Bastion only"
+  priority                                   = 300
+  direction                                  = "Inbound"
+  access                                     = "Allow"
+  protocol                                   = "Tcp"
+  source_port_range                          = "*"
+  destination_port_range                     = "22"
+  source_address_prefix                      = "${local.bastion_ip}"
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.kibana_asg.id}"]
-  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  network_security_group_name = "${data.azurerm_network_security_group.kibana_nsg.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name                = "${data.azurerm_network_security_group.kibana_nsg.name}"
+  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 resource "azurerm_network_security_rule" "kibana_tight_kibana_rule" {
-  name                        = "Bastion_only_Kibana"
-  description                 = "Override open Kibana accessand limit this to Bastion only"
-  priority                    = 310
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "5601"
-  source_address_prefix       = "${local.bastion_ip}"
+  name                                       = "Bastion_only_Kibana"
+  description                                = "Override open Kibana accessand limit this to Bastion only"
+  priority                                   = 310
+  direction                                  = "Inbound"
+  access                                     = "Allow"
+  protocol                                   = "Tcp"
+  source_port_range                          = "*"
+  destination_port_range                     = "5601"
+  source_address_prefix                      = "${local.bastion_ip}"
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.kibana_asg.id}"]
-  resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  network_security_group_name = "${data.azurerm_network_security_group.kibana_nsg.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
+  network_security_group_name                = "${data.azurerm_network_security_group.kibana_nsg.name}"
+  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 resource "azurerm_network_security_rule" "denyall_kibana_rule" {
@@ -280,7 +266,7 @@ resource "azurerm_network_security_rule" "denyall_kibana_rule" {
   destination_address_prefix  = "*"
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.kibana_nsg.name}"
-  depends_on = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
@@ -293,14 +279,23 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
   type                 = "oneAgentLinux"
   type_handler_version = "1.2"
 
-    settings = <<SETTINGS
+  settings = <<SETTINGS
     {
         "tenantId": "${var.dynatrace_instance}",
         "token": "${var.dynatrace_token}",
-        "installerArgs": "--set-network-zone=azure.cft",
         "hostgroup": "${var.dynatrace_hostgroup}"
     }
 SETTINGS
+}
+
+resource "null_resource" "dynatrace_oneagent_networkzone" {
+  count = "${var.vmDataNodeCount}"
+
+  provisioner "local-exec" {
+    command = "sudo /opt/dynatrace/oneagent/agent/tools/oneagentctl --set-network-zone azure.cft --restart-service"
+  }
+
+  depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent]
 }
 
 resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
@@ -312,30 +307,18 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
   type                 = "oneAgentLinux"
   type_handler_version = "1.2"
 
-    settings = <<SETTINGS
+  settings = <<SETTINGS
     {
         "tenantId": "${var.dynatrace_instance}",
         "token": "${var.dynatrace_token}",
-        "installerArgs": "--set-network-zone=azure.cft",
         "hostgroup": "${var.dynatrace_hostgroup}"
     }
 SETTINGS
 }
 
-# resource "random_integer" "makeDNSupdateRunEachTime" {
-#   min     = 1
-#   max     = 99999
-# }
-
-# resource "null_resource" "consul" {
-#   triggers {
-#     trigger = "${azurerm_template_deployment.elastic-iaas.name}"
-#     forceRun = "${random_integer.makeDNSupdateRunEachTime.result}"
-#   }
-
-#   # register loadbalancer dns
-#   provisioner "local-exec" {
-#     # createDns.sh domain rg uri ilbIp subscription
-#     command = "bash -e ${path.module}/createDns.sh '${azurerm_template_deployment.elastic-iaas.name}' 'core-infra-${var.env}' '${path.module}' '${local.vNetLoadBalancerIp}' '${var.subscription}' '${azurerm_template_deployment.elastic-iaas.name}'"
-#   }
-# }
+resource "null_resource" "azcli_exec" {
+  provisioner "local-exec" {
+    command = "sudo /opt/dynatrace/oneagent/agent/tools/oneagentctl --set-network-zone azure.cft --restart-service"
+  }
+  depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent_kibana]
+}

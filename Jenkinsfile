@@ -10,6 +10,10 @@ try {
       checkout scm
     }
 
+    stage('Terraform install') {
+      sh 'tfenv install'
+    }
+
     stage('Terraform init') {
       sh 'terraform init'
     }

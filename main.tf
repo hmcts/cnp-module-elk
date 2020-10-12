@@ -269,12 +269,16 @@ resource "azurerm_network_security_rule" "denyall_kibana_rule" {
   depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
 }
 
+data "azurerm_virtual_machine" "dynatrace_oneagent_vm" {
+  count               = "${var.vmDataNodeCount}"
+  name                = "${var.product}-data-${count.index}"
+  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
+}
+
 resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
   count                = "${var.vmDataNodeCount}"
   name                 = "oneAgentLinux"
-  location             = "${var.location}"
-  resource_group_name  = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  virtual_machine_name = "${var.product}-data-${count.index}"
+  virtual_machine_id   = "${data.azurerm_virtual_machine.dynatrace_oneagent_vm[count.index].id}"
   publisher            = "dynatrace.ruxit"
   type                 = "oneAgentLinux"
   type_handler_version = "1.2"
@@ -298,11 +302,14 @@ resource "null_resource" "dynatrace_oneagent_networkzone" {
   depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent]
 }
 
+data "azurerm_virtual_machine" "dynatrace_oneagent_kibana" {
+  name                = "${var.product}-kibana"
+  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
+}
+
 resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
   name                 = "oneAgentLinux"
-  location             = "${var.location}"
-  resource_group_name  = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  virtual_machine_name = "${var.product}-kibana"
+  virtual_machine_id   =  "${data.azurerm_virtual_machine.dynatrace_oneagent_kibana.id}"
   publisher            = "dynatrace.ruxit"
   type                 = "oneAgentLinux"
   type_handler_version = "1.2"

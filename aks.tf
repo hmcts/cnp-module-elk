@@ -34,7 +34,7 @@ resource "azurerm_network_security_rule" "aks_rule" {
   access                                     = "Allow"
   protocol                                   = "Tcp"
   source_port_range                          = "*"
-  destination_port_range                     = "9200"
+  destination_port_range                     = "7400"
   source_address_prefixes                    = ["${data.azurerm_subnet.aks-00.address_prefix}", "${data.azurerm_subnet.aks-01.address_prefix}"]
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"

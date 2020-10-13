@@ -46,6 +46,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
   parameters = {
     artifactsBaseUrl                = "${local.artifactsBaseUrl}"
     esClusterName                   = "${var.product}-elastic-search-${var.env}"
+    esHttpPort                      = "7400"
     location                        = "${azurerm_resource_group.elastic-resourcegroup.location}"
     esVersion                       = "6.4.2"
     xpackPlugins                    = "No"
@@ -163,7 +164,7 @@ resource "azurerm_network_security_rule" "bastion_es_rule" {
   access                                     = "Allow"
   protocol                                   = "Tcp"
   source_port_range                          = "*"
-  destination_port_range                     = "9200"
+  destination_port_range                     = "7400"
   source_address_prefix                      = "${local.bastion_ip}"
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
@@ -179,7 +180,7 @@ resource "azurerm_network_security_rule" "apps_rule" {
   access                                     = "Allow"
   protocol                                   = "Tcp"
   source_port_range                          = "*"
-  destination_port_range                     = "9200"
+  destination_port_range                     = "7400"
   source_address_prefixes                    = ["${data.azurerm_subnet.apps.address_prefix}"]
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
@@ -195,7 +196,7 @@ resource "azurerm_network_security_rule" "jenkins_rule" {
   access                                     = "Allow"
   protocol                                   = "Tcp"
   source_port_range                          = "*"
-  destination_port_range                     = "9200"
+  destination_port_range                     = "7400"
   source_address_prefix                      = "${data.azurerm_subnet.jenkins.address_prefix}"
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"

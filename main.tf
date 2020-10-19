@@ -296,11 +296,7 @@ resource "null_resource" "dynatrace_oneagent_networkzone" {
   count = "${var.vmDataNodeCount}"
 
   provisioner "local-exec" {
-    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az vm extension set​ 
-    --publisher dynatrace.ruxit​ -n "oneAgentLinux"​ 
-    -g "${azurerm_resource_group.elastic-resourcegroup.name}"​ 
-    --vm-name "${var.product}-data-${count.index}"​ 
-    --settings "{\"tenantId\":\"${var.dynatrace_instance}\",\"token\":\"${var.dynatrace_token}\", \"installerArgs\":\"--set-host-group=${var.dynatrace_hostgroup} --set-infra-only=false --set-network-zone=azure.cft\"}""
+    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az vm extension set​ --publisher dynatrace.ruxit​ -n "oneAgentLinux"​ -g "${azurerm_resource_group.elastic-resourcegroup.name}"​ --vm-name "${var.product}-data-${count.index}"​ --settings "{\"tenantId\":\"${var.dynatrace_instance}\",\"token\":\"${var.dynatrace_token}\", \"installerArgs\":\"--set-host-group=${var.dynatrace_hostgroup} --set-infra-only=false --set-network-zone=azure.cft\"}""
   }
 
   depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent]
@@ -329,11 +325,7 @@ SETTINGS
 
 resource "null_resource" "azcli_exec" {
   provisioner "local-exec" {
-    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az vm extension set​ 
-    --publisher dynatrace.ruxit​ -n "oneAgentLinux"​ 
-    -g "${azurerm_resource_group.elastic-resourcegroup.name}"​ 
-    --vm-name "${var.product}-kibana"​ 
-    --settings "{\"tenantId\":\"${var.dynatrace_instance}\",\"token\":\"${var.dynatrace_token}\", \"installerArgs\":\"--set-host-group=${var.dynatrace_hostgroup} --set-infra-only=false --set-network-zone=azure.cft\"}""
+    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az vm extension set​ --publisher dynatrace.ruxit​ -n "oneAgentLinux"​ -g "${azurerm_resource_group.elastic-resourcegroup.name}"​ --vm-name "${var.product}-kibana"​ --settings "{\"tenantId\":\"${var.dynatrace_instance}\",\"token\":\"${var.dynatrace_token}\", \"installerArgs\":\"--set-host-group=${var.dynatrace_hostgroup} --set-infra-only=false --set-network-zone=azure.cft\"}""
   }
   depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent_kibana]
 }

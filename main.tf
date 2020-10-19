@@ -296,7 +296,7 @@ resource "null_resource" "dynatrace_oneagent_networkzone" {
   count = "${var.vmDataNodeCount}"
 
   provisioner "local-exec" {
-    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az vm extension set --name oneAgentLinux --publisher dynatrace.ruxit --resource-group ${azurerm_resource_group.elastic-resourcegroup.name} --vm-name ${data.azurerm_virtual_machine.dynatrace_oneagent_vm[count.index].id} --settings { 'tenantId': ${var.dynatrace_instance}, 'token': ${var.dynatrace_token}, 'installerArgs': '--set-network-zone=azure.cft'}"
+    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az vm extension set --name oneAgentLinux --publisher dynatrace.ruxit --resource-group ${azurerm_resource_group.elastic-resourcegroup.name} --vm-name ${data.azurerm_virtual_machine.dynatrace_oneagent_vm[count.index].id} --settings { \"tenantId\": ${var.dynatrace_instance}, \"token\": ${var.dynatrace_token}, \"installerArgs\": \"--set-network-zone=azure.cft\"}"
   }
 
   depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent]
@@ -325,7 +325,7 @@ SETTINGS
 
 resource "null_resource" "azcli_exec" {
   provisioner "local-exec" {
-    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az vm extension set --name oneAgentLinux --publisher dynatrace.ruxit --resource-group ${azurerm_resource_group.elastic-resourcegroup.name} --vm-name ${data.azurerm_virtual_machine.dynatrace_oneagent_kibana.name} --settings { 'tenantId': ${var.dynatrace_instance}, 'token': ${var.dynatrace_token}, 'installerArgs': '--set-network-zone=azure.cft'}"
+    command = "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-${var.subscription} az vm extension set --name oneAgentLinux --publisher dynatrace.ruxit --resource-group ${azurerm_resource_group.elastic-resourcegroup.name} --vm-name ${data.azurerm_virtual_machine.dynatrace_oneagent_kibana.name} --settings { \"tenantId\": ${var.dynatrace_instance}, \"token\": ${var.dynatrace_token}, \"installerArgs\": \"--set-network-zone=azure.cft\"}"
   }
   depends_on = [azurerm_virtual_machine_extension.dynatrace_oneagent_kibana]
 }

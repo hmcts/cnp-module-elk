@@ -281,7 +281,7 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
   virtual_machine_id   = "${data.azurerm_virtual_machine.dynatrace_oneagent_vm[count.index].id}"
   publisher            = "dynatrace.ruxit"
   type                 = "oneAgentLinux"
-  type_handler_version = "2.3"
+  type_handler_version = "2.182.0.0"
 
   settings = <<SETTINGS
     {
@@ -303,7 +303,7 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
   virtual_machine_id   = "${data.azurerm_virtual_machine.dynatrace_oneagent_kibana.id}"
   publisher            = "dynatrace.ruxit"
   type                 = "oneAgentLinux"
-  type_handler_version = "2.3"
+  type_handler_version = "2.182.0.0"
 
   settings = <<SETTINGS
     {

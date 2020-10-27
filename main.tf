@@ -164,7 +164,7 @@ resource "azurerm_network_security_rule" "bastion_es_rule" {
   protocol                                   = "Tcp"
   source_port_range                          = "*"
   destination_port_range                     = "9200"
-  source_address_prefix                      = split(",", local.bastion_ip)
+  source_address_prefixes                    = split(",", local.bastion_ip)
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name                = "${data.azurerm_network_security_group.cluster_nsg.name}"

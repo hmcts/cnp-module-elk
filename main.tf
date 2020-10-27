@@ -288,7 +288,7 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
         "tenantId": "${var.dynatrace_instance}",
         "token": "${var.dynatrace_token}",
         "hostgroup": "${var.dynatrace_hostgroup}",
-        "installerArgs": "--set-network-zone=azure.cft"
+        "installerArguments": "--set-network-zone=azure.cft"
     }
 SETTINGS
 }
@@ -310,7 +310,7 @@ resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
         "tenantId": "${var.dynatrace_instance}",
         "token": "${var.dynatrace_token}",
         "hostgroup": "${var.dynatrace_hostgroup}",  
-        "installerArgs": "--set-network-zone=azure.cft"
+        "installerArguments": "--set-network-zone=azure.cft"
     }
 SETTINGS
 }

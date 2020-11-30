@@ -269,12 +269,12 @@ resource "azurerm_network_security_rule" "denyall_kibana_rule" {
   depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
 }
 
-data "azurerm_virtual_machine" "dynatrace_oneagent_vm" {
-  count               = "${var.vmDataNodeCount}"
-  name                = "${var.product}-data-${count.index}"
-  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-}
-
+#data "azurerm_virtual_machine" "dynatrace_oneagent_vm" {
+#  count               = "${var.vmDataNodeCount}"
+#  name                = "${var.product}-data-${count.index}"
+#  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
+#}
+#
 #resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
 #  count                = "${var.vmDataNodeCount}"
 #  name                 = "oneAgentLinux"

@@ -275,43 +275,43 @@ data "azurerm_virtual_machine" "dynatrace_oneagent_vm" {
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
 }
 
-resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
-  count                = "${var.vmDataNodeCount}"
-  name                 = "oneAgentLinux"
-  virtual_machine_id   = "${data.azurerm_virtual_machine.dynatrace_oneagent_vm[count.index].id}"
-  publisher            = "dynatrace.ruxit"
-  type                 = "oneAgentLinux"
-  type_handler_version = "2.1"
-
-  settings = <<SETTINGS
-    {
-        "tenantId": "${var.dynatrace_instance}",
-        "token": "${var.dynatrace_token}",
-        "hostgroup": "${var.dynatrace_hostgroup}",
-        "installerArguments": "--set-host-group=${var.dynatrace_hostgroup} --set-infra-only=false --set-network-zone=azure.cft"
-    }
-SETTINGS
-}
-
-data "azurerm_virtual_machine" "dynatrace_oneagent_kibana" {
-  name                = "${var.product}-kibana"
-  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-}
-
-resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
-  name                 = "oneAgentLinux"
-  virtual_machine_id   = "${data.azurerm_virtual_machine.dynatrace_oneagent_kibana.id}"
-  publisher            = "dynatrace.ruxit"
-  type                 = "oneAgentLinux"
-  type_handler_version = "2.1"
-
-  settings = <<SETTINGS
-    {
-        "tenantId": "${var.dynatrace_instance}",
-        "token": "${var.dynatrace_token}",
-        "hostgroup": "${var.dynatrace_hostgroup}",  
-        "installerArguments": "--set-host-group=${var.dynatrace_hostgroup} --set-infra-only=false --set-network-zone=azure.cft"
-    }
-SETTINGS
-}
+#resource "azurerm_virtual_machine_extension" "dynatrace_oneagent" {
+#  count                = "${var.vmDataNodeCount}"
+#  name                 = "oneAgentLinux"
+#  virtual_machine_id   = "${data.azurerm_virtual_machine.dynatrace_oneagent_vm[count.index].id}"
+#  publisher            = "dynatrace.ruxit"
+#  type                 = "oneAgentLinux"
+#  type_handler_version = "2.1"
+#
+#  settings = <<SETTINGS
+#    {
+#        "tenantId": "${var.dynatrace_instance}",
+#        "token": "${var.dynatrace_token}",
+#        "hostgroup": "${var.dynatrace_hostgroup}",
+#        "installerArguments": "--set-host-group=${var.dynatrace_hostgroup} --set-infra-only=false --set-network-zone=azure.cft"
+#    }
+#SETTINGS
+#}
+#
+#data "azurerm_virtual_machine" "dynatrace_oneagent_kibana" {
+#  name                = "${var.product}-kibana"
+#  resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
+#}
+#
+#resource "azurerm_virtual_machine_extension" "dynatrace_oneagent_kibana" {
+#  name                 = "oneAgentLinux"
+#  virtual_machine_id   = "${data.azurerm_virtual_machine.dynatrace_oneagent_kibana.id}"
+#  publisher            = "dynatrace.ruxit"
+#  type                 = "oneAgentLinux"
+#  type_handler_version = "2.1"
+#
+#  settings = <<SETTINGS
+#    {
+#        "tenantId": "${var.dynatrace_instance}",
+#        "token": "${var.dynatrace_token}",
+#        "hostgroup": "${var.dynatrace_hostgroup}",  
+#        "installerArguments": "--set-host-group=${var.dynatrace_hostgroup} --set-infra-only=false --set-network-zone=azure.cft"
+#    }
+#SETTINGS
+#}
 

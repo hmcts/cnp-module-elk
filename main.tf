@@ -1,7 +1,10 @@
-provider "azurerm" {}
+provider "azurerm" {
+  features {}
+}
 
 provider "azurerm" {
   alias = "mgmt"
+  features {}
 }
 
 resource "azurerm_resource_group" "elastic-resourcegroup" {

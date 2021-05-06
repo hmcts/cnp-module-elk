@@ -3,10 +3,10 @@ module "elastic_devops_action_group" {
   location               = "global"
   env                    = "${var.env}"
   resourcegroup_name     = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
-  action_group_name      = "ElasticSearch_DevOps_${var.env}"
-  short_name             = "es-do-prod"
+  action_group_name      = "${var.product}-ElasticSearch_DevOps_${var.env}"
+  short_name             = "${var.product}-es-do-prod"
   email_receiver_name    = "Elasticsearch Alerts (DevOps - ${var.env})"
-  email_receiver_address = "ccd-elasticsearch-health-red@hmcts-devops.pagerduty.com"
+  email_receiver_address = "${var.alerts_email}"
 }
 
 module "elastic_ccd_action_group" {
@@ -14,15 +14,15 @@ module "elastic_ccd_action_group" {
   location               = "global"
   env                    = "${var.env}"
   resourcegroup_name     = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
-  action_group_name      = "ElasticSearch_CCD_DevOps_${var.env}"
-  short_name             = "es-ccd-ops"
-  email_receiver_name    = "Elasticsearch Alerts (CCD) - ${var.env}"
-  email_receiver_address = "CCD_DevOps@hmcts.net"
+  action_group_name      = "${var.product}_ElasticSearch_CCD_DevOps_${var.env}"
+  short_name             = "es-${var.product}-ops"
+  email_receiver_name    = "Elasticsearch Alerts (${var.product}) - ${var.env}"
+  email_receiver_address = "${var.alerts_email}"
 }
 
 resource "azurerm_template_deployment" "alert_cluster_health_not_green" {
   count               = "${var.subscription != "sandbox" ? 1 : 0}"
-  name                = "alert_cluster_health_not_green_${var.env}"
+  name                = "${var.product}_alert_cluster_health_not_green_${var.env}"
   template_body       = "${file("${path.module}/templates/alert.json")}"
   resource_group_name = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
   deployment_mode     = "Incremental"
@@ -30,7 +30,7 @@ resource "azurerm_template_deployment" "alert_cluster_health_not_green" {
   parameters = {
     workspaceName          = "${data.azurerm_log_analytics_workspace.log_analytics.name}"
     ActionGroupName        = "${module.elastic_ccd_action_group.action_group_name}"
-    DisplayNameOfSearch    = "Cluster health is not green on ${var.env}"
+    DisplayNameOfSearch    = "${var.product} Cluster health is not green on ${var.env}"
     UniqueNameOfSearch     = "Cluster-unhealthy-${var.env}"
     Description            = "Checks that status_s for the healthcheck is != green on ${var.env}"
     SearchQuery            = "es_health_CL | where (status_s != \"green\" and cluster_s == \"${azurerm_resource_group.elastic-resourcegroup.name}\") or error_type_s != \"\""
@@ -47,7 +47,7 @@ resource "azurerm_template_deployment" "alert_cluster_health_not_green" {
 
 resource "azurerm_template_deployment" "alert_cluster_health_red" {
   count               = "${var.env == "prod" ? 1 : 0}"
-  name                = "alert_cluster_health_red_${var.env}"
+  name                = "${var.product}_alert_cluster_health_red_${var.env}"
   template_body       = "${file("${path.module}/templates/alert.json")}"
   resource_group_name = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
   deployment_mode     = "Incremental"
@@ -55,8 +55,8 @@ resource "azurerm_template_deployment" "alert_cluster_health_red" {
   parameters = {
     workspaceName          = "${data.azurerm_log_analytics_workspace.log_analytics.name}"
     ActionGroupName        = "${module.elastic_devops_action_group.action_group_name}"
-    DisplayNameOfSearch    = "Cluster health is RED ${var.env}"
-    UniqueNameOfSearch     = "Cluster-down-${var.env}"
+    DisplayNameOfSearch    = "${var.product} Cluster health is RED ${var.env}"
+    UniqueNameOfSearch     = "${var.product}-Cluster-down-${var.env}"
     Description            = "Checks that status_s for the healthcheck is == red on ${var.env}"
     SearchQuery            = "es_health_CL | where (status_s == \"red\" and cluster_s == \"${azurerm_resource_group.elastic-resourcegroup.name}\") or error_type_s != \"\""
     Severity               = "critical"
@@ -72,7 +72,7 @@ resource "azurerm_template_deployment" "alert_cluster_health_red" {
 
 resource "azurerm_template_deployment" "alert_dead_letter_queue" {
   count               = "${var.subscription != "sandbox" ? 1 : 0}"
-  name                = "alert_dead_letter_queue"
+  name                = "${var.product}alert_dead_letter_queue"
   template_body       = "${file("${path.module}/templates/alert.json")}"
   resource_group_name = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
   deployment_mode     = "Incremental"
@@ -80,8 +80,8 @@ resource "azurerm_template_deployment" "alert_dead_letter_queue" {
   parameters = {
     workspaceName          = "${data.azurerm_log_analytics_workspace.log_analytics.name}"
     ActionGroupName        = "${module.elastic_ccd_action_group.action_group_name}"
-    DisplayNameOfSearch    = "ElasticSearch deadletter queue is not empty in ${var.env}"
-    UniqueNameOfSearch     = "Cluster-deadletters_${var.env}"
+    DisplayNameOfSearch    = "${var.product} ElasticSearch deadletter queue is not empty in ${var.env}"
+    UniqueNameOfSearch     = "${var.product}_Cluster-deadletters_${var.env}"
     Description            = "Check that deadletter queue is empty in ${var.env}"
     SearchQuery            = "es_indices_CL | where index_s == \".logstash_dead_letter\" and docs_count_s != \"0\" and _ResourceId contains \"${azurerm_resource_group.elastic-resourcegroup.name}\""
     Severity               = "warning"

@@ -25,7 +25,7 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl   = "https://raw.githubusercontent.com/hmcts/azure-marketplace/master/src"
+  artifactsBaseUrl   = "https://raw.githubusercontent.com/hmcts/azure-marketplace/7.11.1_hmcts/src"
   templateUrl        = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName    = "${var.product}-elastic-search-vnet-${var.env}"
   vNetLoadBalancerIp = "${cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)}"
@@ -52,8 +52,8 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     location                        = "${azurerm_resource_group.elastic-resourcegroup.location}"
     esVersion                       = "6.4.2"
     xpackPlugins                    = "No"
-    kibana                          = "Yes"
-    logstash                        = "No"
+    kibana                          = "${var.enable_kibana}"
+    logstash                        = "${var.enable_logstash}"
     cnpEnv                          = "${var.env}"
     vmHostNamePrefix                = "${var.product}-"
     adminUsername                   = "elkadmin"

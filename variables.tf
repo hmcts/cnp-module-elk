@@ -103,3 +103,18 @@ variable "dynatrace_token" {
   type    = "string"
   default = ""
 }
+
+variable "enable_kibana" {
+  type    = "string"
+  default = "Yes"
+}
+
+variable "enable_logstash" {
+  type    = "string"
+  default = "No"
+}
+
+variable "alerts_email" {
+  description = "Email for sending alerts"
+  type    = "string"
+}

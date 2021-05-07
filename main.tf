@@ -50,7 +50,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     artifactsBaseUrl                = "${local.artifactsBaseUrl}"
     esClusterName                   = "${var.product}-elastic-search-${var.env}"
     location                        = "${azurerm_resource_group.elastic-resourcegroup.location}"
-    esVersion                       = "6.4.2"
+    esVersion                       = "7.11.1"
     xpackPlugins                    = "No"
     kibana                          = "${var.enable_kibana}"
     logstash                        = "${var.enable_logstash}"

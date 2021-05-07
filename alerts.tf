@@ -9,12 +9,12 @@ module "elastic_devops_action_group" {
   email_receiver_address = "${var.alerts_email}"
 }
 
-module "elastic_ccd_action_group" {
+module "elastic_action_group" {
   source                 = "git@github.com:hmcts/cnp-module-action-group"
   location               = "global"
   env                    = "${var.env}"
   resourcegroup_name     = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
-  action_group_name      = "${var.product}_ElasticSearch_CCD_DevOps_${var.env}"
+  action_group_name      = "${var.product}_ElasticSearch_DevOps_${var.env}"
   short_name             = "es-${var.product}-ops"
   email_receiver_name    = "Elasticsearch Alerts (${var.product}) - ${var.env}"
   email_receiver_address = "${var.alerts_email}"
@@ -29,7 +29,7 @@ resource "azurerm_template_deployment" "alert_cluster_health_not_green" {
 
   parameters = {
     workspaceName          = "${data.azurerm_log_analytics_workspace.log_analytics.name}"
-    ActionGroupName        = "${module.elastic_ccd_action_group.action_group_name}"
+    ActionGroupName        = "${module.elastic_action_group.action_group_name}"
     DisplayNameOfSearch    = "${var.product} Cluster health is not green on ${var.env}"
     UniqueNameOfSearch     = "Cluster-unhealthy-${var.env}"
     Description            = "Checks that status_s for the healthcheck is != green on ${var.env}"
@@ -79,7 +79,7 @@ resource "azurerm_template_deployment" "alert_dead_letter_queue" {
 
   parameters = {
     workspaceName          = "${data.azurerm_log_analytics_workspace.log_analytics.name}"
-    ActionGroupName        = "${module.elastic_ccd_action_group.action_group_name}"
+    ActionGroupName        = "${module.elastic_action_group.action_group_name}"
     DisplayNameOfSearch    = "${var.product} ElasticSearch deadletter queue is not empty in ${var.env}"
     UniqueNameOfSearch     = "${var.product}_Cluster-deadletters_${var.env}"
     Description            = "Check that deadletter queue is empty in ${var.env}"

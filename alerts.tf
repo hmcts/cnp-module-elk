@@ -1,11 +1,11 @@
-module "elastic_devops_action_group" {
+module "elastic_action_group" {
   source                 = "git@github.com:hmcts/cnp-module-action-group"
   location               = "global"
   env                    = "${var.env}"
   resourcegroup_name     = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
-  action_group_name      = "${var.product}-ElasticSearch_DevOps_${var.env}"
+  action_group_name      = "${var.product}-ElasticSearch_${var.env}"
   short_name             = "${var.product}-es-do-prod"
-  email_receiver_name    = "Elasticsearch Alerts (DevOps - ${var.env})"
+  email_receiver_name    = "Elasticsearch Alerts - ${var.env}"
   email_receiver_address = "${var.alerts_email}"
 }
 
@@ -14,7 +14,7 @@ module "elastic_action_group" {
   location               = "global"
   env                    = "${var.env}"
   resourcegroup_name     = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
-  action_group_name      = "${var.product}_ElasticSearch_DevOps_${var.env}"
+  action_group_name      = "${var.product}_ElasticSearch_${var.env}"
   short_name             = "es-${var.product}-ops"
   email_receiver_name    = "Elasticsearch Alerts (${var.product}) - ${var.env}"
   email_receiver_address = "${var.alerts_email}"
@@ -54,7 +54,7 @@ resource "azurerm_template_deployment" "alert_cluster_health_red" {
 
   parameters = {
     workspaceName          = "${data.azurerm_log_analytics_workspace.log_analytics.name}"
-    ActionGroupName        = "${module.elastic_devops_action_group.action_group_name}"
+    ActionGroupName        = "${module.elastic_action_group.action_group_name}"
     DisplayNameOfSearch    = "${var.product} Cluster health is RED ${var.env}"
     UniqueNameOfSearch     = "${var.product}-Cluster-down-${var.env}"
     Description            = "Checks that status_s for the healthcheck is == red on ${var.env}"

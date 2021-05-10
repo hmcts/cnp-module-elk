@@ -3,17 +3,6 @@ module "elastic_action_group" {
   location               = "global"
   env                    = "${var.env}"
   resourcegroup_name     = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
-  action_group_name      = "${var.product}-ElasticSearch_${var.env}"
-  short_name             = "${var.product}-es-do-prod"
-  email_receiver_name    = "Elasticsearch Alerts - ${var.env}"
-  email_receiver_address = "${var.alerts_email}"
-}
-
-module "elastic_action_group" {
-  source                 = "git@github.com:hmcts/cnp-module-action-group"
-  location               = "global"
-  env                    = "${var.env}"
-  resourcegroup_name     = "${data.azurerm_log_analytics_workspace.log_analytics.resource_group_name}"
   action_group_name      = "${var.product}_ElasticSearch_${var.env}"
   short_name             = "es-${var.product}-ops"
   email_receiver_name    = "Elasticsearch Alerts (${var.product}) - ${var.env}"

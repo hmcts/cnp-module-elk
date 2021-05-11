@@ -4,8 +4,7 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
   location = "${var.location}"
 
   tags = "${merge(var.common_tags,
-    tomap("lastUpdated", "${timestamp()}")
-  )}"
+    tomap({lastUpdated = "${timestamp()}"}))}"
 }
 
 resource "random_string" "password" {

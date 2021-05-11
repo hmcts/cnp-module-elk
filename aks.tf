@@ -1,7 +1,3 @@
-provider "azurerm" {
-  alias = "aks-infra"
-}
-
 data "azurerm_virtual_network" "aks_core_vnet" {
   provider            = "azurerm.aks-infra"
   name                = "core-${local.env}-vnet"

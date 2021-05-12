@@ -4,7 +4,8 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
   location = var.location
 
   tags = merge(var.common_tags,
-    tomap({lastUpdated = timestamp()}))
+    tomap({lastUpdated = timestamp()
+    }))
 }
 
 resource "random_string" "password" {
@@ -43,8 +44,8 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     location                        = azurerm_resource_group.elastic-resourcegroup.location
     esVersion                       = "7.11.1"
     xpackPlugins                    = "No"
-    kibana                          = var.enable_kibana
-    logstash                        = var.enable_logstash
+    kibana                          = var.enable_kibana ? "Yes" : "No"
+    logstash                        = var.enable_logstash ? "Yes" : "No"
     cnpEnv                          = var.env
     vmHostNamePrefix                = "${var.product}-"
     adminUsername                   = "elkadmin"

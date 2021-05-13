@@ -20,8 +20,8 @@ variable "common_tags" {
 }
 
 variable "dataNodesAreMasterEligible" {
-  type    = string
-  default = "Yes"
+  type    = bool
+  default = true
 }
 
 variable "vmDataNodeCount" {
@@ -105,13 +105,13 @@ variable "dynatrace_token" {
 }
 
 variable "enable_kibana" {
-  type    = string
-  default = "Yes"
+  type    = bool
+  default = true
 }
 
 variable "enable_logstash" {
-  type    = string
-  default = "No"
+  type    = bool
+  default = false
 }
 
 variable "alerts_email" {

@@ -66,7 +66,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmSizeDataNodes                 = var.vmSizeAllNodes
     vmSizeClientNodes               = var.vmSizeAllNodes
     vmSizeMasterNodes               = var.vmSizeAllNodes
-    dataNodesAreMasterEligible      = var.dataNodesAreMasterEligible
+    dataNodesAreMasterEligible      = var.dataNodesAreMasterEligible ? "Yes" : "No"
     vmDataNodeCount                 = var.vmDataNodeCount
     vmDataDiskCount                 = var.vmDataDiskCount
     vmClientNodeCount               = var.vmClientNodeCount

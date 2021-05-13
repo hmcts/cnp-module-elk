@@ -45,7 +45,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     xpackPlugins                    = "No"
     kibana                          = var.enable_kibana ? "Yes" : "No"
     logstash                        = var.enable_logstash ? "Yes" : "No"
-    vmHostNamePrefix                = "${var.product}-"
+    vmHostNamePrefix                = var.vmHostNamePrefix
     adminUsername                   = "elkadmin"
     authenticationType              = "sshPublicKey"
     sshPublicKey                    = var.ssh_elastic_search_public_key

@@ -99,3 +99,7 @@ variable "enable_logstash" {
 variable "alerts_email" {
   description = "Email for sending alerts"
 }
+
+variable "vmHostNamePrefix" {
+  default = ""
+}

@@ -53,7 +53,8 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     securityKibanaPassword          = local.securePassword
     securityBootstrapPassword       = ""
     securityLogstashPassword        = local.securePassword
-    securityApmPassword            = local.securePassword
+    securityApmPassword             = local.securePassword
+    securityRemoteMonitoringPassword = local.securePassword
     securityBeatsPassword           = local.securePassword
     vNetNewOrExisting               = "existing"
     vNetName                        = data.azurerm_virtual_network.core_infra_vnet.name

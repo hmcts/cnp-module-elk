@@ -101,3 +101,5 @@ variable "alerts_email" {
 }
 
 variable "vmHostNamePrefix" {}
+
+variable "vNetLoadBalancerIp" {}

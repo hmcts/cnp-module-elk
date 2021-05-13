@@ -20,7 +20,6 @@ locals {
   artifactsBaseUrl   = "https://raw.githubusercontent.com/hmcts/azure-marketplace/7.11.1_hmcts/src"
   templateUrl        = "${local.artifactsBaseUrl}/mainTemplate.json"
   elasticVnetName    = "${var.product}-elastic-search-vnet-${var.env}"
-  vNetLoadBalancerIp = cidrhost(data.azurerm_subnet.elastic-subnet.address_prefix, -2)
   securePassword     = random_string.password.result
 
   mgmt_network_name = var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "core-cftptl-intsvc-vnet" : "core-cftsbox-intsvc-vnet"
@@ -59,7 +58,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vNetNewOrExisting               = "existing"
     vNetName                        = data.azurerm_virtual_network.core_infra_vnet.name
     vNetExistingResourceGroup       = data.azurerm_virtual_network.core_infra_vnet.resource_group_name
-    vNetLoadBalancerIp              = local.vNetLoadBalancerIp
+    vNetLoadBalancerIp              = var.vNetLoadBalancerIp
     vNetClusterSubnetName           = data.azurerm_subnet.elastic-subnet.name
     vmSizeKibana                    = "Standard_A2_v2"
     vmSizeDataNodes                 = var.vmSizeAllNodes

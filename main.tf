@@ -17,8 +17,8 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl   = "https://raw.githubusercontent.com/hmcts/azure-marketplace/7.11.1_hmcts/src"
-  templateUrl        = "${local.artifactsBaseUrl}/mainTemplate.json"
+  artifactsBaseUrl   = "https://raw.githubusercontent.com/hmcts/azure-marketplace/7.11.1_hmcts/src/"
+  templateUrl        = "${local.artifactsBaseUrl}mainTemplate.json"
   elasticVnetName    = "${var.product}-elastic-search-vnet-${var.env}"
   securePassword     = random_string.password.result
 

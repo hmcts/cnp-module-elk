@@ -4,7 +4,7 @@ module "elastic_action_group" {
   env                    = var.env
   resourcegroup_name     = data.azurerm_log_analytics_workspace.log_analytics.resource_group_name
   action_group_name      = "${var.product}_ElasticSearch_${var.env}"
-  short_name             = "es-${var.product}-ops"
+  short_name             = "es-${var.product}"
   email_receiver_name    = "Elasticsearch Alerts (${var.product}) - ${var.env}"
   email_receiver_address = var.alerts_email
 }

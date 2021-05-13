@@ -39,14 +39,12 @@ resource "azurerm_template_deployment" "elastic-iaas" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    artifactsBaseUrl                = local.artifactsBaseUrl
     esClusterName                   = "${var.product}-elastic-search-${var.env}"
     location                        = azurerm_resource_group.elastic-resourcegroup.location
     esVersion                       = "7.11.1"
     xpackPlugins                    = "No"
     kibana                          = var.enable_kibana ? "Yes" : "No"
     logstash                        = var.enable_logstash ? "Yes" : "No"
-    cnpEnv                          = var.env
     vmHostNamePrefix                = "${var.product}-"
     adminUsername                   = "elkadmin"
     authenticationType              = "sshPublicKey"
@@ -55,7 +53,6 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     securityKibanaPassword          = local.securePassword
     securityBootstrapPassword       = ""
     securityLogstashPassword        = local.securePassword
-    securityReadPassword            = local.securePassword
     securityBeatsPassword           = local.securePassword
     vNetNewOrExisting               = "existing"
     vNetName                        = data.azurerm_virtual_network.core_infra_vnet.name

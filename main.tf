@@ -197,71 +197,71 @@ data "azurerm_key_vault_secret" "bastion_devops_ip" {
 #   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
 # }
 
-resource "azurerm_network_security_rule" "bastion_ssh_rule" {
-  name                        = "Bastion_To_VMs"
-  description                 = "Allow Bastion SSH access overridding templates broad SSH access"
-  priority                    = 230
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "22"
-  source_address_prefixes     = split(",", local.bastion_ip)
-  destination_address_prefix  = data.azurerm_subnet.elastic-subnet.address_prefix
-  resource_group_name         = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name = data.azurerm_network_security_group.cluster_nsg.name
-  depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
-}
+# resource "azurerm_network_security_rule" "bastion_ssh_rule" {
+#   name                        = "Bastion_To_VMs"
+#   description                 = "Allow Bastion SSH access overridding templates broad SSH access"
+#   priority                    = 230
+#   direction                   = "Inbound"
+#   access                      = "Allow"
+#   protocol                    = "Tcp"
+#   source_port_range           = "*"
+#   destination_port_range      = "22"
+#   source_address_prefixes     = split(",", local.bastion_ip)
+#   destination_address_prefix  = data.azurerm_subnet.elastic-subnet.address_prefix
+#   resource_group_name         = azurerm_resource_group.elastic-resourcegroup.name
+#   network_security_group_name = data.azurerm_network_security_group.cluster_nsg.name
+#   depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
+# }
 
 # Additional kibana-nsg rules use 300>=priority>400
 
-resource "azurerm_network_security_rule" "kibana_tight_ssh_rule" {
-  name                                       = "Bastion_only_SSH"
-  description                                = "Override open SSH and limit this to Bastion only"
-  priority                                   = 300
-  direction                                  = "Inbound"
-  access                                     = "Allow"
-  protocol                                   = "Tcp"
-  source_port_range                          = "*"
-  destination_port_range                     = "22"
-  source_address_prefixes                    = split(",", local.bastion_ip)
-  destination_application_security_group_ids = [data.azurerm_application_security_group.kibana_asg.id]
-  resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name                = data.azurerm_network_security_group.kibana_nsg.name
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
-}
+# resource "azurerm_network_security_rule" "kibana_tight_ssh_rule" {
+#   name                                       = "Bastion_only_SSH"
+#   description                                = "Override open SSH and limit this to Bastion only"
+#   priority                                   = 300
+#   direction                                  = "Inbound"
+#   access                                     = "Allow"
+#   protocol                                   = "Tcp"
+#   source_port_range                          = "*"
+#   destination_port_range                     = "22"
+#   source_address_prefixes                    = split(",", local.bastion_ip)
+#   destination_application_security_group_ids = [data.azurerm_application_security_group.kibana_asg.id]
+#   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
+#   network_security_group_name                = data.azurerm_network_security_group.kibana_nsg.name
+#   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+# }
 
-resource "azurerm_network_security_rule" "kibana_tight_kibana_rule" {
-  name                                       = "Bastion_only_Kibana"
-  description                                = "Override open Kibana accessand limit this to Bastion only"
-  priority                                   = 310
-  direction                                  = "Inbound"
-  access                                     = "Allow"
-  protocol                                   = "Tcp"
-  source_port_range                          = "*"
-  destination_port_range                     = "5601"
-  source_address_prefixes                    = split(",", local.bastion_ip)
-  destination_application_security_group_ids = [data.azurerm_application_security_group.kibana_asg.id]
-  resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name                = data.azurerm_network_security_group.kibana_nsg.name
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
-}
+# resource "azurerm_network_security_rule" "kibana_tight_kibana_rule" {
+#   name                                       = "Bastion_only_Kibana"
+#   description                                = "Override open Kibana accessand limit this to Bastion only"
+#   priority                                   = 310
+#   direction                                  = "Inbound"
+#   access                                     = "Allow"
+#   protocol                                   = "Tcp"
+#   source_port_range                          = "*"
+#   destination_port_range                     = "5601"
+#   source_address_prefixes                    = split(",", local.bastion_ip)
+#   destination_application_security_group_ids = [data.azurerm_application_security_group.kibana_asg.id]
+#   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
+#   network_security_group_name                = data.azurerm_network_security_group.kibana_nsg.name
+#   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+# }
 
-resource "azurerm_network_security_rule" "denyall_kibana_rule" {
-  name                        = "DenyAllOtherTraffic"
-  description                 = "Deny all traffic that is not SSH or Kibana access"
-  priority                    = 400
-  direction                   = "Inbound"
-  access                      = "Deny"
-  protocol                    = "*"
-  source_port_range           = "*"
-  destination_port_range      = "*"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name = data.azurerm_network_security_group.kibana_nsg.name
-  depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
-}
+# resource "azurerm_network_security_rule" "denyall_kibana_rule" {
+#   name                        = "DenyAllOtherTraffic"
+#   description                 = "Deny all traffic that is not SSH or Kibana access"
+#   priority                    = 400
+#   direction                   = "Inbound"
+#   access                      = "Deny"
+#   protocol                    = "*"
+#   source_port_range           = "*"
+#   destination_port_range      = "*"
+#   source_address_prefix       = "*"
+#   destination_address_prefix  = "*"
+#   resource_group_name         = azurerm_resource_group.elastic-resourcegroup.name
+#   network_security_group_name = data.azurerm_network_security_group.kibana_nsg.name
+#   depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
+# }
 
 #data "azurerm_virtual_machine" "dynatrace_oneagent_vm" {
 #  count               = "${var.vmDataNodeCount}"

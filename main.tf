@@ -103,13 +103,13 @@ data "azurerm_subnet" "jenkins" {
 }
 
 data "azurerm_network_security_group" "cluster_nsg" {
-  name                = "${var.vmHostNamePrefix}-cluster-nsg"
+  name                = "${var.vmHostNamePrefix}cluster-nsg"
   resource_group_name = azurerm_resource_group.elastic-resourcegroup.name
   depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 data "azurerm_network_security_group" "kibana_nsg" {
-  name                = "${var.vmHostNamePrefix}-kibana-nsg"
+  name                = "${var.vmHostNamePrefix}kibana-nsg"
   resource_group_name = azurerm_resource_group.elastic-resourcegroup.name
   depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 
@@ -117,13 +117,13 @@ data "azurerm_network_security_group" "kibana_nsg" {
 }
 
 data "azurerm_application_security_group" "data_asg" {
-  name                = "${var.vmHostNamePrefix}-data-asg"
+  name                = "${var.vmHostNamePrefix}data-asg"
   resource_group_name = azurerm_resource_group.elastic-resourcegroup.name
   depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 data "azurerm_application_security_group" "kibana_asg" {
-  name                = "${var.vmHostNamePrefix}-kibana-asg"
+  name                = "${var.vmHostNamePrefix}kibana-asg"
   resource_group_name = azurerm_resource_group.elastic-resourcegroup.name
   depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 

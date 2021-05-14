@@ -148,54 +148,54 @@ data "azurerm_key_vault_secret" "bastion_devops_ip" {
 
 # Rules that we can't easily define in the Elastic templates, use 200>=priority>300 for these rules
 
-resource "azurerm_network_security_rule" "bastion_es_rule" {
-  count                                      = var.subscription == "prod" ? 0 : 1
-  name                                       = "Bastion_To_ES"
-  description                                = "Allow Bastion access for debugging elastic queries on development platforms"
-  priority                                   = 200
-  direction                                  = "Inbound"
-  access                                     = "Allow"
-  protocol                                   = "Tcp"
-  source_port_range                          = "*"
-  destination_port_range                     = "9200"
-  source_address_prefixes                    = split(",", local.bastion_ip)
-  destination_application_security_group_ids = [data.azurerm_application_security_group.data_asg.id]
-  resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name                = data.azurerm_network_security_group.cluster_nsg.name
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
-}
+# resource "azurerm_network_security_rule" "bastion_es_rule" {
+#   count                                      = var.subscription == "prod" ? 0 : 1
+#   name                                       = "Bastion_To_ES"
+#   description                                = "Allow Bastion access for debugging elastic queries on development platforms"
+#   priority                                   = 200
+#   direction                                  = "Inbound"
+#   access                                     = "Allow"
+#   protocol                                   = "Tcp"
+#   source_port_range                          = "*"
+#   destination_port_range                     = "9200"
+#   source_address_prefixes                    = split(",", local.bastion_ip)
+#   destination_application_security_group_ids = [data.azurerm_application_security_group.data_asg.id]
+#   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
+#   network_security_group_name                = data.azurerm_network_security_group.cluster_nsg.name
+#   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+# }
 
-resource "azurerm_network_security_rule" "apps_rule" {
-  name                                       = "App_To_ES"
-  description                                = "Allow Apps to access the ElasticSearch cluster"
-  priority                                   = 210
-  direction                                  = "Inbound"
-  access                                     = "Allow"
-  protocol                                   = "Tcp"
-  source_port_range                          = "*"
-  destination_port_range                     = "9200"
-  source_address_prefixes                    = [data.azurerm_subnet.apps.address_prefix]
-  destination_application_security_group_ids = [data.azurerm_application_security_group.data_asg.id]
-  resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name                = data.azurerm_network_security_group.cluster_nsg.name
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
-}
+# resource "azurerm_network_security_rule" "apps_rule" {
+#   name                                       = "App_To_ES"
+#   description                                = "Allow Apps to access the ElasticSearch cluster"
+#   priority                                   = 210
+#   direction                                  = "Inbound"
+#   access                                     = "Allow"
+#   protocol                                   = "Tcp"
+#   source_port_range                          = "*"
+#   destination_port_range                     = "9200"
+#   source_address_prefixes                    = [data.azurerm_subnet.apps.address_prefix]
+#   destination_application_security_group_ids = [data.azurerm_application_security_group.data_asg.id]
+#   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
+#   network_security_group_name                = data.azurerm_network_security_group.cluster_nsg.name
+#   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+# }
 
-resource "azurerm_network_security_rule" "jenkins_rule" {
-  name                                       = "Jenkins_To_ES"
-  description                                = "Allow Jenkins to access the ElasticSearch cluster for testing"
-  priority                                   = 220
-  direction                                  = "Inbound"
-  access                                     = "Allow"
-  protocol                                   = "Tcp"
-  source_port_range                          = "*"
-  destination_port_range                     = "9200"
-  source_address_prefix                      = data.azurerm_subnet.jenkins.address_prefix
-  destination_application_security_group_ids = [data.azurerm_application_security_group.data_asg.id]
-  resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name                = data.azurerm_network_security_group.cluster_nsg.name
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
-}
+# resource "azurerm_network_security_rule" "jenkins_rule" {
+#   name                                       = "Jenkins_To_ES"
+#   description                                = "Allow Jenkins to access the ElasticSearch cluster for testing"
+#   priority                                   = 220
+#   direction                                  = "Inbound"
+#   access                                     = "Allow"
+#   protocol                                   = "Tcp"
+#   source_port_range                          = "*"
+#   destination_port_range                     = "9200"
+#   source_address_prefix                      = data.azurerm_subnet.jenkins.address_prefix
+#   destination_application_security_group_ids = [data.azurerm_application_security_group.data_asg.id]
+#   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
+#   network_security_group_name                = data.azurerm_network_security_group.cluster_nsg.name
+#   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+# }
 
 resource "azurerm_network_security_rule" "bastion_ssh_rule" {
   name                        = "Bastion_To_VMs"

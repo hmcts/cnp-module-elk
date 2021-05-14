@@ -4,8 +4,8 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
   location = var.location
 
   tags = merge(var.common_tags,
-    tomap({lastUpdated = timestamp()
-    }))
+    tomap({ lastUpdated = timestamp()
+  }))
 }
 
 resource "random_string" "password" {
@@ -17,10 +17,10 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl   = "https://raw.githubusercontent.com/hmcts/azure-marketplace/7.11.1_hmcts/src/"
-  templateUrl        = "${local.artifactsBaseUrl}mainTemplate.json"
-  elasticVnetName    = "${var.product}-elastic-search-vnet-${var.env}"
-  securePassword     = random_string.password.result
+  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/7.11.1_hmcts/src/"
+  templateUrl      = "${local.artifactsBaseUrl}mainTemplate.json"
+  elasticVnetName  = "${var.product}-elastic-search-vnet-${var.env}"
+  securePassword   = random_string.password.result
 
   mgmt_network_name = var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "core-cftptl-intsvc-vnet" : "core-cftsbox-intsvc-vnet"
   mgmt_rg_name      = var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "aks-infra-cftptl-intsvc-rg" : "aks-infra-cftsbox-intsvc-rg"
@@ -38,43 +38,43 @@ resource "azurerm_template_deployment" "elastic-iaas" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    _artifactsLocation                = local.artifactsBaseUrl
-    esClusterName                   = "${var.product}-elastic-search-${var.env}"
-    location                        = azurerm_resource_group.elastic-resourcegroup.location
-    esVersion                       = "7.11.1"
-    xpackPlugins                    = "No"
-    kibana                          = var.enable_kibana ? "Yes" : "No"
-    logstash                        = var.enable_logstash ? "Yes" : "No"
-    vmHostNamePrefix                = var.vmHostNamePrefix
-    adminUsername                   = "elkadmin"
-    authenticationType              = "sshPublicKey"
-    sshPublicKey                    = var.ssh_elastic_search_public_key
-    securityAdminPassword           = local.securePassword
-    securityKibanaPassword          = local.securePassword
-    securityBootstrapPassword       = ""
-    securityLogstashPassword        = local.securePassword
-    securityApmPassword             = local.securePassword
+    _artifactsLocation               = local.artifactsBaseUrl
+    esClusterName                    = "${var.product}-elastic-search-${var.env}"
+    location                         = azurerm_resource_group.elastic-resourcegroup.location
+    esVersion                        = "7.11.1"
+    xpackPlugins                     = "No"
+    kibana                           = var.enable_kibana ? "Yes" : "No"
+    logstash                         = var.enable_logstash ? "Yes" : "No"
+    vmHostNamePrefix                 = var.vmHostNamePrefix
+    adminUsername                    = "elkadmin"
+    authenticationType               = "sshPublicKey"
+    sshPublicKey                     = var.ssh_elastic_search_public_key
+    securityAdminPassword            = local.securePassword
+    securityKibanaPassword           = local.securePassword
+    securityBootstrapPassword        = ""
+    securityLogstashPassword         = local.securePassword
+    securityApmPassword              = local.securePassword
     securityRemoteMonitoringPassword = local.securePassword
-    securityBeatsPassword           = local.securePassword
-    vNetNewOrExisting               = "existing"
-    vNetName                        = data.azurerm_virtual_network.core_infra_vnet.name
-    vNetExistingResourceGroup       = data.azurerm_virtual_network.core_infra_vnet.resource_group_name
-    vNetLoadBalancerIp              = var.vNetLoadBalancerIp
-    vNetClusterSubnetName           = data.azurerm_subnet.elastic-subnet.name
-    vmSizeKibana                    = "Standard_A2_v2"
-    vmSizeDataNodes                 = var.vmSizeAllNodes
-    vmSizeClientNodes               = var.vmSizeAllNodes
-    vmSizeMasterNodes               = var.vmSizeAllNodes
-    dataNodesAreMasterEligible      = var.dataNodesAreMasterEligible ? "Yes" : "No"
-    vmDataNodeCount                 = var.vmDataNodeCount
-    vmDataDiskCount                 = var.vmDataDiskCount
-    vmClientNodeCount               = var.vmClientNodeCount
-    storageAccountType              = var.storageAccountType
-    vmDataNodeAcceleratedNetworking = var.dataNodeAcceleratedNetworking
-    esAdditionalYaml                = var.esAdditionalYaml
-    kibanaAdditionalYaml            = var.kibanaAdditionalYaml
-    logAnalyticsId                  = var.logAnalyticsId
-    logAnalyticsKey                 = var.logAnalyticsKey
+    securityBeatsPassword            = local.securePassword
+    vNetNewOrExisting                = "existing"
+    vNetName                         = data.azurerm_virtual_network.core_infra_vnet.name
+    vNetExistingResourceGroup        = data.azurerm_virtual_network.core_infra_vnet.resource_group_name
+    vNetLoadBalancerIp               = var.vNetLoadBalancerIp
+    vNetClusterSubnetName            = data.azurerm_subnet.elastic-subnet.name
+    vmSizeKibana                     = "Standard_A2_v2"
+    vmSizeDataNodes                  = var.vmSizeAllNodes
+    vmSizeClientNodes                = var.vmSizeAllNodes
+    vmSizeMasterNodes                = var.vmSizeAllNodes
+    dataNodesAreMasterEligible       = var.dataNodesAreMasterEligible ? "Yes" : "No"
+    vmDataNodeCount                  = var.vmDataNodeCount
+    vmDataDiskCount                  = var.vmDataDiskCount
+    vmClientNodeCount                = var.vmClientNodeCount
+    storageAccountType               = var.storageAccountType
+    vmDataNodeAcceleratedNetworking  = var.dataNodeAcceleratedNetworking
+    esAdditionalYaml                 = var.esAdditionalYaml
+    kibanaAdditionalYaml             = var.kibanaAdditionalYaml
+    logAnalyticsId                   = var.logAnalyticsId
+    logAnalyticsKey                  = var.logAnalyticsKey
   }
 }
 
@@ -103,27 +103,31 @@ data "azurerm_subnet" "jenkins" {
 }
 
 data "azurerm_network_security_group" "cluster_nsg" {
-  name                = "${var.product}-cluster-nsg"
+  name                = "${var.vmHostNamePrefix}-cluster-nsg"
   resource_group_name = azurerm_resource_group.elastic-resourcegroup.name
   depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 data "azurerm_network_security_group" "kibana_nsg" {
-  name                = "${var.product}-kibana-nsg"
+  name                = "${var.vmHostNamePrefix}-kibana-nsg"
   resource_group_name = azurerm_resource_group.elastic-resourcegroup.name
   depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+
+  count = var.enable_kibana ? 1 : 0
 }
 
 data "azurerm_application_security_group" "data_asg" {
-  name                = "${var.product}-data-asg"
+  name                = "${var.vmHostNamePrefix}-data-asg"
   resource_group_name = azurerm_resource_group.elastic-resourcegroup.name
   depends_on          = ["azurerm_template_deployment.elastic-iaas"]
 }
 
 data "azurerm_application_security_group" "kibana_asg" {
-  name                = "${var.product}-kibana-asg"
+  name                = "${var.vmHostNamePrefix}-kibana-asg"
   resource_group_name = azurerm_resource_group.elastic-resourcegroup.name
   depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+
+  count = var.enable_kibana ? 1 : 0
 }
 
 data "azurerm_log_analytics_workspace" "log_analytics" {
@@ -229,6 +233,8 @@ resource "azurerm_network_security_rule" "kibana_tight_ssh_rule" {
   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
   network_security_group_name                = data.azurerm_network_security_group.kibana_nsg.name
   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+
+  count = var.enable_kibana ? 1 : 0
 }
 
 resource "azurerm_network_security_rule" "kibana_tight_kibana_rule" {
@@ -245,6 +251,8 @@ resource "azurerm_network_security_rule" "kibana_tight_kibana_rule" {
   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
   network_security_group_name                = data.azurerm_network_security_group.kibana_nsg.name
   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+
+  count = var.enable_kibana ? 1 : 0
 }
 
 resource "azurerm_network_security_rule" "denyall_kibana_rule" {

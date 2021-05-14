@@ -229,9 +229,9 @@ resource "azurerm_network_security_rule" "kibana_tight_ssh_rule" {
   source_port_range                          = "*"
   destination_port_range                     = "22"
   source_address_prefixes                    = split(",", local.bastion_ip)
-  destination_application_security_group_ids = [data.azurerm_application_security_group.kibana_asg.id]
+  destination_application_security_group_ids = [data.azurerm_application_security_group.kibana_asg[0].id]
   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name                = data.azurerm_network_security_group.kibana_nsg.name
+  network_security_group_name                = data.azurerm_network_security_group.kibana_nsg[0].name
   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
 
   count = var.enable_kibana ? 1 : 0
@@ -247,9 +247,9 @@ resource "azurerm_network_security_rule" "kibana_tight_kibana_rule" {
   source_port_range                          = "*"
   destination_port_range                     = "5601"
   source_address_prefixes                    = split(",", local.bastion_ip)
-  destination_application_security_group_ids = [data.azurerm_application_security_group.kibana_asg.id]
+  destination_application_security_group_ids = [data.azurerm_application_security_group.kibana_asg[0].id]
   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name                = data.azurerm_network_security_group.kibana_nsg.name
+  network_security_group_name                = data.azurerm_network_security_group.kibana_nsg[0].name
   depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
 
   count = var.enable_kibana ? 1 : 0
@@ -267,8 +267,10 @@ resource "azurerm_network_security_rule" "denyall_kibana_rule" {
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
   resource_group_name         = azurerm_resource_group.elastic-resourcegroup.name
-  network_security_group_name = data.azurerm_network_security_group.kibana_nsg.name
+  network_security_group_name = data.azurerm_network_security_group.kibana_nsg[0].name
   depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
+
+  count = var.enable_kibana ? 1 : 0
 }
 
 #data "azurerm_virtual_machine" "dynatrace_oneagent_vm" {

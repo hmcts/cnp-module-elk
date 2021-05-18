@@ -55,7 +55,7 @@ resource "azurerm_template_deployment" "alert_cluster_health_red" {
     AggregateValue         = "0"
     TriggerAlertCondition  = "Total"
     TriggerAlertOperator   = "gt"
-    TriggerAlertValue      = "0"
+    TriggerAlertValue      = "2"
   }
 }
 
@@ -80,7 +80,7 @@ resource "azurerm_template_deployment" "alert_dead_letter_queue" {
     AggregateValue         = "0"
     TriggerAlertCondition  = "Total"
     TriggerAlertOperator   = "gt"
-    TriggerAlertValue      = "0"
+    TriggerAlertValue      = "2"
     ThrottleDuration       = var.env == "prod" ? 30 : 24 * 60
   }
 }

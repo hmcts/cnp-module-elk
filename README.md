@@ -12,6 +12,9 @@ The following parameters are required by the module
 - `location` this is the azure region for this service
 - `env` this is used to differentiate the environments e.g dev, prod, test etc
 - `common_tags` tags that need to be applied to every resource group, passed through by the jenkins-library
+- `alerts_email` used to send basic alerts configured in [alerts.tf](alerts.tf)
+- `vmHostNamePrefix` used to prefix hosts, Can be up to 5 characters in length.
+- `vNetLoadBalancerIp`private ip for attatching to load balancer
 
 ### Output
 

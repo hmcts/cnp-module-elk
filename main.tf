@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 provider "azurerm" {
-  version = "1.44.0"
+  version = "2.51.0"
   alias = "mgmt"
   features {}
 }

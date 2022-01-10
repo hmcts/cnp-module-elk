@@ -13,7 +13,7 @@ resource "azurerm_resource_group" "elastic-resourcegroup" {
   location = "${var.location}"
 
   tags = "${merge(var.common_tags,
-    map("lastUpdated", "${timestamp()}")
+    tomap({"lastUpdated" = "${timestamp()}"})
   )}"
 }
 

@@ -10,12 +10,12 @@ try {
       checkout scm
     }
 
-    stage('Terraform init') {
-      sh 'terraform init'
+    stage('Terraform install') {
+      sh 'tfenv install'
     }
 
-    stage('Terraform Linting Checks') {
-      sh 'terraform validate -check-variables=false -no-color'
+    stage('Terraform init') {
+      sh 'terraform init'
     }
   }
 }

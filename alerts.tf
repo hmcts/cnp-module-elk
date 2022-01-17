@@ -61,7 +61,7 @@ resource "azurerm_template_deployment" "alert_cluster_health_red" {
 
 resource "azurerm_template_deployment" "alert_dead_letter_queue" {
   count               = var.subscription != "sandbox" ? 1 : 0
-  name                = "${var.product}alert_dead_letter_queue"
+  name                = "${var.product}_alert_dead_letter_queue_${var.env}"
   template_body       = file("${path.module}/templates/alert.json")
   resource_group_name = data.azurerm_log_analytics_workspace.log_analytics.resource_group_name
   deployment_mode     = "Incremental"

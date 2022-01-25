@@ -45,6 +45,11 @@ variable "vmSizeAllNodes" {
   default     = "Standard_D2_v2"
 }
 
+variable "esVersion" {
+  description = "ES version"
+  default     = "7.11.1"
+}
+
 variable "ssh_elastic_search_public_key" {
   description = "pub key used to ssh into the cluster nodes"
 }

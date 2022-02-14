@@ -46,7 +46,6 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     kibana                           = var.enable_kibana ? "Yes" : "No"
     logstash                         = var.enable_logstash ? "Yes" : "No"
     vmHostNamePrefix                 = var.vmHostNamePrefix
-    esHeapSize                       = tonumber(var.esHeapSize)
     adminUsername                    = "elkadmin"
     authenticationType               = "sshPublicKey"
     sshPublicKey                     = var.ssh_elastic_search_public_key

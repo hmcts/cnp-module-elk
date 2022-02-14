@@ -110,7 +110,7 @@ variable "vmHostNamePrefix" {
 }
 
 variable "esHeapSize" {
-  description = "The size, in megabytes, of memory to allocate on each Elasticsearch node for the JVM heap.",
+  description = "The size, in megabytes, of memory to allocate on each Elasticsearch node for the JVM heap."
   defaultValue = 0
 }
 

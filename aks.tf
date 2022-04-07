@@ -4,8 +4,8 @@ provider "azurerm" {
 
 data "azurerm_virtual_network" "aks_core_vnet" {
   provider            = "azurerm.aks-infra"
-  name                = "core-${local.env}-vnet"
-  resource_group_name = "aks-infra-${local.env}-rg"
+  name                = "cft-${local.env}-vnet"
+  resource_group_name = "cft-${local.env}-network-rg"
 }
 
 data "azurerm_subnet" "aks-00" {

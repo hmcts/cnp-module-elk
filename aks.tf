@@ -1,3 +1,7 @@
+provider "azurerm" {
+  alias = "aks-infra"
+}
+
 data "azurerm_virtual_network" "aks_core_vnet" {
   provider            = azurerm.aks-infra
   name                = var.env == "prod" ? "core-${local.env}-vnet" : "cft-${local.env}-vnet"

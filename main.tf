@@ -1,3 +1,7 @@
+provider "azurerm" {
+  alias = "mgmt"
+  features {}
+}
 
 resource "azurerm_resource_group" "elastic-resourcegroup" {
   name     = "${var.product}-elastic-search-${var.env}"

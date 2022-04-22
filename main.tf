@@ -100,6 +100,7 @@ data "azurerm_subnet" "apps" {
 }
 
 data "azurerm_subnet" "jenkins" {
+  provider             = "azurerm.mgmt"
   name                 = "iaas"
   virtual_network_name = local.mgmt_network_name
   resource_group_name  = local.mgmt_rg_name

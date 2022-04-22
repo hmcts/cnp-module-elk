@@ -1,22 +1,22 @@
-provider "azurerm" {
-  alias = "aks-infra"
-}
+# provider "azurerm" {
+#   alias = "aks-infra"
+# }
 
 data "azurerm_virtual_network" "aks_core_vnet" {
-  provider            = azurerm.aks-infra
+  # provider            = azurerm.aks-infra
   name                = var.env == "prod" ? "core-${local.env}-vnet" : "cft-${local.env}-vnet"
   resource_group_name = var.env == "prod" ? "aks-infra-${local.env}-rg" : "cft-${local.env}-network-rg"
 }
 
 data "azurerm_subnet" "aks-00" {
-  provider             = azurerm.aks-infra
+  # provider             = azurerm.aks-infra
   name                 = "aks-00"
   virtual_network_name = data.azurerm_virtual_network.aks_core_vnet.name
   resource_group_name  = data.azurerm_virtual_network.aks_core_vnet.resource_group_name
 }
 
 data "azurerm_subnet" "aks-01" {
-  provider             = azurerm.aks-infra
+  # provider             = azurerm.aks-infra
   name                 = "aks-01"
   virtual_network_name = data.azurerm_virtual_network.aks_core_vnet.name
   resource_group_name  = data.azurerm_virtual_network.aks_core_vnet.resource_group_name

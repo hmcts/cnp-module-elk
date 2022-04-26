@@ -1,7 +1,7 @@
-provider "azurerm" {
-  alias = "aks-infra"
-  features {}
-}
+# provider "azurerm" {
+#   alias = "aks-infra"
+#   features {}
+# }
 
 data "azurerm_virtual_network" "aks_core_vnet" {
   provider            = azurerm.aks-infra

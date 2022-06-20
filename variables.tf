@@ -45,6 +45,11 @@ variable "vmSizeAllNodes" {
   default     = "Standard_D2_v2"
 }
 
+variable "esVersion" {
+  description = "ES version"
+  default     = "7.11.1"
+}
+
 variable "ssh_elastic_search_public_key" {
   description = "pub key used to ssh into the cluster nodes"
 }
@@ -102,6 +107,12 @@ variable "alerts_email" {
 
 variable "vmHostNamePrefix" {
   description= "The prefix to use for resources and hostnames when naming virtual machines in the cluster. Can be up to 5 characters in length, must begin with an alphanumeric character and can contain alphanumeric and hyphen characters. Hostnames are used for resolution of master nodes so if you are deploying a cluster into an existing virtual network containing an existing Elasticsearch cluster, be sure to set this to a unique prefix to differentiate the hostnames of this cluster from an existing cluster"
+}
+
+variable "esHeapSize" {
+  description = "The size, in megabytes, of memory to allocate on each Elasticsearch node for the JVM heap."
+  type        = number 
+  default     = 0
 }
 
 variable "vNetLoadBalancerIp" {

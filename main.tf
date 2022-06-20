@@ -22,8 +22,8 @@ locals {
   elasticVnetName  = "${var.product}-elastic-search-vnet-${var.env}"
   securePassword   = random_string.password.result
 
-  mgmt_network_name = var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "core-cftptl-intsvc-vnet" : "core-cftsbox-intsvc-vnet"
-  mgmt_rg_name      = var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "aks-infra-cftptl-intsvc-rg" : "aks-infra-cftsbox-intsvc-rg"
+  mgmt_network_name = var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "cft-ptl-vnet" : "cft-ptlsbox-vnet"
+  mgmt_rg_name      = var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "cft-ptl-network-rg" : "cft-ptlsbox-network-rg"
   bastion_ip        = var.subscription == "prod" || var.subscription == "ethosldata" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value
 }
 
@@ -41,7 +41,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     _artifactsLocation               = local.artifactsBaseUrl
     esClusterName                    = "${var.product}-elastic-search-${var.env}"
     location                         = azurerm_resource_group.elastic-resourcegroup.location
-    esVersion                        = "7.11.1"
+    esVersion                        = var.esVersion
     xpackPlugins                     = "No"
     kibana                           = var.enable_kibana ? "Yes" : "No"
     logstash                         = var.enable_logstash ? "Yes" : "No"

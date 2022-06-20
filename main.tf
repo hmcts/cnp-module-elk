@@ -114,25 +114,25 @@ data "azurerm_subnet" "jenkins" {
 data "azurerm_network_security_group" "cluster_nsg" {
   name                = "${var.product}-cluster-nsg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = [azurerm_template_deployment.elastic-iaas]
 }
 
 data "azurerm_network_security_group" "kibana_nsg" {
   name                = "${var.product}-kibana-nsg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = [azurerm_template_deployment.elastic-iaas]
 }
 
 data "azurerm_application_security_group" "data_asg" {
   name                = "${var.product}-data-asg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = [azurerm_template_deployment.elastic-iaas]
 }
 
 data "azurerm_application_security_group" "kibana_asg" {
   name                = "${var.product}-kibana-asg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = [azurerm_template_deployment.elastic-iaas]
 }
 
 data "azurerm_log_analytics_workspace" "log_analytics" {

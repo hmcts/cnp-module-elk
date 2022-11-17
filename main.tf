@@ -105,7 +105,7 @@ data "azurerm_subnet" "apps" {
 }
 
 data "azurerm_subnet" "jenkins" {
-  provider             = "azurerm.mgmt"
+  provider             = azurerm.mgmt
   name                 = "iaas"
   virtual_network_name = "${local.mgmt_network_name}"
   resource_group_name  = "${local.mgmt_rg_name}"
@@ -114,25 +114,25 @@ data "azurerm_subnet" "jenkins" {
 data "azurerm_network_security_group" "cluster_nsg" {
   name                = "${var.product}-cluster-nsg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = [azurerm_template_deployment.elastic-iaas]
 }
 
 data "azurerm_network_security_group" "kibana_nsg" {
   name                = "${var.product}-kibana-nsg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = [azurerm_template_deployment.elastic-iaas]
 }
 
 data "azurerm_application_security_group" "data_asg" {
   name                = "${var.product}-data-asg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = [azurerm_template_deployment.elastic-iaas]
 }
 
 data "azurerm_application_security_group" "kibana_asg" {
   name                = "${var.product}-kibana-asg"
   resource_group_name = "${azurerm_resource_group.elastic-resourcegroup.name}"
-  depends_on          = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on          = [azurerm_template_deployment.elastic-iaas]
 }
 
 data "azurerm_log_analytics_workspace" "log_analytics" {
@@ -171,7 +171,7 @@ resource "azurerm_network_security_rule" "bastion_es_rule" {
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name                = "${data.azurerm_network_security_group.cluster_nsg.name}"
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on                                 = [azurerm_template_deployment.elastic-iaas]
 }
 
 resource "azurerm_network_security_rule" "apps_rule" {
@@ -187,7 +187,7 @@ resource "azurerm_network_security_rule" "apps_rule" {
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name                = "${data.azurerm_network_security_group.cluster_nsg.name}"
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on                                 = [azurerm_template_deployment.elastic-iaas]
 }
 
 resource "azurerm_network_security_rule" "jenkins_rule" {
@@ -203,7 +203,7 @@ resource "azurerm_network_security_rule" "jenkins_rule" {
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.data_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name                = "${data.azurerm_network_security_group.cluster_nsg.name}"
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on                                 = [azurerm_template_deployment.elastic-iaas]
 }
 
 resource "azurerm_network_security_rule" "bastion_ssh_rule" {
@@ -219,7 +219,7 @@ resource "azurerm_network_security_rule" "bastion_ssh_rule" {
   destination_address_prefix  = "${data.azurerm_subnet.elastic-subnet.address_prefix}"
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.cluster_nsg.name}"
-  depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on                  = [azurerm_template_deployment.elastic-iaas]
 }
 
 # Additional kibana-nsg rules use 300>=priority>400
@@ -237,7 +237,7 @@ resource "azurerm_network_security_rule" "kibana_tight_ssh_rule" {
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.kibana_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name                = "${data.azurerm_network_security_group.kibana_nsg.name}"
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on                                 = [azurerm_template_deployment.elastic-iaas]
 }
 
 resource "azurerm_network_security_rule" "kibana_tight_kibana_rule" {
@@ -253,7 +253,7 @@ resource "azurerm_network_security_rule" "kibana_tight_kibana_rule" {
   destination_application_security_group_ids = ["${data.azurerm_application_security_group.kibana_asg.id}"]
   resource_group_name                        = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name                = "${data.azurerm_network_security_group.kibana_nsg.name}"
-  depends_on                                 = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on                                 = [azurerm_template_deployment.elastic-iaas]
 }
 
 resource "azurerm_network_security_rule" "denyall_kibana_rule" {
@@ -269,7 +269,7 @@ resource "azurerm_network_security_rule" "denyall_kibana_rule" {
   destination_address_prefix  = "*"
   resource_group_name         = "${azurerm_resource_group.elastic-resourcegroup.name}"
   network_security_group_name = "${data.azurerm_network_security_group.kibana_nsg.name}"
-  depends_on                  = ["azurerm_template_deployment.elastic-iaas"]
+  depends_on                  = [azurerm_template_deployment.elastic-iaas]
 }
 
 #data "azurerm_virtual_machine" "dynatrace_oneagent_vm" {

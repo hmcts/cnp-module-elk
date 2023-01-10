@@ -76,9 +76,9 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     logAnalyticsId                   = var.logAnalyticsId
     logAnalyticsKey                  = var.logAnalyticsKey
     application  = var.common_tags.application
-    builtFrom    = "camunda-shared-infrastructure"
+    builtFrom    = var.common_tags.builtFrom
     businessArea = var.common_tags.businessArea 
-    criticality  = "criticality"
+    criticality  = var.common_tags.criticality
     environment  = var.common_tags.environment
   }
 }

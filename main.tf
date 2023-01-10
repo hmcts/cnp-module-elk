@@ -79,6 +79,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     builtFrom    = var.common_tags.BuiltFrom
     businessArea = var.common_tags.businessArea 
     environment  = var.common_tags.environment
+    securityReadPassword = "Password123"
   }
 }
 

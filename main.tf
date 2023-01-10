@@ -78,7 +78,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     application  = var.common_tags.application
     builtFrom    = "camunda-shared-infrastructure"
     businessArea = var.common_tags.businessArea 
-    criticality  = var.common_tags.criticality
+    criticality  = "criticality"
     environment  = var.common_tags.environment
   }
 }

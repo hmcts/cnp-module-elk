@@ -38,7 +38,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
   deployment_mode     = "Incremental"
 
   parameters = {
-    _artifactsLocation               = local.artifactsBaseUrl
+    #_artifactsLocation               = local.artifactsBaseUrl */
     esClusterName                    = "${var.product}-elastic-search-${var.env}"
     location                         = azurerm_resource_group.elastic-resourcegroup.location
     esVersion                        = "7.11.1"
@@ -53,8 +53,8 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     securityKibanaPassword           = local.securePassword
     securityBootstrapPassword        = ""
     securityLogstashPassword         = local.securePassword
-    securityApmPassword              = local.securePassword
-    securityRemoteMonitoringPassword = local.securePassword
+    #securityApmPassword              = local.securePassword
+    #securityRemoteMonitoringPassword = local.securePassword
     securityBeatsPassword            = local.securePassword
     vNetNewOrExisting                = "existing"
     vNetName                         = data.azurerm_virtual_network.core_infra_vnet.name

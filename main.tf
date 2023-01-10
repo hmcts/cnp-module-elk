@@ -17,7 +17,7 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/7.11.1_hmcts/src/"
+  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/branch_of_7.11.1_hmcts/src/"
   templateUrl      = "${local.artifactsBaseUrl}mainTemplate.json"
   elasticVnetName  = "${var.product}-elastic-search-vnet-${var.env}"
   securePassword   = random_string.password.result
@@ -75,6 +75,11 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     kibanaAdditionalYaml             = var.kibanaAdditionalYaml
     logAnalyticsId                   = var.logAnalyticsId
     logAnalyticsKey                  = var.logAnalyticsKey
+    application  = var.common_tags.application
+    builtFrom    = var.common_tags.builtFrom
+    businessArea = var.common_tags.businessArea 
+    criticality  = var.common_tags.criticality
+    environment  = var.common_tags.environment
   }
 }
 

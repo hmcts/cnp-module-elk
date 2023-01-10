@@ -78,7 +78,6 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     application  = var.common_tags.application
     builtFrom    = var.common_tags.BuiltFrom
     businessArea = var.common_tags.businessArea 
-    criticality  = "Low"
     environment  = var.common_tags.environment
   }
 }

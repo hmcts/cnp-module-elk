@@ -18,6 +18,6 @@ output "elasticsearch_admin_password" {
   value = local.securePassword
 }
 
-output "delete_tag_output_criticality" {
-  value = var.common_tags.criticality
+output "delete_commaon_tag_output" {
+  value = var.common_tags
 }

@@ -76,9 +76,9 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     logAnalyticsId                   = var.logAnalyticsId
     logAnalyticsKey                  = var.logAnalyticsKey
     application  = var.common_tags.application
-    builtFrom    = "buildFrom"
+    builtFrom    = var.common_tags.BuiltFrom
     businessArea = var.common_tags.businessArea 
-    criticality  = "criticality"
+    criticality  = "Low"
     environment  = var.common_tags.environment
   }
 }

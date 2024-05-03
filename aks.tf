@@ -1,8 +1,8 @@
 
 data "azurerm_virtual_network" "aks_core_vnet" {
   provider            = azurerm.aks-infra
-  name                = var.env == "prod" ? "core-infra-vnet-${var.env}" : "cft-${local.env}-vnet"
-  resource_group_name = var.env == "prod" ? "core-infra-${var.env}" : "cft-${local.env}-network-rg"
+  name                = "cft-${local.env}-vnet"
+  resource_group_name = "cft-${local.env}-network-rg"
 }
 
 data "azurerm_subnet" "aks-00" {

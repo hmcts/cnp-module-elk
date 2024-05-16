@@ -40,6 +40,11 @@ variable "storageAccountType" {
   default     = "Standard"
 }
 
+variable "dataStorageAccountType" {
+  description = "disk storage account type"
+  default     = "Standard"
+}
+
 variable "vmSizeAllNodes" {
   description = "vm size for all the cluster nodes"
   default     = "Standard_D2_v2"

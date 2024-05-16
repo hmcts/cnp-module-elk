@@ -17,7 +17,7 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/7.11.1_hmcts/src/"
+  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/DTSPO-17635_7.11.1_hmcts/src/"
   templateUrl      = "${local.artifactsBaseUrl}mainTemplate.json"
   elasticVnetName  = "${var.product}-elastic-search-vnet-${var.env}"
   securePassword   = random_string.password.result
@@ -70,6 +70,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     vmDataDiskCount                  = var.vmDataDiskCount
     vmClientNodeCount                = var.vmClientNodeCount
     storageAccountType               = var.storageAccountType
+    dataStorageAccountType               = var.dataStorageAccountType
     vmDataNodeAcceleratedNetworking  = var.dataNodeAcceleratedNetworking
     esAdditionalYaml                 = var.esAdditionalYaml
     kibanaAdditionalYaml             = var.kibanaAdditionalYaml

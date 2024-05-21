@@ -42,7 +42,7 @@ variable "storageAccountType" {
 
 variable "dataStorageAccountType" {
   description = "disk storage account type"
-  default     = "Default"
+  default     = "Standard"
 }
 
 variable "vmSizeAllNodes" {

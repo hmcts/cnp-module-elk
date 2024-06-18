@@ -36,7 +36,7 @@ variable "vmDataDiskSize" {
   default = "1TiB"
   validation {
     condition     = contains(["32GiB", "64GiB", "128GiB", "256GiB", "512GiB", "1TiB", "2TiB", "4TiB", "8TiB", "16TiB", "32TiB"], var.vmDataDiskSize)
-    error_message = "Please define a data disk size that matches the condition"
+    error_message = "Please define a data disk size within the provided range."
   }
 }
 

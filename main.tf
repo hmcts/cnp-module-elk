@@ -68,6 +68,7 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     dataNodesAreMasterEligible       = var.dataNodesAreMasterEligible ? "Yes" : "No"
     vmDataNodeCount                  = var.vmDataNodeCount
     vmDataDiskCount                  = var.vmDataDiskCount
+    vmDataDiskSize                   = var.vmDataDiskSize
     vmClientNodeCount                = var.vmClientNodeCount
     storageAccountType               = var.storageAccountType
     dataStorageAccountType           = var.dataStorageAccountType
@@ -163,7 +164,7 @@ resource "azurerm_network_security_rule" "bastion_es_rule" {
   protocol                                   = "Tcp"
   source_port_range                          = "*"
   destination_port_range                     = "9200"
-  source_address_prefixes                    = var.subscription == "prod" || var.subscription == "ethosldata" ? ["10.11.8.32/27"] : [ "10.11.72.32/27"]
+  source_address_prefixes                    = var.subscription == "prod" || var.subscription == "ethosldata" ? ["10.11.8.32/27"] : ["10.11.72.32/27"]
   destination_application_security_group_ids = [data.azurerm_application_security_group.data_asg.id]
   resource_group_name                        = azurerm_resource_group.elastic-resourcegroup.name
   network_security_group_name                = data.azurerm_network_security_group.cluster_nsg.name
@@ -211,7 +212,7 @@ resource "azurerm_network_security_rule" "bastion_ssh_rule" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "22"
-  source_address_prefixes     = var.subscription == "prod" || var.subscription == "ethosldata" ? ["10.11.8.32/27"] : [ "10.11.72.32/27"]
+  source_address_prefixes     = var.subscription == "prod" || var.subscription == "ethosldata" ? ["10.11.8.32/27"] : ["10.11.72.32/27"]
   destination_address_prefix  = data.azurerm_subnet.elastic-subnet.address_prefix
   resource_group_name         = azurerm_resource_group.elastic-resourcegroup.name
   network_security_group_name = data.azurerm_network_security_group.cluster_nsg.name

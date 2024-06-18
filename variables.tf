@@ -27,6 +27,17 @@ variable "vmDataDiskCount" {
   description = "number of data node's disks"
   type        = number
   default     = 1
+
+}
+variable "vmDataDiskSize" {
+  description = "The disk size of each attached data disk"
+  type        = string
+  # Default to Large now so we can override this, but to avoid breaking changes in the meantime
+  default = "1TiB"
+  validation {
+    condition     = contains(["32GiB", "64GiB", "128GiB", "256GiB", "512GiB", "1TiB", "2TiB", "4TiB", "8TiB", "16TiB", "32TiB"], var.vmDataDiskSize)
+    error_message = "Please define a data disk size within the provided range."
+  }
 }
 
 variable "vmClientNodeCount" {
@@ -111,15 +122,15 @@ variable "alerts_email" {
 }
 
 variable "vmHostNamePrefix" {
-  description= "The prefix to use for resources and hostnames when naming virtual machines in the cluster. Can be up to 5 characters in length, must begin with an alphanumeric character and can contain alphanumeric and hyphen characters. Hostnames are used for resolution of master nodes so if you are deploying a cluster into an existing virtual network containing an existing Elasticsearch cluster, be sure to set this to a unique prefix to differentiate the hostnames of this cluster from an existing cluster"
+  description = "The prefix to use for resources and hostnames when naming virtual machines in the cluster. Can be up to 5 characters in length, must begin with an alphanumeric character and can contain alphanumeric and hyphen characters. Hostnames are used for resolution of master nodes so if you are deploying a cluster into an existing virtual network containing an existing Elasticsearch cluster, be sure to set this to a unique prefix to differentiate the hostnames of this cluster from an existing cluster"
 }
 
 variable "esHeapSize" {
   description = "The size, in megabytes, of memory to allocate on each Elasticsearch node for the JVM heap."
-  type        = number 
+  type        = number
   default     = 0
 }
 
 variable "vNetLoadBalancerIp" {
-  description= "The static IP address for the internal load balancer. This must be an available IP address in the specified subnet"
+  description = "The static IP address for the internal load balancer. This must be an available IP address in the specified subnet"
 }

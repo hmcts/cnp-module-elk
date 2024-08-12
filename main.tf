@@ -17,7 +17,7 @@ resource "random_string" "password" {
 }
 
 locals {
-  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/DTSPO-17635_7.11.1/src/"
+  artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/updated-ccd-tag-for-autoshutdown_1/src/"
   templateUrl      = "${local.artifactsBaseUrl}mainTemplate.json"
   elasticVnetName  = "${var.product}-elastic-search-vnet-${var.env}"
   securePassword   = random_string.password.result

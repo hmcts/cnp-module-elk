@@ -90,7 +90,6 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     logAnalyticsId                  = "${var.logAnalyticsId}"
     logAnalyticsKey                 = "${var.logAnalyticsKey}"
     tags                            = jsonencode(merge(var.common_tags, local.auto_shutdown_tag))
-
   }
 }
 

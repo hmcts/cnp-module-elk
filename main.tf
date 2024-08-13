@@ -27,8 +27,8 @@ locals {
   bastion_ip        = var.subscription == "prod" || var.subscription == "ethosldata" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value
 
   auto_shutdown_tag = {
-    "autoShutdown" = "true"
-    "startupMode"  = "always"
+    autoShutdown = "true"
+    startupMode  = "always"
   }
 }
 

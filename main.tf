@@ -25,10 +25,10 @@ locals {
   mgmt_rg_name      = var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "cft-ptl-network-rg" : "cft-ptlsbox-network-rg"
   bastion_ip        = var.subscription == "prod" || var.subscription == "ethosldata" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value
 
-  auto_shutdown_tag = {
-    autoShutdown = true
-    startupMode  = "always"
-  }
+  # auto_shutdown_tag = {
+  #   autoShutdown = true
+  #   startupMode  = "always"
+  # }
 }
 
 data "http" "template" {
@@ -80,9 +80,8 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     kibanaAdditionalYaml             = var.kibanaAdditionalYaml
     logAnalyticsId                   = var.logAnalyticsId
     logAnalyticsKey                  = var.logAnalyticsKey
-    tags                             = jsonencode(merge(var.common_tags, local.auto_shutdown_tag))
+    # tags                             = jsonencode(merge(var.common_tags, local.auto_shutdown_tag))
  }
-
 }
 
 

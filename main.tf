@@ -1,4 +1,3 @@
-
 resource "azurerm_resource_group" "elastic-resourcegroup" {
   name     = "${var.product}-elastic-search-${var.env}"
   location = var.location
@@ -27,7 +26,7 @@ locals {
   bastion_ip        = var.subscription == "prod" || var.subscription == "ethosldata" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value
 
   auto_shutdown_tag = {
-    autoShutdown = "true"
+    autoShutdown = true
     startupMode  = "always"
   }
 }
@@ -81,12 +80,11 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     kibanaAdditionalYaml             = var.kibanaAdditionalYaml
     logAnalyticsId                   = var.logAnalyticsId
     logAnalyticsKey                  = var.logAnalyticsKey
-    tags = {
-      autoShutdown = "true"
-      startupMode  = "always"
-    }
-  }
+    tags                             = jsonencode(merge(var.common_tags, local.auto_shutdown_tag))
+ }
+
 }
+
 
 data "azurerm_virtual_network" "core_infra_vnet" {
   name                = "core-infra-vnet-${var.env}"

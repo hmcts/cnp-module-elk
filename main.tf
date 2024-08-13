@@ -16,15 +16,6 @@ resource "random_string" "password" {
   number  = true
 }
 
-variable "common_tags" {
-  description = "Common tags for all resources"
-  type        = map(string)
-  default     = {
-    Environment = "dev"
-    Project     = "elastic-iaas"
-  }
-}
-
 locals {
   artifactsBaseUrl = "https://raw.githubusercontent.com/hmcts/azure-marketplace/updated-ccd-tag-for-autoshutdown_1/src/"
   templateUrl      = "${local.artifactsBaseUrl}mainTemplate.json"

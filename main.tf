@@ -26,8 +26,10 @@ locals {
   mgmt_rg_name      = var.subscription == "prod" || var.subscription == "nonprod" || var.subscription == "qa" || var.subscription == "ethosldata" ? "cft-ptl-network-rg" : "cft-ptlsbox-network-rg"
   bastion_ip        = var.subscription == "prod" || var.subscription == "ethosldata" ? data.azurerm_key_vault_secret.bastion_devops_ip.value : data.azurerm_key_vault_secret.bastion_dev_ip.value
 
+  include_in_autoshutdown   = var.env == "prod" ? "false" : "true"
+
   auto_shutdown_tag = {
-    autoShutdown = true
+    autoShutdown = local.include_in_autoshutdown
     startupMode  = "always"
   }
 }

@@ -32,10 +32,6 @@ locals {
   }
 }
 
-locals {
-  auto_shutdown = local.auto_shutdown_tag
-}
-
 data "http" "template" {
   url = local.templateUrl
 }
@@ -85,7 +81,10 @@ resource "azurerm_template_deployment" "elastic-iaas" {
     kibanaAdditionalYaml             = var.kibanaAdditionalYaml
     logAnalyticsId                   = var.logAnalyticsId
     logAnalyticsKey                  = var.logAnalyticsKey
-    tags                             = local.auto_shutdown
+    tags = {
+      autoShutdown = "true"
+      startupMode  = "always"
+    }
   }
 }
 
